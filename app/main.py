@@ -4,6 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
+from .routers import auth, songs, voting
+from . import admin
 import os
 
 from .routers import auth, songs, voting
@@ -37,7 +39,7 @@ templates = Jinja2Templates(directory="app/templates")
 app.include_router(auth.router, prefix="/api")
 app.include_router(songs.router, prefix="/api")
 app.include_router(voting.router, prefix="/api")
-
+app.include_router(admin.router, prefix="/api")
 # Root route - Home page
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):

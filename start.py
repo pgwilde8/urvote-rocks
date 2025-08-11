@@ -13,7 +13,7 @@ def main():
     
     # Set default configuration
     host = os.getenv("HOST", "0.0.0.0")
-    port = int(os.getenv("PORT", "8001"))
+    port = int(os.getenv("PORT", "8002"))
     reload = os.getenv("RELOAD", "false").lower() == "true"
     workers = int(os.getenv("WORKERS", "1"))
     

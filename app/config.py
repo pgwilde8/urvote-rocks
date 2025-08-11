@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     
     # File Upload
     upload_dir: str = "/opt/urvote/uploads"
-    max_file_size: int = 50 * 1024 * 1024  # 50MB
+    max_file_size: int = 100 * 1024 * 1024  # 100MB
     
     # Redis
     redis_url: str = "redis://localhost:6379"
