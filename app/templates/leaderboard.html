@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Contest Leaderboard</h1>
+        <p class="text-xl text-gray-600">See how the Best Pro-American AI Song Contest is shaping up!</p>
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-4">
+                <label class="text-sm font-medium text-gray-700">Filter by:</label>
+                <select id="countryFilter" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="">All Countries</option>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                    <option value="JP">Japan</option>
+                </select>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-600">Sort by:</span>
+                <button id="sortVotes" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition-colors">
+                    Most Votes
+                </button>
+                <button id="sortRecent" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+                    Recently Added
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Song</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Artist</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Genre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Votes</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody" class="bg-white divide-y divide-gray-200">
+                    <!-- Leaderboard entries will be populated here -->
+                    <tr class="text-center">
+                        <td colspan="6" class="px-6 py-12 text-gray-500">
+                            <div class="flex flex-col items-center">
+                                <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                                </svg>
+                                <p class="text-lg font-medium">No songs available yet</p>
+                                <p class="text-sm">Songs will appear here once they're approved and voting begins</p>
+                                <a href="/upload" class="mt-4 text-primary hover:underline">Submit the first song →</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Contest Stats -->
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <div class="text-3xl font-bold text-primary mb-2" id="totalSongs">0</div>
+            <div class="text-gray-600">Approved Songs</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <div class="text-3xl font-bold text-secondary mb-2" id="totalVotes">0</div>
+            <div class="text-gray-600">Total Votes Cast</div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <div class="text-3xl font-bold text-accent mb-2" id="activeVoters">0</div>
+            <div class="text-gray-600">Active Voters</div>
+        </div>
+    </div>
+</div>
+
+<!-- Song Detail Modal -->
+<div id="songModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-screen overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 id="modalTitle" class="text-2xl font-bold text-gray-800"></h3>
+                    <button onclick="closeSongModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="modalContent" class="space-y-4">
+                    <!-- Modal content will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Leaderboard functionality
+let currentLeaderboard = [];
+
+async function loadLeaderboard() {
+    try {
+        const response = await fetch('/api/voting/leaderboard');
+        const data = await response.json();
+        currentLeaderboard = data;
+        displayLeaderboard(data);
+        updateStats();
+    } catch (error) {
+        console.error('Error loading leaderboard:', error);
+    }
+}
+
+function displayLeaderboard(leaderboard) {
+    const tbody = document.getElementById('leaderboardBody');
+    
+    if (leaderboard.length === 0) {
+        tbody.innerHTML = `
+            <tr class="text-center">
+                <td colspan="6" class="px-6 py-12 text-gray-500">
+                    <div class="flex flex-col items-center">
+                        <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                        </svg>
+                        <p class="text-lg font-medium">No songs available yet</p>
+                        <p class="text-sm">Songs will appear here once they're approved and voting begins</p>
+                        <a href="/upload" class="mt-4 text-primary hover:underline">Submit the first song →</a>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = leaderboard.map(entry => `
+        <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                    <span class="text-lg font-bold text-gray-900">${entry.rank}</span>
+                    ${entry.rank <= 3 ? getRankBadge(entry.rank) : ''}
+                </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900">${entry.title}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">${entry.artist_name}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                    ${entry.genre || 'Unknown'}
+                </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <div class="flex items-center">
+                    <span class="font-bold text-lg">${entry.vote_count}</span>
+                    <span class="text-gray-500 ml-1">votes</span>
+                </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button onclick="viewSong(${entry.song_id})" class="text-primary hover:text-blue-600 mr-3">
+                    View Details
+                </button>
+                <button onclick="voteForSong(${entry.song_id})" class="text-secondary hover:text-green-600">
+                    Vote
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getRankBadge(rank) {
+    const badges = {
+        1: '<span class="ml-2 text-yellow-500">🥇</span>',
+        2: '<span class="ml-2 text-gray-400">🥈</span>',
+        3: '<span class="ml-2 text-orange-500">🥉</span>'
+    };
+    return badges[rank] || '';
+}
+
+async function updateStats() {
+    try {
+        const response = await fetch('/api/voting/stats');
+        const stats = await response.json();
+        
+        document.getElementById('totalSongs').textContent = stats.total_songs || 0;
+        document.getElementById('totalVotes').textContent = stats.total_votes || 0;
+        document.getElementById('activeVoters').textContent = stats.unique_voters || 0;
+    } catch (error) {
+        console.error('Error loading stats:', error);
+    }
+}
+
+function viewSong(songId) {
+    // TODO: Implement song detail view
+    console.log('Viewing song:', songId);
+}
+
+function voteForSong(songId) {
+    // TODO: Implement voting functionality
+    console.log('Voting for song:', songId);
+}
+
+function closeSongModal() {
+    document.getElementById('songModal').classList.add('hidden');
+}
+
+// Event listeners
+document.getElementById('countryFilter').addEventListener('change', function() {
+    const country = this.value;
+    if (country) {
+        loadLeaderboard(`?country_filter=${country}`);
+    } else {
+        loadLeaderboard();
+    }
+});
+
+document.getElementById('sortVotes').addEventListener('click', function() {
+    const sorted = [...currentLeaderboard].sort((a, b) => b.vote_count - a.vote_count);
+    displayLeaderboard(sorted);
+});
+
+document.getElementById('sortRecent').addEventListener('click', function() {
+    // TODO: Implement recent sorting
+    console.log('Sort by recent');
+});
+
+// Load leaderboard on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadLeaderboard();
+});
+</script>
+{% endblock %}

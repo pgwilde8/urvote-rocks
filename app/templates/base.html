@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}UrVote.Rocks - Contest Platform{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <span class="text-2xl font-bold text-primary">UrVote.Rocks</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="/leaderboard" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Leaderboard</a>
+                    <a href="/upload" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Submit Song</a>
+                    {% if current_user %}
+                        <a href="/profile" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+                        <a href="/logout" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+                    {% else %}
+                        <a href="/login" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                        <a href="/register" class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-auto">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-300">Powered by <span class="text-primary font-semibold">UrVote.Rocks</span></p>
+                <p class="text-sm text-gray-400 mt-2">Contest Platform for Brands, Events, and Creators</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}UrVote.Rocks - Best Pro-American AI Song Contest{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-primary to-blue-600 text-white py-20 rounded-lg mb-12">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-5xl font-bold mb-6">Best Pro-American AI Song Contest</h1>
+            <p class="text-xl mb-8">Powered by PayPortPro - Showcase your AI-generated patriotic music!</p>
+            <div class="space-x-4">
+                <a href="/upload" class="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                    Submit Your Song
+                </a>
+                <a href="/leaderboard" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors">
+                    View Leaderboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contest Details -->
+    <div class="max-w-4xl mx-auto mb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Contest Details</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-primary mb-4">🎵 Submission Requirements</h3>
+                <ul class="text-gray-600 space-y-2">
+                    <li>• AI-generated patriotic music</li>
+                    <li>• MP3, WAV, FLAC, or M4A format</li>
+                    <li>• Maximum file size: 50MB</li>
+                    <li>• Include AI tools used in creation</li>
+                    <li>• Choose license: Stream only or CC BY-NC 4.0</li>
+                </ul>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-secondary mb-4">🏆 Prizes & Recognition</h3>
+                <ul class="text-gray-600 space-y-2">
+                    <li>• Grand Prize for Best Song</li>
+                    <li>• People's Choice Award</li>
+                    <li>• Featured on PayPortPro platform</li>
+                    <li>• Industry recognition & exposure</li>
+                    <li>• Potential collaboration opportunities</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="max-w-4xl mx-auto mb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">How It Works</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="text-center">
+                <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+                <h3 class="text-xl font-semibold mb-2">Submit Your Song</h3>
+                <p class="text-gray-600">Upload your AI-generated patriotic music with metadata and description</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-secondary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+                <h3 class="text-xl font-semibold mb-2">Get Approved</h3>
+                <p class="text-gray-600">Our team reviews submissions for quality and appropriateness</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-accent text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+                <h3 class="text-xl font-semibold mb-2">Vote & Win</h3>
+                <p class="text-gray-600">Public voting determines the winners with fraud protection</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Songs Preview -->
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Featured Submissions</h2>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <p class="text-gray-600 text-center">Songs will appear here once approved and voting begins!</p>
+            <div class="mt-4 text-center">
+                <a href="/leaderboard" class="text-primary hover:underline">Check the leaderboard →</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

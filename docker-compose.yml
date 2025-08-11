@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: urvote_postgres
+    environment:
+      POSTGRES_DB: urvote
+      POSTGRES_USER: urvote_user
+      POSTGRES_PASSWORD: urvote_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U urvote_user -d urvote"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: urvote_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # UrVote.Rocks Application
+  app:
+    build: .
+    container_name: urvote_app
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://urvote_user:urvote_password@postgres:5432/urvote
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-secret-key-change-this-in-production
+      - UPLOAD_DIR=/app/uploads
+      - DEBUG=true
+    volumes:
+      - ./uploads:/app/uploads
+      - ./app:/app/app
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    command: python start.py
+
+  # Nginx Reverse Proxy (optional)
+  nginx:
+    image: nginx:alpine
+    container_name: urvote_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

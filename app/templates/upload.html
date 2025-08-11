@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Your Song - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Submit Your AI Song</h1>
+        <p class="text-xl text-gray-600">Join the Best Pro-American AI Song Contest powered by PayPortPro</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <form action="/api/v1/upload" method="post" enctype="multipart/form-data" class="space-y-6">
+            <!-- Artist Information -->
+            <div>
+                <label for="artist" class="block text-sm font-medium text-gray-700 mb-2">Artist / Team Name *</label>
+                <input 
+                    type="text" 
+                    id="artist" 
+                    name="artist" 
+                    required 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Enter your artist name or team name"
+                >
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="your.email@example.com"
+                >
+                <p class="text-sm text-gray-500 mt-1">We'll use this to contact you about contest updates</p>
+            </div>
+
+            <!-- Song Title -->
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Song Title *</label>
+                <input 
+                    type="text" 
+                    id="title" 
+                    name="title" 
+                    required 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Enter your song title"
+                >
+            </div>
+
+            <!-- Genre -->
+            <div>
+                <label for="genre" class="block text-sm font-medium text-gray-700 mb-2">Genre</label>
+                <select 
+                    id="genre" 
+                    name="genre" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                    <option value="">Select a genre</option>
+                    <option value="pop">Pop</option>
+                    <option value="rock">Rock</option>
+                    <option value="country">Country</option>
+                    <option value="hip-hop">Hip-Hop</option>
+                    <option value="electronic">Electronic</option>
+                    <option value="folk">Folk</option>
+                    <option value="jazz">Jazz</option>
+                    <option value="classical">Classical</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- AI Tools Used -->
+            <div>
+                <label for="ai_tools" class="block text-sm font-medium text-gray-700 mb-2">AI Tools Used *</label>
+                <textarea 
+                    id="ai_tools" 
+                    name="ai_tools" 
+                    required 
+                    rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Describe the AI tools you used (e.g., 'ChatGPT for lyrics, Suno for music generation')"
+                ></textarea>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Song Description</label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    rows="4"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Tell us about your song, inspiration, and what makes it pro-American"
+                ></textarea>
+            </div>
+
+            <!-- License Type -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">License Type *</label>
+                <div class="space-y-3">
+                    <label class="flex items-center">
+                        <input 
+                            type="radio" 
+                            name="license_type" 
+                            value="stream_only" 
+                            checked 
+                            class="mr-3 text-primary focus:ring-primary"
+                        >
+                        <div>
+                            <span class="font-medium">Stream Only</span>
+                            <p class="text-sm text-gray-500">Your song can only be streamed, not downloaded or remixed</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center">
+                        <input 
+                            type="radio" 
+                            name="license_type" 
+                            value="cc_by_nc" 
+                            class="mr-3 text-primary focus:ring-primary"
+                        >
+                        <div>
+                            <span class="font-medium">Creative Commons (CC BY-NC 4.0)</span>
+                            <p class="text-sm text-gray-500">Others can download and remix your song for non-commercial use</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- File Upload -->
+            <div>
+                <label for="file" class="block text-sm font-medium text-gray-700 mb-2">Song File *</label>
+                <input 
+                    type="file" 
+                    id="file" 
+                    name="file" 
+                    accept=".mp3,.wav,.flac,.m4a" 
+                    required 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                <p class="text-sm text-gray-500 mt-1">Accepted formats: MP3, WAV, FLAC, M4A. Maximum size: 50MB</p>
+            </div>
+
+            <!-- External Link (Optional) -->
+            <div>
+                <label for="external_link" class="block text-sm font-medium text-gray-700 mb-2">External Link (Optional)</label>
+                <input 
+                    type="url" 
+                    id="external_link" 
+                    name="external_link" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="YouTube, SoundCloud, or other streaming link"
+                >
+                <p class="text-sm text-gray-500 mt-1">If you prefer to link to an external source instead of uploading</p>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+                <button 
+                    type="submit" 
+                    class="w-full bg-primary text-white py-3 px-6 rounded-md font-semibold hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+                >
+                    Submit Your Song
+                </button>
+            </div>
+
+            <!-- Terms -->
+            <div class="text-center">
+                <p class="text-sm text-gray-500">
+                    By submitting, you agree to our contest terms and confirm this is your original AI-generated work.
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
