@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}Pricing - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-primary to-blue-600 text-white py-12 sm:py-20 rounded-lg mb-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <h1 class="text-4xl sm:text-5xl font-bold mb-6">Simple, Transparent Pricing</h1>
+            <p class="text-xl sm:text-2xl mb-4">Choose the plan that fits your contest needs</p>
+            <p class="text-lg sm:text-xl mb-8">From local events to global competitions, we have the perfect plan for you</p>
+        </div>
+    </div>
+
+    <!-- Pricing Tiers -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 justify-items-center">
+            
+            <!-- STARTER PLAN -->
+            <div class="bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:shadow-xl transition-shadow w-full max-w-sm">
+                <div class="p-6 sm:p-8">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">STARTER</h3>
+                        <p class="text-gray-600 mb-4">Launch Your First Contest</p>
+                        <div class="text-4xl font-bold text-primary mb-2">$199<span class="text-lg text-gray-500">/month</span></div>
+                        <p class="text-sm text-gray-500">or $2,000/year (save 16%)</p>
+                    </div>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">1 Active Contest at a time</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Up to 50 Song Submissions</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Up to 2,500 Voters</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Basic Contest Branding</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Standard Voting System</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Basic Moderation Tools</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Basic Analytics</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        <p class="text-sm text-gray-600 mb-4">Best for: Local radio stations, small festivals, community organizations</p>
+                        <a href="/contact" class="w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors inline-block">
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRO PLAN (FEATURED) -->
+            <div class="bg-white rounded-lg shadow-xl border-2 border-primary transform scale-105 relative w-full max-w-sm">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span class="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold">MOST POPULAR</span>
+                </div>
+                <div class="p-6 sm:p-8">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">PRO</h3>
+                        <p class="text-gray-600 mb-4">Scale Your Audience</p>
+                        <div class="text-4xl font-bold text-primary mb-2">$499<span class="text-lg text-gray-500">/month</span></div>
+                        <p class="text-sm text-gray-500">or $5,000/year (save 16%)</p>
+                    </div>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Up to 5 Active Contests</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Up to 250 Songs per contest</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Up to 20,000 Voters</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Full Custom Branding</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Advanced Voting Options</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Advanced Moderation</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Enhanced Analytics</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Social Sharing Tools</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        <p class="text-sm text-gray-600 mb-4">Best for: Regional events, influencer networks, mid-size brands</p>
+                        <a href="/contact" class="w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors inline-block">
+                            Start Pro Plan
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ENTERPRISE PLAN -->
+            <div class="bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:shadow-xl transition-shadow w-full max-w-sm">
+                <div class="p-6 sm:p-8">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">ENTERPRISE</h3>
+                        <p class="text-gray-600 mb-4">Own the Stage</p>
+                        <div class="text-4xl font-bold text-primary mb-2">Custom</div>
+                        <p class="text-sm text-gray-500">Starting at $1,500/month</p>
+                    </div>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Unlimited Active Contests</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Unlimited Submissions & Voters</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">White-Label Platform</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Custom Voting Rules</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Premium Moderation Suite</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Full Analytics Suite</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Dedicated Account Manager</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">✓</div>
+                            <span class="text-gray-700">Priority Support & SLA</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mb-4">
+                        <p class="text-sm text-gray-600 mb-4">Best for: Major brands, record labels, media companies</p>
+                        <a href="/contact" class="w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors inline-block">
+                            Contact Sales
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upgrade Path -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">📈 Simple Upgrade Path</h2>
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Starter → Pro</h3>
+                    <p class="text-gray-600 mb-4">Upgrade when you want:</p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• More contests running simultaneously</li>
+                        <li>• More than 50 song submissions</li>
+                        <li>• Advanced branding options</li>
+                        <li>• Enhanced analytics and insights</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-secondary mb-4">Pro → Enterprise</h3>
+                    <p class="text-gray-600 mb-4">Upgrade when you need:</p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• White-label platform</li>
+                        <li>• Unlimited scale and contests</li>
+                        <li>• Custom voting rules</li>
+                        <li>• Dedicated support and SLA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Revenue -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">💰 Additional Revenue Opportunities</h2>
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+            <p class="text-lg text-gray-700 mb-6 text-center">
+                Even Starter plans can generate extra revenue through our add-on services
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">⭐</div>
+                    <h3 class="text-xl font-semibold mb-2">Featured Placement</h3>
+                    <p class="text-gray-600">Highlight top songs for additional fees</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-secondary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">🔍</div>
+                    <h3 class="text-xl font-semibold mb-2">Extra Moderation</h3>
+                    <p class="text-gray-600">Human review and custom content rules</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-accent text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">📊</div>
+                    <h3 class="text-xl font-semibold mb-2">Data Reports</h3>
+                    <p class="text-gray-600">Detailed analytics and insights packages</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">❓ Frequently Asked Questions</h2>
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="divide-y divide-gray-200">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Can I change plans mid-contest?</h3>
+                    <p class="text-gray-600">Yes! You can upgrade at any time and your current contest will automatically get the new plan's benefits.</p>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">What happens if I exceed my plan limits?</h3>
+                    <p class="text-gray-600">We'll notify you and you can either upgrade your plan or purchase additional capacity as needed.</p>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Is there a setup fee?</h3>
+                    <p class="text-gray-600">No setup fees! Just pay your monthly subscription and start creating contests immediately.</p>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Can I cancel anytime?</h3>
+                    <p class="text-gray-600">Absolutely. No long-term contracts. Cancel anytime and your contests will remain active until the end of your billing period.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="max-w-4xl mx-auto mb-12">
+        <div class="bg-gradient-to-r from-primary to-blue-600 text-white p-6 sm:p-8 rounded-lg">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4">Ready to Launch Your Contest?</h2>
+            <p class="text-base sm:text-lg mb-6">
+                Join PayPortPro and other brands already using UrVote.Rocks to engage their audiences through AI music contests.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="/contact" class="bg-white text-primary px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full sm:w-auto text-center">
+                    Start Your Contest
+                </a>
+                <a href="/demo" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors w-full sm:w-auto text-center">
+                    Request Demo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

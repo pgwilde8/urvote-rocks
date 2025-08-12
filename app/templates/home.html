@@ -5,139 +5,360 @@
 {% block content %}
 <div class="text-center">
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-primary to-blue-600 text-white py-20 rounded-lg mb-12">
-        <div class="max-w-4xl mx-auto px-4">
-            <h1 class="text-5xl font-bold mb-6">UrVote.Rocks</h1>
-            <p class="text-2xl mb-4">The Complete AI Music Contest Platform</p>
-            <p class="text-xl mb-8">Empowering brands and communities to run engaging AI-generated music competitions</p>
-            <div class="space-x-4">
-                <a href="/upload" class="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                    Submit Your Song
+    <div class="bg-gradient-to-r from-primary to-blue-600 text-white py-12 sm:py-20 rounded-lg mb-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <h1 class="text-4xl sm:text-5xl font-bold mb-6">UrVote.Rocks</h1>
+            <p class="text-xl sm:text-2xl mb-4">The Future of AI Music Contests</p>
+            <p class="text-lg sm:text-xl mb-8">Join the pre-launch and help shape the ultimate AI-generated music voting platform</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="/upload" class="bg-white text-primary px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full sm:w-auto text-center">
+                    Submit Your Song FREE
                 </a>
-                <a href="/leaderboard" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors">
-                    View Leaderboard
+                <a href="#signup" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors w-full sm:w-auto text-center">
+                    Join Pre-Launch
                 </a>
             </div>
         </div>
     </div>
 
     <!-- What is UrVote.Rocks -->
-    <div class="max-w-4xl mx-auto mb-12">
-        <h2 class="text-3xl font-bold text-gray-800 mb-8">What is UrVote.Rocks?</h2>
-        <div class="bg-white p-8 rounded-lg shadow-md text-left">
-            <p class="text-lg text-gray-700 mb-6">
-                <strong>UrVote.Rocks</strong> is a comprehensive SaaS platform that enables brands, companies, and communities to create and manage AI-generated music contests. 
-                Our platform handles everything from song submissions and approval workflows to voting systems and fraud prevention.
-            </p>
-            <div class="grid md:grid-cols-2 gap-6 mt-6">
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">🤔 What is UrVote.Rocks?</h2>
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
-                    <h3 class="text-xl font-semibold text-primary mb-3">🎯 For Contest Organizers</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li>• Custom contest creation and management</li>
-                        <li>• Automated submission processing</li>
-                        <li>• Built-in fraud prevention</li>
-                        <li>• Real-time analytics and reporting</li>
-                        <li>• White-label branding options</li>
-                    </ul>
+                    <p class="text-lg text-gray-700 mb-6">
+                        <strong>UrVote.Rocks</strong> is the world's first AI music contest platform where <span class="text-primary font-semibold">everyone gets to vote</span> on the best AI-generated songs.
+                    </p>
+                    <p class="text-base text-gray-600 mb-6">
+                        We're building a revolutionary system that combines cutting-edge AI music generation with democratic voting. Whether you're a music creator, listener, or just curious about the future of music - this is where the magic happens.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">✓</div>
+                            <span class="text-gray-700">Submit AI-generated songs for FREE</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">✓</div>
+                            <span class="text-gray-700">Vote on your favorite tracks</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="bg-green-100 text-green-600 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold">✓</div>
+                            <span class="text-gray-700">Join a global music community</span>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-secondary mb-3">🎵 For Contest Participants</h3>
-                    <ul class="text-gray-600 space-y-2">
-                        <li>• Easy song submission process</li>
-                        <li>• AI tool documentation</li>
-                        <li>• Fair voting system</li>
-                        <li>• Community engagement</li>
-                        <li>• Recognition and prizes</li>
-                    </ul>
+                <div class="bg-gradient-to-br from-primary to-blue-600 p-6 rounded-lg text-white text-center">
+                    <div class="text-4xl mb-4">🎵</div>
+                    <h3 class="text-xl font-bold mb-3">The Future of Music Contests</h3>
+                    <p class="text-sm opacity-90">
+                        AI + Democracy + Music = UrVote.Rocks
+                    </p>
+                    <div class="mt-4 text-xs opacity-75">
+                        <p>• No gatekeepers</p>
+                        <p>• Everyone votes</p>
+                        <p>• AI-powered creativity</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PayPortPro Contest -->
-    <div class="max-w-4xl mx-auto mb-12">
-        <h2 class="text-3xl font-bold text-gray-800 mb-8">Featured Contest: PayPortPro AI Patriotic Music Challenge</h2>
-        <div class="bg-gradient-to-r from-red-600 to-blue-600 text-white p-8 rounded-lg shadow-md">
-            <h3 class="text-2xl font-bold mb-4">🇺🇸 Best Pro-American AI Song Contest</h3>
-            <p class="text-lg mb-6">
-                <strong>PayPortPro</strong> is our first platform customer, showcasing how UrVote.Rocks can power 
-                engaging brand contests. They're running a patriotic AI music competition to celebrate American innovation 
-                and creativity in AI-generated music.
+    <!-- First Use Case: PayPortPro Contest -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">🚀 First Use Case: PayPortPro AI Patriotic Music Challenge</h2>
+        <div class="bg-gradient-to-r from-red-600 to-blue-600 text-white p-6 sm:p-8 rounded-lg shadow-md">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold">🇺🇸 Best Pro-American AI Song Contest</h3>
+                <div class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">
+                    🚧 Platform Under Construction
+                </div>
+            </div>
+            <p class="text-base sm:text-lg mb-6">
+                <strong>PayPortPro</strong> represents our first contest use case - a patriotic AI music competition celebrating American innovation and creativity. This is exactly the type of campaign our platform is designed to support.
             </p>
-            <div class="grid md:grid-cols-2 gap-6 mt-6">
-                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                    <h4 class="text-xl font-semibold mb-3">🎵 Submission Requirements</h4>
-                    <ul class="text-left space-y-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div class="bg-white bg-opacity-20 p-3 sm:p-4 rounded-lg">
+                    <h4 class="text-lg sm:text-xl font-semibold mb-3">🎵 Contest Vision</h4>
+                    <ul class="text-left space-y-2 text-sm sm:text-base">
                         <li>• AI-generated patriotic music</li>
-                        <li>• MP3, WAV, FLAC, or M4A format</li>
-                        <li>• Maximum file size: 50MB</li>
-                        <li>• Include AI tools used in creation</li>
-                        <li>• Choose license: Stream only or CC BY-NC 4.0</li>
+                        <li>• Pro-American themes and values</li>
+                        <li>• Community voting and engagement</li>
+                        <li>• Recognition for AI music innovation</li>
                     </ul>
                 </div>
-                <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                    <h4 class="text-xl font-semibold mb-3">🏆 Prizes & Recognition</h4>
-                    <ul class="text-left space-y-2">
-                        <li>• Grand Prize for Best Song</li>
-                        <li>• People's Choice Award</li>
-                        <li>• Featured on PayPortPro platform</li>
-                        <li>• Industry recognition & exposure</li>
-                        <li>• Potential collaboration opportunities</li>
+                <div class="bg-white bg-opacity-20 p-3 sm:p-4 rounded-lg">
+                    <h4 class="text-lg sm:text-xl font-semibold mb-3">🏗️ Platform Status</h4>
+                    <ul class="text-left space-y-2 text-sm sm:text-base">
+                        <li>• Contest infrastructure in development</li>
+                        <li>• Voting system being built</li>
+                        <li>• User management system ready</li>
+                        <li>• Launch timeline: Coming Soon</li>
                     </ul>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <p class="text-sm opacity-90 mb-4">This contest demonstrates the type of campaigns our platform will host</p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <span class="bg-white bg-opacity-20 px-4 py-2 rounded-lg text-sm">
+                        🎯 Target Launch: Q1 2025
+                    </span>
+                    <span class="bg-white bg-opacity-20 px-4 py-2 rounded-lg text-sm">
+                        🌍 Voting Scope: Country-wide
+                    </span>
+                    <span class="bg-white bg-opacity-20 px-4 py-2 rounded-lg text-sm">
+                        🎵 Theme: Patriotic AI Music
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Platform Features -->
-    <div class="max-w-4xl mx-auto mb-12">
-        <h2 class="text-3xl font-bold text-gray-800 mb-8">Platform Features</h2>
-        <div class="grid md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
-                <h3 class="text-xl font-semibold mb-2">Contest Management</h3>
-                <p class="text-gray-600">Create, configure, and manage multiple contests with custom rules, timeframes, and branding</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="bg-secondary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
-                <h3 class="text-xl font-semibold mb-2">Submission & Approval</h3>
-                <p class="text-gray-600">Streamlined submission process with admin approval workflows and quality control</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="bg-accent text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
-                <h3 class="text-xl font-semibold mb-2">Voting & Analytics</h3>
-                <p class="text-gray-600">Secure voting system with fraud prevention, real-time results, and detailed analytics</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Call to Action -->
-    <div class="max-w-4xl mx-auto mb-12">
-        <div class="bg-gray-50 p-8 rounded-lg">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Ready to Run Your Own Contest?</h2>
-            <p class="text-lg text-gray-600 mb-6">
-                UrVote.Rocks is the complete solution for AI music contests. Whether you're a brand, company, 
-                or community organizer, we provide the tools you need to engage your audience through 
-                AI-generated music competitions.
-            </p>
-            <div class="space-x-4">
-                <a href="/upload" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
-                    Try the Platform
+    <!-- Pricing Section -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">💰 Simple, Transparent Pricing</h2>
+        <p class="text-lg text-gray-600 mb-8 text-center">Choose the plan that fits your contest needs</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Starter Plan -->
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center">
+                <h3 class="text-xl font-semibold text-primary mb-4">STARTER</h3>
+                <p class="text-gray-600 mb-2">Launch Your First Contest</p>
+                <div class="text-3xl font-bold text-primary mb-4">$199<span class="text-lg text-gray-500">/month</span></div>
+                <ul class="text-sm text-gray-600 space-y-2 mb-6 text-left">
+                    <li>• 1 Active Contest</li>
+                    <li>• Up to 50 Submissions</li>
+                    <li>• Up to 2,500 Voters</li>
+                    <li>• Basic Branding</li>
+                </ul>
+                <a href="/pricing" class="inline-block bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+                    Learn More
                 </a>
-                <a href="#" class="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary hover:text-white transition-colors">
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="bg-white p-6 rounded-lg shadow-lg border-2 border-primary hover:shadow-xl transition-shadow text-center relative">
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span class="bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">MOST POPULAR</span>
+                </div>
+                <h3 class="text-xl font-semibold text-secondary mb-4">PRO</h3>
+                <p class="text-gray-600 mb-2">Scale Your Audience</p>
+                <div class="text-3xl font-bold text-secondary mb-4">$499<span class="text-lg text-gray-500">/month</span></div>
+                <ul class="text-sm text-gray-600 space-y-2 mb-6 text-left">
+                    <li>• Up to 5 Contests</li>
+                    <li>• Up to 250 Submissions</li>
+                    <li>• Up to 20,000 Voters</li>
+                    <li>• Full Custom Branding</li>
+                </ul>
+                <a href="/pricing" class="inline-block bg-secondary text-white px-6 py-2 rounded-lg font-semibold hover:bg-secondary-dark transition-colors">
+                    Learn More
+                </a>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center">
+                <h3 class="text-xl font-semibold text-accent mb-4">ENTERPRISE</h3>
+                <p class="text-gray-600 mb-2">Own the Stage</p>
+                <div class="text-3xl font-bold text-accent mb-4">Custom</div>
+                <ul class="text-sm text-gray-600 space-y-2 mb-6 text-left">
+                    <li>• Unlimited Contests</li>
+                    <li>• Unlimited Scale</li>
+                    <li>• White-Label Platform</li>
+                    <li>• Dedicated Support</li>
+                </ul>
+                <a href="/pricing" class="inline-block bg-accent text-white px-6 py-2 rounded-lg font-semibold hover:bg-accent-dark transition-colors">
                     Contact Sales
                 </a>
+                <p class="text-xs text-gray-500 mt-2">Starting at $1,500/month</p>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <p class="text-gray-600 mb-4">Ready to launch your contest? Choose the plan that fits your needs.</p>
+            <a href="/pricing" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+                View Full Pricing Details
+            </a>
+        </div>
+    </div>
+
+    <!-- Featured Music Clips Showcase -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">🎵 Featured AI-Generated Songs</h2>
+        <p class="text-lg text-gray-600 mb-8">🎧 Press play and hear the future of music 🚀</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- First Clip -->
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-semibold text-primary mb-4">MAGAMAGA401 - Unity Song</h3>
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <audio controls class="w-full" preload="none">
+                        <source src="/static/audio/payportpro/user/magamaga401clip.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+                <p class="text-sm text-gray-600">A unifying anthem bringing people together through music</p>
+            </div>
+
+            <!-- Second Clip -->
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-semibold text-secondary mb-4">MAGA66 - Patriotic Anthem</h3>
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <audio controls class="w-full" preload="none">
+                        <source src="/static/audio/payportpro/user/maga66clip.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+                <p class="text-sm text-gray-600">A powerful patriotic anthem showcasing AI music innovation</p>
+            </div>
+
+            <!-- Third Clip -->
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <h3 class="text-xl font-semibold text-accent mb-4">MAGA501 - Freedom Song</h3>
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <audio controls class="w-full" preload="none">
+                        <source src="/static/audio/payportpro/user/maga501clip.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+                <p class="text-sm text-gray-600">An inspiring freedom song celebrating American values</p>
+            </div>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <p class="text-gray-600 mb-4">These songs demonstrate the incredible quality possible with AI-generated music</p>
+            <a href="/upload" class="inline-block bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+                Submit Your Own Song FREE
+            </a>
+        </div>
+    </div>
+
+    <!-- Pre-Launch Mission -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">🚀 Pre-Launch Mission</h2>
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md text-left">
+            <p class="text-base sm:text-lg text-gray-700 mb-6">
+                <strong>UrVote.Rocks</strong> is building the ultimate platform where users can choose their voting scope - from local communities to country-wide or even global voting for the best AI-generated songs. 
+                We're in pre-launch mode, and we need YOU to help us create something amazing.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-3">🎯 What We're Building</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• Flexible voting scope - local, country-wide, or global</li>
+                        <li>• Fair and transparent contest platform</li>
+                        <li>• Community-driven music discovery</li>
+                        <li>• Recognition for the best AI musicians</li>
+                        <li>• Prizes and opportunities (announcement coming soon!)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-secondary mb-3">🎵 How You Can Help</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>• Submit your AI-generated songs for FREE</li>
+                        <li>• Join our pre-launch community</li>
+                        <li>• Share your music with friends</li>
+                        <li>• Help us test and improve the platform</li>
+                        <li>• Be part of music history in the making</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Featured Songs Preview -->
+    <!-- How It Works -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">⚡ How It Works</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+                <h3 class="text-xl font-semibold mb-2">Submit Your Song</h3>
+                <p class="text-gray-600">Upload your AI-generated music for FREE. No cost, no commitment - just share your creativity!</p>
+            </div>
+            <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                            <div class="bg-secondary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+            <h3 class="text-xl font-semibold mb-2">Choose Your Voting Scope</h3>
+            <p class="text-gray-600">Once we launch, you can choose local, country-wide, or global voting for your favorite AI-generated songs</p>
+            </div>
+            <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                <div class="bg-accent text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+                <h3 class="text-xl font-semibold mb-2">Win & Be Recognized</h3>
+                <p class="text-gray-600">Best songs get prizes, recognition, and opportunities (details coming soon!)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pre-Launch Signup -->
+    <div class="max-w-4xl mx-auto mb-12" id="signup">
+        <div class="bg-gradient-to-r from-green-600 to-blue-600 text-white p-6 sm:p-8 rounded-lg">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4">🎉 Join the Pre-Launch Community!</h2>
+            <p class="text-base sm:text-lg mb-6">
+                We're not done building yet, but you can be part of the journey from the beginning. 
+                Sign up for FREE and get early access to everything we're creating.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="/register" class="bg-white text-green-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full sm:w-auto text-center">
+                    Sign Up FREE
+                </a>
+                <a href="/upload" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors w-full sm:w-auto text-center">
+                    Submit Song Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Engagement -->
+    <div class="max-w-4xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">📱 Stay Connected</h2>
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+            <p class="text-base sm:text-lg text-gray-700 mb-6 text-center">
+                Follow us on social media for updates, behind-the-scenes content, and to be part of our growing community!
+            </p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+                <a href="#" class="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors text-center">
+                    <div class="text-2xl mb-2">📘</div>
+                    <div class="font-semibold">Facebook</div>
+                </a>
+                <a href="#" class="bg-blue-400 text-white p-4 rounded-lg hover:bg-blue-500 transition-colors text-center">
+                    <div class="text-2xl mb-2">🐦</div>
+                    <div class="font-semibold">Twitter</div>
+                </a>
+                <a href="#" class="bg-pink-600 text-white p-4 rounded-lg hover:bg-pink-700 transition-colors text-center">
+                    <div class="text-2xl mb-2">📷</div>
+                    <div class="font-semibold">Instagram</div>
+                </a>
+                <a href="#" class="bg-red-600 text-white p-4 rounded-lg hover:bg-red-700 transition-colors text-center">
+                    <div class="text-2xl mb-2">📺</div>
+                    <div class="font-semibold">YouTube</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Status -->
     <div class="max-w-4xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-800 mb-8">Current Contest Submissions</h2>
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <p class="text-gray-600 text-center">Songs will appear here once approved and voting begins!</p>
-            <div class="mt-4 text-center">
-                <a href="/leaderboard" class="text-primary hover:underline">Check the leaderboard →</a>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">🏗️ Platform Status</h2>
+        <div class="bg-white rounded-lg shadow-md p-6 sm:p-8">
+            <div class="text-center">
+                <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full inline-block mb-4">
+                    🚧 Under Construction
+                </div>
+                <h3 class="text-xl font-semibold mb-4">What's Ready Now</h3>
+                <ul class="text-gray-600 space-y-2 mb-6 text-left max-w-md mx-auto">
+                    <li>✅ Song submission system</li>
+                    <li>✅ User registration</li>
+                    <li>✅ Basic platform structure</li>
+                </ul>
+                <h3 class="text-xl font-semibold mb-4">Coming Soon</h3>
+                <ul class="text-gray-600 space-y-2 mb-6 text-left max-w-md mx-auto">
+                    <li>🔄 Voting system</li>
+                    <li>🔄 Contest management</li>
+                    <li>🔄 Prize announcements</li>
+                    <li>🔄 Full platform launch</li>
+                </ul>
+                <p class="text-gray-600 mb-4">We're building fast! Join now and be part of the journey.</p>
+                <a href="/register" class="inline-block bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+                    Get Started FREE
+                </a>
             </div>
         </div>
     </div>

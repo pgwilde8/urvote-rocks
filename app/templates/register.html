@@ -3,61 +3,148 @@
 {% block title %}Register - UrVote.Rocks{% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-        <div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Create your account
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Or
-                <a href="/login" class="font-medium text-primary hover:text-primary-dark">
-                    sign in to existing account
-                </a>
-            </p>
-        </div>
-        <form class="mt-8 space-y-6" id="registerForm">
-            <div class="rounded-md shadow-sm -space-y-px">
-                <div>
-                    <label for="username" class="sr-only">Username</label>
-                    <input id="username" name="username" type="text" required 
-                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm" 
-                           placeholder="Username">
-                </div>
-                <div>
-                    <label for="email" class="sr-only">Email address</label>
-                    <input id="email" name="email" type="email" required 
-                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm" 
-                           placeholder="Email address">
-                </div>
-                <div>
-                    <label for="password" class="sr-only">Password</label>
-                    <input id="password" name="password" type="password" required 
-                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm" 
-                           placeholder="Password">
-                </div>
-            </div>
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Create your account
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Join UrVote.Rocks as a contestant, voter, or both!
+        </p>
+    </div>
 
-            <div>
-                <button type="submit" 
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                    Create Account
-                </button>
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <form id="registerForm" class="space-y-6">
+                <!-- Account Type Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">
+                        I want to join as:
+                    </label>
+                    <div class="space-y-3">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="is_voter" value="true" checked 
+                                   class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                            <span class="ml-3 text-sm text-gray-700">🗳️ Voter (Vote on songs)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="is_contestant" value="true"
+                                   class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                            <span class="ml-3 text-sm text-gray-700">🎵 Contestant (Submit songs)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Basic Account Info -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">
+                        Username
+                    </label>
+                    <input type="text" name="username" id="username" required
+                           class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary">
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">
+                        Email address
+                    </label>
+                    <input type="email" name="email" id="email" required
+                           class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">
+                        Password
+                    </label>
+                    <input type="password" name="password" id="password" required
+                           class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary">
+                </div>
+
+                <!-- Contestant-specific fields (shown when is_contestant is checked) -->
+                <div id="contestantFields" class="hidden space-y-6 border-t pt-6">
+                    <h3 class="text-lg font-medium text-gray-900">Artist Profile</h3>
+                    
+                    <div>
+                        <label for="artist_name" class="block text-sm font-medium text-gray-700">
+                            Artist/Band Name
+                        </label>
+                        <input type="text" name="artist_name" id="artist_name"
+                               class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary">
+                    </div>
+
+                    <div>
+                        <label for="bio" class="block text-sm font-medium text-gray-700">
+                            Bio
+                        </label>
+                        <textarea name="bio" id="bio" rows="3"
+                                  class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary"
+                                  placeholder="Tell us about your music..."></textarea>
+                    </div>
+
+                    <div>
+                        <label for="website" class="block text-sm font-medium text-gray-700">
+                            Website (optional)
+                        </label>
+                        <input type="url" name="website" id="website"
+                               class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary"
+                               placeholder="https://yourwebsite.com">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit"
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        Create Account
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300" />
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Already have an account?</span>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <a href="/login" class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        Sign in
+                    </a>
+                </div>
             </div>
-        </form>
-        
-        <div id="error-message" class="hidden text-red-600 text-center text-sm"></div>
-        <div id="success-message" class="hidden text-green-600 text-center text-sm"></div>
+        </div>
     </div>
 </div>
 
 <script>
+// Show/hide contestant fields based on checkbox
+document.querySelector('input[name="is_contestant"]').addEventListener('change', function() {
+    const contestantFields = document.getElementById('contestantFields');
+    if (this.checked) {
+        contestantFields.classList.remove('hidden');
+    } else {
+        contestantFields.classList.add('hidden');
+    }
+});
+
+// Form submission
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const formData = new FormData(this);
+    const data = {
+        username: formData.get('username'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        is_voter: formData.get('is_voter') === 'true',
+        is_contestant: formData.get('is_contestant') === 'true',
+        artist_name: formData.get('artist_name'),
+        bio: formData.get('bio'),
+        website: formData.get('website')
+    };
     
     try {
         const response = await fetch('/api/auth/register', {
@@ -65,33 +152,19 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password
-            })
+            body: JSON.stringify(data)
         });
         
+        const result = await response.json();
+        
         if (response.ok) {
-            const data = await response.json();
-            
-            // Show success message
-            document.getElementById('success-message').textContent = 'Registration successful! Please check your email for verification.';
-            document.getElementById('success-message').classList.remove('hidden');
-            document.getElementById('error-message').classList.add('hidden');
-            
-            // Clear form
-            document.getElementById('registerForm').reset();
+            alert('Registration successful! Please check your email to verify your account.');
+            window.location.href = '/login';
         } else {
-            const errorData = await response.json();
-            document.getElementById('error-message').textContent = errorData.detail || 'Registration failed';
-            document.getElementById('error-message').classList.remove('hidden');
-            document.getElementById('success-message').classList.add('hidden');
+            alert('Registration failed: ' + result.detail);
         }
     } catch (error) {
-        document.getElementById('error-message').textContent = 'Network error. Please try again.';
-        document.getElementById('error-message').classList.remove('hidden');
-        document.getElementById('success-message').classList.add('hidden');
+        alert('Registration failed: ' + error.message);
     }
 });
 </script>

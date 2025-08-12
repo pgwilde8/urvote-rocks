@@ -79,6 +79,9 @@ async def upload_song(
         file_path = str(client_contest_dir / safe_filename)
         file_size = len(data)
         
+        # Generate web-accessible URL path - files are saved to uploads/clients/
+        audio_url = f"/uploads/clients/payportpro/patriotic-2024/{safe_filename}"
+        
         # Save file
         with open(file_path, "wb") as f:
             f.write(data)
@@ -97,6 +100,10 @@ async def upload_song(
         external_link=external_link,
         is_approved=False
     )
+    
+    # Set audio_url for web access
+    if file_path:
+        new_song.audio_url = audio_url
     
     db.add(new_song)
     await db.commit()

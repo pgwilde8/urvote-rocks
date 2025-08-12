@@ -7,7 +7,7 @@ import httpx
 from ..database import get_db
 from ..models import Vote, Song, User
 from ..schemas import VoteCreate, VoteResponse
-from ..auth import get_current_user
+from ..auth import get_current_user, verify_token
 from ..config import settings
 
 router = APIRouter(prefix="/voting", tags=["voting"])
@@ -33,10 +33,26 @@ async def get_geoip_info(ip_address: str) -> dict:
 async def cast_vote(
     vote_data: VoteCreate,
     request: Request,
-    db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    db: AsyncSession = Depends(get_db)
 ):
     """Cast a vote for a song"""
+    
+    # Try to get current user if authentication header is present
+    current_user = None
+    auth_header = request.headers.get("authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        try:
+            # Extract token and verify manually
+            token = auth_header.split(" ")[1]
+            payload = verify_token(token)
+            if payload and payload.get("sub"):
+                user_id = int(payload.get("sub"))
+                result = await db.execute(select(User).where(User.id == user_id))
+                user = result.scalar_one_or_none()
+                if user and user.is_active:
+                    current_user = user
+        except:
+            current_user = None
     
     # Check if song exists and is approved
     result = await db.execute(select(Song).where(Song.id == vote_data.song_id))
@@ -54,45 +70,87 @@ async def cast_vote(
             detail="Cannot vote for unapproved songs"
         )
     
-    # Check if user already voted for this song today
-    today = func.date(func.now())
-    existing_vote = await db.execute(
-        select(Vote).where(
-            and_(
-                Vote.song_id == vote_data.song_id,
-                Vote.voter_id == current_user.id,
-                func.date(Vote.created_at) == today
-            )
-        )
-    )
-    
-    if existing_vote.scalar_one_or_none():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="You have already voted for this song today"
-        )
-    
     # Get GeoIP information
     client_ip = request.client.host
     geoip_info = await get_geoip_info(client_ip)
     
+    # Determine voter type and check existing votes
+    if current_user:
+        # Authenticated user voting
+        voter_id = current_user.id
+        voter_type = "authenticated"
+        
+        # Check if user already voted for this song today
+        today = func.date(func.now())
+        existing_vote = await db.execute(
+            select(Vote).where(
+                and_(
+                    Vote.song_id == vote_data.song_id,
+                    Vote.voter_id == current_user.id,
+                    func.date(Vote.created_at) == today
+                )
+            )
+        )
+        
+        if existing_vote.scalar_one_or_none():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You have already voted for this song today"
+            )
+    else:
+        # Anonymous voting - check IP-based rate limiting
+        voter_id = None
+        voter_type = "anonymous"
+        
+        # Check if IP already voted for this song today (rate limiting)
+        today = func.date(func.now())
+        existing_vote = await db.execute(
+            select(Vote).where(
+                and_(
+                    Vote.song_id == vote_data.song_id,
+                    Vote.ip_address == client_ip,
+                    Vote.voter_type == "anonymous",
+                    func.date(Vote.created_at) == today
+                )
+            )
+        )
+        
+        if existing_vote.scalar_one_or_none():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="You have already voted for this song today. See you tomorrow!"
+            )
+    
     # Create vote
-    new_vote = Vote(
-        song_id=vote_data.song_id,
-        voter_id=current_user.id,
-        ip_address=client_ip,
-        user_agent=request.headers.get("user-agent"),
-        recaptcha_score=vote_data.recaptcha_token,  # TODO: Verify reCAPTCHA
-        country_code=geoip_info["country_code"],
-        region=geoip_info["region"],
-        city=geoip_info["city"]
-    )
-    
-    db.add(new_vote)
-    await db.commit()
-    await db.refresh(new_vote)
-    
-    return new_vote
+    try:
+        new_vote = Vote(
+            song_id=vote_data.song_id,
+            voter_id=voter_id,
+            voter_type=voter_type,
+            ip_address=client_ip,
+            user_agent=request.headers.get("user-agent"),
+            recaptcha_score=vote_data.recaptcha_token,  # TODO: Add real reCAPTCHA
+            country_code=geoip_info["country_code"],
+            region=geoip_info["region"],
+            city=geoip_info["city"]
+        )
+        
+        print(f"DEBUG: Creating vote with voter_id={voter_id}, voter_type={voter_type}, ip={client_ip}")
+        
+        db.add(new_vote)
+        await db.commit()
+        await db.refresh(new_vote)
+        
+        print(f"DEBUG: Vote created successfully with ID {new_vote.id}")
+        return new_vote
+        
+    except Exception as e:
+        print(f"DEBUG: Error creating vote: {str(e)}")
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Database error: {str(e)}"
+        )
 
 @router.get("/leaderboard", response_model=List[dict])
 async def get_leaderboard(

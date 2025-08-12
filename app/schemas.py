@@ -70,7 +70,8 @@ class VoteCreate(BaseModel):
 class VoteResponse(BaseModel):
     id: int
     song_id: int
-    voter_id: int
+    voter_id: Optional[int] = None  # Made optional for anonymous voting
+    voter_type: str  # "authenticated" or "anonymous"
     ip_address: str
     country_code: Optional[str]
     created_at: datetime

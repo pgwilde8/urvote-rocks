@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, BigInteger
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, BigInteger, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .database import Base
@@ -16,9 +16,47 @@ class User(Base):
     email_verified = Column(Boolean, default=False)
     verification_token = Column(String(255), nullable=True)
     
+    # New fields for dual-purpose accounts
+    artist_name = Column(String(255), nullable=True)  # For contestants
+    bio = Column(Text, nullable=True)  # Artist bio
+    website = Column(String(500), nullable=True)  # Artist website
+    social_links = Column(JSON, nullable=True)  # Social media links
+    profile_image = Column(String(500), nullable=True)  # Profile picture
+    is_contestant = Column(Boolean, default=False)  # Can submit songs
+    is_voter = Column(Boolean, default=True)  # Can vote (default for all)
+    
+    # Additional fields for better artist profiles
+    location = Column(String(255), nullable=True)  # Artist location
+    genre = Column(String(100), nullable=True)  # Primary music genre
+    years_active = Column(String(50), nullable=True)  # How long making music
+    
     # Relationships
     songs = relationship("Song", back_populates="artist")
     votes = relationship("Vote", back_populates="voter")
+
+class Client(Base):
+    __tablename__ = "clients"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String(100), unique=True, index=True, nullable=False)
+    name = Column(String(255), nullable=False)
+    tagline = Column(String(500), nullable=True)
+    description = Column(Text, nullable=True)
+    about = Column(Text, nullable=True)
+    company_info = Column(Text, nullable=True)
+    mission = Column(Text, nullable=True)
+    logo_url = Column(String(500), nullable=True)
+    theme = Column(JSON, nullable=True)  # Store theme colors as JSON
+    website_url = Column(String(500), nullable=True)
+    contact_email = Column(String(255), nullable=True)
+    is_active = Column(Boolean, default=True)
+    
+    # Timestamps
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    
+    # Relationships
+    contests = relationship("Contest", back_populates="client")
 
 class Song(Base):
     __tablename__ = "songs"
@@ -42,11 +80,14 @@ class Song(Base):
     
     # Metadata
     artist_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    contest_id = Column(Integer, ForeignKey("contests.id"), nullable=True)  # Changed from False to True
+    audio_url = Column(String(500), nullable=True)  # Web-accessible URL for audio files
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     approved_at = Column(DateTime(timezone=True), nullable=True)
     
     # Relationships
     artist = relationship("User", back_populates="songs")
+    contest = relationship("Contest")
     votes = relationship("Vote", back_populates="song")
 
 class Vote(Base):
@@ -54,7 +95,8 @@ class Vote(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     song_id = Column(Integer, ForeignKey("songs.id"), nullable=False)
-    voter_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    voter_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Made optional for anonymous voting
+    voter_type = Column(String(20), default="authenticated")  # "authenticated" or "anonymous"
     ip_address = Column(String(45), nullable=False)  # IPv6 compatible
     user_agent = Column(Text, nullable=True)
     device_fingerprint = Column(String(255), nullable=True)
@@ -84,4 +126,10 @@ class Contest(Base):
     max_entries_per_user = Column(Integer, default=1)
     voting_enabled = Column(Boolean, default=True)
     
+    # Client relationship
+    client_id = Column(Integer, ForeignKey("clients.id"), nullable=False)
+    
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    # Relationships
+    client = relationship("Client", back_populates="contests")
