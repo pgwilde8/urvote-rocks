@@ -3,16 +3,24 @@ from typing import Optional
 
 class Settings(BaseSettings):
     # Database
-    database_url: str = "postgresql+asyncpg://username:Securepass1@localhost/urvote"
+    database_url: str = "postgresql+asyncpg://urvote_user:Securepass1@localhost/urvote"
     
     # Security
     secret_key: str = "hfdfsf78gj558"
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
     
-    # File Upload
+    # File Upload - Multi-Client Structure
     upload_dir: str = "/opt/urvote/uploads"
+    clients_dir: str = "/opt/urvote/uploads/clients"
+    contests_dir: str = "/opt/urvote/uploads/contests"
+    processed_dir: str = "/opt/urvote/uploads/processed"
+    temp_dir: str = "/opt/urvote/uploads/temp"
     max_file_size: int = 100 * 1024 * 1024  # 100MB
+    
+    # Client Configuration
+    default_client: str = "payportpro"
+    default_contest: str = "patriotic-2024"
     
     # Redis
     redis_url: str = "redis://localhost:6379"

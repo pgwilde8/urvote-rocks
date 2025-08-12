@@ -4,11 +4,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-from .routers import auth, songs, voting
-from . import admin
 import os
 
 from .routers import auth, songs, voting
+from . import admin
 from .config import settings
 
 # Create FastAPI app
@@ -23,7 +22,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://urvote.rocks", "https://www.urvote.rocks"],  # Configure appropriately for production
+    allow_origins=["https://urvote.rocks", "https://www.urvote.rocks"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,6 +39,7 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(songs.router, prefix="/api")
 app.include_router(voting.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
+
 # Root route - Home page
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -54,6 +54,21 @@ async def upload_page(request: Request):
 @app.get("/leaderboard", response_class=HTMLResponse)
 async def leaderboard_page(request: Request):
     return templates.TemplateResponse("leaderboard.html", {"request": request})
+
+# Admin route - Direct access without API prefix
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_page(request: Request):
+    return templates.TemplateResponse("admin/dashboard.html", {"request": request})
+
+# Login page route
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+# Register page route
+@app.get("/register", response_class=HTMLResponse)
+async def register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})    
 
 # Health check
 @app.get("/health")
@@ -70,7 +85,3 @@ async def legacy_upload(
 ):
     """Legacy upload endpoint - redirects to new system"""
     return {"message": "Please use the new upload form at /upload"}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)

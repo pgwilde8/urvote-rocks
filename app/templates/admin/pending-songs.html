@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Pending Songs - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="py-8">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Pending Song Approvals</h1>
+            <a href="/admin" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">
+                ← Back to Dashboard
+            </a>
+        </div>
+        
+        <div id="pending-songs-list" class="space-y-6">
+            <p class="text-gray-500 text-center py-8">Loading pending songs...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadPendingSongs() {
+    try {
+        const response = await fetch('/api/admin/pending-songs');
+        if (response.ok) {
+            const songs = await response.json();
+            displayPendingSongs(songs);
+        } else {
+            document.getElementById('pending-songs-list').innerHTML = 
+                '<p class="text-red-500 text-center py-8">Error loading pending songs</p>';
+        }
+    } catch (error) {
+        console.error('Error loading pending songs:', error);
+        document.getElementById('pending-songs-list').innerHTML = 
+            '<p class="text-red-500 text-center py-8">Error loading pending songs</p>';
+    }
+}
+
+function displayPendingSongs(songs) {
+    const container = document.getElementById('pending-songs-list');
+    
+    if (!songs || songs.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-8">No pending songs to review</p>';
+        return;
+    }
+    
+    const html = songs.map(song => `
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <h3 class="text-lg font-medium text-gray-900">${song.title}</h3>
+                    <p class="text-sm text-gray-500">by ${song.artist_name}</p>
+                    <p class="text-sm text-gray-500">Genre: ${song.genre || 'Not specified'}</p>
+                    <p class="text-sm text-gray-600 mt-2">${song.description || 'No description provided'}</p>
+                    <p class="text-sm text-gray-600 mt-1"><strong>AI Tools:</strong> ${song.ai_tools_used}</p>
+                    <p class="text-sm text-gray-500 mt-2">Submitted: ${new Date(song.created_at).toLocaleString()}</p>
+                </div>
+                <div class="ml-6 flex space-x-2">
+                    <button onclick="approveSong(${song.id})" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                        Approve
+                    </button>
+                    <button onclick="rejectSong(${song.id})" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+                        Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    container.innerHTML = html;
+}
+
+async function approveSong(songId) {
+    if (!confirm('Are you sure you want to approve this song?')) return;
+    
+    try {
+        const response = await fetch(`/api/admin/approve-song/${songId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (response.ok) {
+            alert('Song approved successfully!');
+            loadPendingSongs(); // Reload the list
+        } else {
+            alert('Error approving song');
+        }
+    } catch (error) {
+        console.error('Error approving song:', error);
+        alert('Error approving song');
+    }
+}
+
+async function rejectSong(songId) {
+    const reason = prompt('Please provide a reason for rejection:');
+    if (!reason) return;
+    
+    try {
+        const response = await fetch(`/api/admin/reject-song/${songId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reason: reason })
+        });
+        
+        if (response.ok) {
+            alert('Song rejected successfully!');
+            loadPendingSongs(); // Reload the list
+        } else {
+            alert('Error rejecting song');
+        }
+    } catch (error) {
+        console.error('Error rejecting song:', error);
+        alert('Error rejecting song');
+    }
+}
+
+// Load pending songs when page loads
+document.addEventListener('DOMContentLoaded', loadPendingSongs);
+</script>
+{% endblock %}

@@ -67,16 +67,19 @@ async def upload_song(
                 detail=f"File too large. Maximum: {settings.max_file_size // (1024*1024)}MB"
             )
         
-        # Generate file hash and path
+        # Generate file hash and path - UPDATED FOR MULTI-CLIENT
         file_hash = hashlib.sha256(data).hexdigest()
         timestamp = int(time.time())
         safe_artist = "".join(c for c in artist_name if c.isalnum() or c in (" ", "-", "_")).strip().replace(" ", "_")
         safe_filename = f"{timestamp}__{safe_artist}__{file_hash[:10]}{ext}"
-        file_path = str(Path(settings.upload_dir) / safe_filename)
+        
+        # Use new multi-client path structure
+        client_contest_dir = Path(settings.clients_dir) / "payportpro" / "patriotic-2024"
+        os.makedirs(client_contest_dir, exist_ok=True)
+        file_path = str(client_contest_dir / safe_filename)
         file_size = len(data)
         
         # Save file
-        os.makedirs(Path(settings.upload_dir), exist_ok=True)
         with open(file_path, "wb") as f:
             f.write(data)
     
@@ -99,9 +102,10 @@ async def upload_song(
     await db.commit()
     await db.refresh(new_song)
     
-    # Log submission
+    # Log submission - UPDATED PATH
     logline = f'{int(time.time())},"{artist_name}","{email}","{title}",{file_size},"{file_hash}","{request.client.host if request else ""}","{file_path or external_link}"\n'
-    log_file = Path(settings.upload_dir) / "submissions.csv"
+    log_file = Path(settings.clients_dir) / "payportpro" / "patriotic-2024" / "submissions.csv"
+    
     with open(log_file, "a", encoding="utf-8") as f:
         if f.tell() == 0:
             f.write("ts,artist,email,title,bytes,digest,ip,file_path\n")

@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="py-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
+        
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                                <span class="text-white font-bold">🎵</span>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Songs</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="total-songs">-</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
+                                <span class="text-white font-bold">⏳</span>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Pending Approval</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="pending-songs">-</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
+                                <span class="text-white font-bold">✅</span>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Approved Songs</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="approved-songs">-</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
+                                <span class="text-white font-bold">👥</span>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+                                <dd class="text-lg font-medium text-gray-900" id="total-users">-</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="bg-white shadow rounded-lg mb-8">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Quick Actions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="/admin/pending-songs" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                        Review Pending Songs
+                    </a>
+                    <a href="/admin/users" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                        Manage Users
+                    </a>
+                    <a href="/admin/export" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">
+                        Export Data
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Activity</h3>
+                <div id="recent-activity" class="space-y-3">
+                    <p class="text-gray-500 text-center py-4">Loading recent activity...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Load dashboard data
+async function loadDashboardData() {
+    try {
+        // Load stats
+        const statsResponse = await fetch('/api/admin/stats');
+        if (statsResponse.ok) {
+            const stats = await statsResponse.json();
+            document.getElementById('total-songs').textContent = stats.total_songs || 0;
+            document.getElementById('pending-songs').textContent = stats.pending_songs || 0;
+            document.getElementById('approved-songs').textContent = stats.approved_songs || 0;
+            document.getElementById('total-users').textContent = stats.total_users || 0;
+        }
+        
+        // Load recent activity
+        const activityResponse = await fetch('/api/admin/recent-activity');
+        if (activityResponse.ok) {
+            const activities = await activityResponse.json();
+            displayRecentActivity(activities);
+        }
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
+    }
+}
+
+function displayRecentActivity(activities) {
+    const container = document.getElementById('recent-activity');
+    if (!activities || activities.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center py-4">No recent activity</p>';
+        return;
+    }
+    
+    const html = activities.map(activity => `
+        <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span class="text-blue-600 text-sm">${activity.type === 'song' ? '🎵' : '👤'}</span>
+                </div>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900">${activity.description}</p>
+                <p class="text-sm text-gray-500">${new Date(activity.timestamp).toLocaleString()}</p>
+            </div>
+        </div>
+    `).join('');
+    
+    container.innerHTML = html;
+}
+
+// Load data when page loads
+document.addEventListener('DOMContentLoaded', loadDashboardData);
+</script>
+{% endblock %}
