@@ -54,10 +54,25 @@ async def home(request: Request):
 async def upload_page(request: Request):
     return templates.TemplateResponse("upload.html", {"request": request})
 
-# Leaderboard page
+# Campaigns list page
+@app.get("/campaigns", response_class=HTMLResponse)
+async def campaigns_page(request: Request):
+    return templates.TemplateResponse("campaigns.html", {"request": request})
+
+# Campaign-specific leaderboard page
+@app.get("/campaigns/{client_slug}/{contest_slug}", response_class=HTMLResponse)
+async def campaign_leaderboard_page(
+    client_slug: str, 
+    contest_slug: str, 
+    request: Request
+):
+    """Campaign-specific leaderboard page"""
+    return templates.TemplateResponse("leaderboard.html", {"request": request})
+
+# Legacy leaderboard page (redirect to campaigns)
 @app.get("/leaderboard", response_class=HTMLResponse)
 async def leaderboard_page(request: Request):
-    return templates.TemplateResponse("leaderboard.html", {"request": request})
+    return templates.TemplateResponse("campaigns.html", {"request": request})
 
 # Client contest page route
 @app.get("/contest/{client_slug}/{contest_slug}", response_class=HTMLResponse)

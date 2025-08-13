@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Active Campaigns - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">🎵 Active Music Campaigns</h1>
+        <p class="text-xl text-gray-600">Choose your contest and start voting for the best AI-generated music!</p>
+        <p class="text-lg text-primary font-semibold mt-2">Multiple contests, one platform</p>
+    </div>
+
+    <!-- Platform Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-primary" id="totalCampaigns">2</div>
+            <div class="text-sm text-gray-600">Active Campaigns</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-secondary" id="totalSongs">0</div>
+            <div class="text-sm text-gray-600">Total Submissions</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-accent" id="totalVotes">0</div>
+            <div class="text-sm text-gray-600">Total Votes Cast</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-green-600" id="activeUsers">0</div>
+            <div class="text-sm text-gray-600">Active Participants</div>
+        </div>
+    </div>
+
+    <!-- Campaigns Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        
+        <!-- PayPortPro Campaign -->
+        <div class="bg-gradient-to-br from-red-500 to-blue-600 text-white rounded-lg shadow-lg overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold">🇺🇸 PayPortPro</h3>
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">ACTIVE</span>
+                </div>
+                <h4 class="text-xl font-semibold mb-3">Patriotic AI Music Challenge</h4>
+                <p class="text-white text-opacity-90 mb-4">
+                    Celebrate American values through AI-generated patriotic music. 
+                    Bridging dollars to stable coins with the power of music.
+                </p>
+                
+                <!-- Campaign Stats -->
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold">15</div>
+                        <div class="text-sm text-white text-opacity-80">Songs</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold">127</div>
+                        <div class="text-sm text-white text-opacity-80">Votes</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold">7</div>
+                        <div class="text-sm text-white text-opacity-80">Days Left</div>
+                    </div>
+                </div>
+                
+                <!-- Campaign Features -->
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🎵 Patriotic Theme</span>
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🇺🇸 American Values</span>
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🤖 AI-Generated</span>
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🗳️ Community Voting</span>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="/campaigns/payportpro/patriotic-2024" 
+                       class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
+                        🎵 Enter Contest
+                    </a>
+                    <a href="/upload" 
+                       class="bg-white bg-opacity-20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-colors text-center">
+                        📤 Submit Song
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sound of Chi's Playlist Campaign -->
+        <div class="bg-gradient-to-br from-purple-500 to-pink-600 text-white rounded-lg shadow-lg overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold">🎵 Sound of Chi</h3>
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">ACTIVE</span>
+                </div>
+                <h4 class="text-xl font-semibold mb-3">Community Playlist Contest</h4>
+                <p class="text-white text-opacity-90 mb-4">
+                    Like Spotify playlists, but with AI-generated music! Upload your songs, 
+                    vote for favorites, and build the ultimate community-curated playlist.
+                </p>
+                
+                <!-- Campaign Stats -->
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold">8</div>
+                        <div class="text-sm text-white text-opacity-80">Songs</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold">43</div>
+                        <div class="text-sm text-white text-opacity-80">Votes</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold">∞</div>
+                        <div class="text-sm text-white text-opacity-80">Always Open</div>
+                    </div>
+                </div>
+                
+                <!-- Campaign Features -->
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🎵 Community Playlist</span>
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🤖 AI-Generated</span>
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">📱 Spotify-Style</span>
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🌍 Global Community</span>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="/campaigns/soundofchi/playlist" 
+                       class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
+                        🎵 View Playlist
+                    </a>
+                    <a href="/upload" 
+                       class="bg-white bg-opacity-20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-colors text-center">
+                        📤 Add to Playlist
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Platform Benefits -->
+    <div class="bg-white p-8 rounded-lg shadow-md mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Why Choose UrVote.Rocks?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center">
+                <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">🎯</div>
+                <h3 class="text-xl font-semibold mb-2">Multiple Campaigns</h3>
+                <p class="text-gray-600">Participate in different contests with various themes and clients</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-secondary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">🤖</div>
+                <h3 class="text-xl font-semibold mb-2">AI Music Focus</h3>
+                <p class="text-gray-600">Specialized platform for AI-generated music contests</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-accent text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">📱</div>
+                <h3 class="text-xl font-semibold mb-2">Playlist Style</h3>
+                <p class="text-gray-600">Spotify-like experience for AI-generated music discovery</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mb-8">
+        <p class="text-lg text-gray-600 mb-4">Ready to launch your own music contest?</p>
+        <a href="/pricing" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+            View Pricing & Get Started
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Load platform stats
+async function loadPlatformStats() {
+    try {
+        const response = await fetch('/api/voting/stats');
+        const stats = await response.json();
+        
+        // Update stats display
+        document.getElementById('totalSongs').textContent = stats.total_songs || 0;
+        document.getElementById('totalVotes').textContent = stats.total_votes || 0;
+        
+        // Calculate active users (simplified)
+        const activeUsers = Math.max(1, Math.floor((stats.total_votes || 0) / 10));
+        document.getElementById('activeUsers').textContent = activeUsers;
+        
+    } catch (error) {
+        console.error('Error loading platform stats:', error);
+    }
+}
+
+// Load stats on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadPlatformStats();
+});
+</script>
+{% endblock %}

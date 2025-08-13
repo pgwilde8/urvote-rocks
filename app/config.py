@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
+import os
+os.environ.clear()  # Clear any cached environment variables
 
 class Settings(BaseSettings):
     # Database
@@ -38,6 +40,13 @@ class Settings(BaseSettings):
     
     # GeoIP Service
     geoip_api_key: Optional[str] = None
+
+    # DigitalOcean Spaces Configuration
+    spaces_endpoint: str = "https://sfo3.digitaloceanspaces.com"
+    spaces_bucket: str = "urvote.rocks"
+    spaces_access_key: str = "DO00DLYYGZ83P833NDQB"
+    spaces_secret_key: str = "KTWro6oES5YqxAvI2Oq52MlqxkuVjz8NJlL9WdEncT0"
+    spaces_region: str = "sfo3"
     
     @property
     def allowed_extensions(self) -> set:

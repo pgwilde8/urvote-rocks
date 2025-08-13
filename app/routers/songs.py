@@ -6,8 +6,10 @@ from typing import List, Optional
 from pathlib import Path
 import hashlib
 import time
+import io
 import os
-
+import boto3
+from botocore.client import Config
 from ..database import get_db
 from ..models import Song, User, Vote
 from ..schemas import SongCreate, SongResponse, SongApproval
@@ -67,24 +69,48 @@ async def upload_song(
                 detail=f"File too large. Maximum: {settings.max_file_size // (1024*1024)}MB"
             )
         
-        # Generate file hash and path - UPDATED FOR MULTI-CLIENT
+        # Generate file hash and path
         file_hash = hashlib.sha256(data).hexdigest()
         timestamp = int(time.time())
         safe_artist = "".join(c for c in artist_name if c.isalnum() or c in (" ", "-", "_")).strip().replace(" ", "_")
         safe_filename = f"{timestamp}__{safe_artist}__{file_hash[:10]}{ext}"
         
-        # Use new multi-client path structure
-        client_contest_dir = Path(settings.clients_dir) / "payportpro" / "patriotic-2024"
-        os.makedirs(client_contest_dir, exist_ok=True)
-        file_path = str(client_contest_dir / safe_filename)
-        file_size = len(data)
-        
-        # Generate web-accessible URL path - files are saved to uploads/clients/
-        audio_url = f"/uploads/clients/payportpro/patriotic-2024/{safe_filename}"
-        
-        # Save file
-        with open(file_path, "wb") as f:
-            f.write(data)
+        # DigitalOcean Spaces upload
+        try:
+            print(f"DEBUG: Using bucket: {settings.spaces_bucket}")
+            print(f"DEBUG: Using region: {settings.spaces_region}")
+            print(f"DEBUG: Using endpoint: {settings.spaces_endpoint}")
+            
+            session = boto3.session.Session()
+            spaces_client = session.client('s3',
+                region_name=settings.spaces_region,
+                endpoint_url=settings.spaces_endpoint,
+                aws_access_key_id=settings.spaces_access_key,
+                aws_secret_access_key=settings.spaces_secret_key)
+            
+            # Upload to Spaces
+            spaces_key = f"payportpro/patriotic-2024/{safe_filename}"
+            print(f"DEBUG: Uploading to key: {spaces_key}")
+            
+            spaces_client.upload_fileobj(
+                io.BytesIO(data), 
+                settings.spaces_bucket, 
+                spaces_key,
+                ExtraArgs={'ACL': 'public-read'}
+            )
+            
+            # Set file info
+            file_path = f"http://{settings.spaces_region}.digitaloceanspaces.com/{settings.spaces_bucket}/{spaces_key}"
+            audio_url = file_path
+            file_size = len(data)
+            print(f"DEBUG: File uploaded successfully to: {file_path}")
+            
+        except Exception as e:
+            print(f"DEBUG: Upload error: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to upload to DigitalOcean Spaces: {str(e)}"
+            )
     
     # Create song record
     new_song = Song(
@@ -98,12 +124,9 @@ async def upload_song(
         file_size=file_size,
         file_hash=file_hash,
         external_link=external_link,
-        is_approved=False
+        is_approved=False,
+        audio_url=audio_url
     )
-    
-    # Set audio_url for web access
-    if file_path:
-        new_song.audio_url = audio_url
     
     db.add(new_song)
     await db.commit()
