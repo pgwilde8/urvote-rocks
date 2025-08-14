@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+{% block title %}Create New Campaign - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">🎵 Create New Campaign</h1>
+        <p class="text-xl text-gray-600">Launch your own AI music contest with custom branding</p>
+        <p class="text-lg text-primary font-semibold mt-2">Professional campaign pages, automatic setup</p>
+    </div>
+
+    <!-- Campaign Creation Form -->
+    <div class="bg-white p-8 rounded-lg shadow-md">
+        <form method="POST" action="/api/campaigns/create" class="space-y-6">
+            <!-- Client Information -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🏢 Client Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="client_name" class="block text-sm font-medium text-gray-700 mb-2">Client/Company Name *</label>
+                        <input type="text" id="client_name" name="client_name" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., TechCorp Inc">
+                    </div>
+                    <div>
+                        <label for="client_slug" class="block text-sm font-medium text-gray-700 mb-2">URL Slug *</label>
+                        <input type="text" id="client_slug" name="client_slug" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., techcorp">
+                        <p class="text-xs text-gray-500 mt-1">This will create: urvote.rocks/campaigns/techcorp/your-contest</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label for="website_url" class="block text-sm font-medium text-gray-700 mb-2">Website URL</label>
+                        <input type="url" id="website_url" name="website_url"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="https://www.yourcompany.com">
+                    </div>
+                    <div>
+                        <label for="website_display" class="block text-sm font-medium text-gray-700 mb-2">Website Display Name</label>
+                        <input type="text" id="website_display" name="website_display"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="www.yourcompany.com">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campaign Information -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Campaign Details</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="contest_name" class="block text-sm font-medium text-gray-700 mb-2">Contest Name *</label>
+                        <input type="text" id="contest_name" name="contest_name" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., Summer Vibes 2024">
+                    </div>
+                    <div>
+                        <label for="contest_slug" class="block text-sm font-medium text-gray-700 mb-2">Contest URL Slug *</label>
+                        <input type="text" id="contest_slug" name="contest_slug" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., summer-vibes-2024">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label for="contest_description" class="block text-sm font-medium text-gray-700 mb-2">Contest Description *</label>
+                    <textarea id="contest_description" name="contest_description" rows="3" required
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                              placeholder="Describe your contest theme, goals, and what kind of music you're looking for..."></textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label for="tagline" class="block text-sm font-medium text-gray-700 mb-2">Tagline</label>
+                        <input type="text" id="tagline" name="tagline"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., Join the AI music revolution">
+                    </div>
+                    <div>
+                        <label for="sponsor_description" class="block text-sm font-medium text-gray-700 mb-2">Sponsor Description</label>
+                        <input type="text" id="sponsor_description" name="sponsor_description"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                               placeholder="e.g., AI-generated music contest">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campaign Tags -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🏷️ Campaign Tags</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tags" value="🎵 AI-Generated" class="mr-2">
+                        <span class="text-sm">🎵 AI-Generated</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tags" value="🗳️ Community Voting" class="mr-2">
+                        <span class="text-sm">🗳️ Community Voting</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tags" value="🤖 AI Music" class="mr-2">
+                        <span class="text-sm">🤖 AI Music</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tags" value="🎯 Contest" class="mr-2">
+                        <span class="text-sm">🎯 Contest</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tags" value="🌍 Global" class="mr-2">
+                        <span class="text-sm">🌍 Global</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tags" value="📱 Mobile" class="mr-2">
+                        <span class="text-sm">📱 Mobile</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tags" value="🎨 Creative" class="mr-2">
+                        <span class="text-sm">🎨 Creative</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tags" value="🚀 Innovation" class="mr-2">
+                        <span class="text-sm">🚀 Innovation</span>
+                    </label>
+                </div>
+                <div class="mt-4">
+                    <label for="custom_tags" class="block text-sm font-medium text-gray-700 mb-2">Custom Tags (comma-separated)</label>
+                    <input type="text" id="custom_tags" name="custom_tags"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                           placeholder="e.g., Electronic, Ambient, Corporate">
+                </div>
+            </div>
+
+            <!-- Color Scheme -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🎨 Color Scheme</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="color_primary" class="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
+                        <select id="color_primary" name="color_primary" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="primary">Primary (Blue)</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="purple">Purple</option>
+                            <option value="pink">Pink</option>
+                            <option value="teal">Teal</option>
+                            <option value="orange">Orange</option>
+                            <option value="indigo">Indigo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="color_secondary" class="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
+                        <select id="color_secondary" name="color_secondary" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="blue">Blue</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="purple">Purple</option>
+                            <option value="pink">Pink</option>
+                            <option value="teal">Teal</option>
+                            <option value="orange">Orange</option>
+                            <option value="indigo">Indigo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="color_accent" class="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
+                        <select id="color_accent" name="color_accent" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="accent">Accent (Yellow)</option>
+                            <option value="red">Red</option>
+                            <option value="green">Green</option>
+                            <option value="purple">Purple</option>
+                            <option value="pink">Pink</option>
+                            <option value="teal">Teal</option>
+                            <option value="orange">Orange</option>
+                            <option value="indigo">Indigo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campaign Settings -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">⚙️ Campaign Settings</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">End Date (Optional)</label>
+                        <input type="date" id="end_date" name="end_date"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Leave empty for always-open campaigns</p>
+                    </div>
+                    <div>
+                        <label for="max_file_size" class="block text-sm font-medium text-gray-700 mb-2">Max File Size (MB)</label>
+                        <select id="max_file_size" name="max_file_size" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="25">25 MB</option>
+                            <option value="50">50 MB</option>
+                            <option value="100" selected>100 MB</option>
+                            <option value="200">200 MB</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label for="call_to_action" class="block text-sm font-medium text-gray-700 mb-2">Call to Action Message</label>
+                    <textarea id="call_to_action" name="call_to_action" rows="2"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                              placeholder="e.g., Share your AI-generated music and help choose the best songs for our community"></textarea>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+                    🚀 Create Campaign
+                </button>
+                <p class="text-sm text-gray-500 mt-2">Your campaign will be live immediately after creation</p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="mt-12 bg-gradient-to-r from-primary-50 to-blue-50 p-8 rounded-lg border border-primary-200">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">What You Get</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center">
+                <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">🎨</div>
+                <h3 class="text-xl font-semibold mb-2">Custom Branding</h3>
+                <p class="text-gray-600">Your own colors, logo, and campaign identity</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-secondary text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">📱</div>
+                <h3 class="text-xl font-semibold mb-2">Professional Page</h3>
+                <p class="text-gray-600">Beautiful, responsive campaign page that works on all devices</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-accent text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">🚀</div>
+                <h3 class="text-xl font-semibold mb-2">Instant Setup</h3>
+                <p class="text-gray-600">Your campaign is live immediately with full functionality</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Auto-generate slugs from names
+document.getElementById('client_name').addEventListener('input', function(e) {
+    const slug = e.target.value.toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    document.getElementById('client_slug').value = slug;
+});
+
+document.getElementById('contest_name').addEventListener('input', function(e) {
+    const slug = e.target.value.toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    document.getElementById('contest_slug').value = slug;
+});
+
+// Form validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    const requiredFields = this.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('border-red-500');
+            isValid = false;
+        } else {
+            field.classList.remove('border-red-500');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required fields.');
+    }
+});
+</script>
+{% endblock %}

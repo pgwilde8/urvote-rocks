@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from typing import List, Optional
@@ -19,26 +19,47 @@ from ..config import settings
 router = APIRouter(prefix="/songs", tags=["songs"])
 
 @router.get("/upload", response_class=HTMLResponse)
-async def upload_form():
+async def upload_form(request: Request):
     """Show song upload form"""
-    from ..templates.upload import upload
-    return upload()
+    from .. import templates
+    return templates.TemplateResponse("upload.html", {"request": request})
 
-@router.post("/upload")
-async def upload_song(
-    title: str = Form(...),
-    artist_name: str = Form(...),
-    email: str = Form(...),
-    genre: Optional[str] = Form(None),
-    ai_tools_used: str = Form(...),
-    description: Optional[str] = Form(None),
-    license_type: str = Form("stream_only"),
-    external_link: Optional[str] = Form(None),
-    file: Optional[UploadFile] = File(None),
-    request: Request = None,
-    db: AsyncSession = Depends(get_db)
+@router.get("/upload/success", response_class=HTMLResponse)
+async def upload_success(request: Request, song_id: int = None):
+    """Show upload success page"""
+    from .. import templates
+    from ..database import get_db
+    from sqlalchemy.ext.asyncio import AsyncSession
+    
+    # Get song details if song_id is provided
+    song_data = None
+    if song_id:
+        db = await anext(get_db())
+        try:
+            result = await db.execute(select(Song).where(Song.id == song_id))
+            song_data = result.scalar_one_or_none()
+        except:
+            pass
+    
+    return templates.TemplateResponse("upload-success.html", {
+        "request": request,
+        "song": song_data
+    })
+
+async def upload_song_logic(
+    title: str,
+    artist_name: str,
+    email: str,
+    genre: Optional[str],
+    ai_tools_used: str,
+    description: Optional[str],
+    license_type: str,
+    external_link: Optional[str],
+    file: Optional[UploadFile],
+    request: Request,
+    db: AsyncSession
 ):
-    """Upload a new song submission"""
+    """Upload logic for song submission - can be called from API or form handler"""
     
     # Validate file or external link
     if not file and not external_link:
@@ -51,6 +72,7 @@ async def upload_song(
     file_path = None
     file_size = 0
     file_hash = ""
+    audio_url = None
     
     if file:
         # Validate file type
@@ -141,10 +163,42 @@ async def upload_song(
             f.write("ts,artist,email,title,bytes,digest,ip,file_path\n")
         f.write(logline)
     
+    return new_song
+
+@router.post("/upload")
+async def upload_song(
+    title: str = Form(...),
+    artist_name: str = Form(...),
+    email: str = Form(...),
+    genre: Optional[str] = Form(None),
+    ai_tools_used: str = Form(...),
+    description: Optional[str] = Form(None),
+    license_type: str = Form("stream_only"),
+    external_link: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None),
+    request: Request = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """Upload a new song submission - API endpoint"""
+    
+    song = await upload_song_logic(
+        title=title,
+        artist_name=artist_name,
+        email=email,
+        genre=genre,
+        ai_tools_used=ai_tools_used,
+        description=description,
+        license_type=license_type,
+        external_link=external_link,
+        file=file,
+        request=request,
+        db=db
+    )
+    
     return {
         "ok": True,
         "message": "Song submitted successfully! It will be reviewed by our team.",
-        "song_id": new_song.id
+        "song_id": song.id
     }
 
 @router.get("/", response_model=List[SongResponse])

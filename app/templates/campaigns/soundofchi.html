@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Community Playlist Contest - Sound of Chi - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">🎵 Community Playlist Contest</h1>
+        <p class="text-xl text-gray-600">Like Spotify playlists, but with AI-generated music!</p>
+        <p class="text-lg text-purple-600 font-semibold mt-2">Build the ultimate community-curated playlist together</p>
+    </div>
+
+    <!-- Contest Info -->
+    <div class="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-6 rounded-lg mb-8">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold mb-2">🎵 Sound of Chi Community Playlist</h2>
+            <p class="text-lg opacity-90">Sponsored by Sound of Chi: Global community music curation</p>
+            <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm">
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🎵 Community Playlist</span>
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🤖 AI-Generated</span>
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">📱 Spotify-Style</span>
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🌍 Global Community</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Creator Backlink -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-8 text-center">
+        <p class="text-sm text-gray-600 mb-2">🎵 Creator Backlink:</p>
+        <a href="https://soundcloud.com/sound-of-chi" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="text-purple-600 hover:text-purple-800 underline font-medium">
+            soundcloud.com/sound-of-chi
+        </a>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-purple-600" id="totalSongs">8</div>
+            <div class="text-sm text-gray-600">Songs</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-pink-600" id="totalVotes">43</div>
+            <div class="text-sm text-gray-600">Total Votes</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-purple-500" id="activeVoters">12</div>
+            <div class="text-sm text-gray-600">Voters</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-pink-500" id="daysLeft">∞</div>
+            <div class="text-sm text-gray-600">Always Open</div>
+        </div>
+    </div>
+
+    <!-- Featured Song -->
+    <div class="bg-gradient-to-r from-purple-400 to-pink-500 text-white p-6 rounded-lg mb-8">
+        <div class="text-center mb-4">
+            <h3 class="text-2xl font-bold mb-2">🌟 Featured Playlist Song</h3>
+            <p class="text-lg opacity-90">Listen to this week's highlighted community favorite</p>
+        </div>
+        <div class="bg-white bg-opacity-20 p-6 rounded-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div>
+                    <h4 class="text-xl font-semibold mb-2">Community Choice</h4>
+                    <p class="text-sm opacity-90 mb-4">Top-voted song from our global community playlist</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">🎵 Community</span>
+                        <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">🤖 AI-Generated</span>
+                        <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">🌍 Global</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm">
+                        <span>🎧 Duration: TBD</span>
+                        <span>🎯 Playlist Entry</span>
+                    </div>
+                </div>
+                <div class="bg-white bg-opacity-10 p-4 rounded-lg text-center">
+                    <div class="text-6xl mb-4">🎵</div>
+                    <p class="text-sm opacity-90 mb-4">Community favorite</p>
+                    <div class="mt-4 text-center">
+                        <a href="/upload" class="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                            📤 Add to Playlist
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Song List -->
+    <div class="space-y-4" id="songList">
+        <!-- Songs will be populated here -->
+        <div class="text-center py-12 text-gray-500">
+            <div class="text-6xl mb-4">🎵</div>
+            <p class="text-xl font-medium">Building our community playlist</p>
+            <p class="text-sm">Join the global community and help curate the ultimate AI-generated music playlist</p>
+            <a href="/upload" class="mt-4 inline-block bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                Add Your Song to the Playlist
+            </a>
+        </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div class="text-center mt-8" id="loadMoreSection" style="display: none;">
+        <button id="loadMoreBtn" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+            Load More Songs
+        </button>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-12">
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-8 rounded-lg border border-purple-200">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Join the Global Music Community</h3>
+            <p class="text-gray-600 mb-6">Share your AI-generated music and help build the ultimate community-curated playlist</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/upload" class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                    📤 Add to Playlist
+                </a>
+                <a href="/campaigns" class="border-2 border-purple-600 text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-purple-600 hover:text-white transition-colors">
+                    🎵 View All Campaigns
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Load campaign stats
+async function loadCampaignStats() {
+    try {
+        const response = await fetch('/api/voting/stats?client=soundofchi&contest=playlist');
+        const stats = await response.json();
+        
+        // Update stats display
+        document.getElementById('totalSongs').textContent = stats.total_songs || 8;
+        document.getElementById('totalVotes').textContent = stats.total_votes || 43;
+        document.getElementById('activeVoters').textContent = stats.active_voters || 12;
+        
+    } catch (error) {
+        console.error('Error loading campaign stats:', error);
+    }
+}
+
+// Load stats on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadCampaignStats();
+});
+</script>
+{% endblock %}

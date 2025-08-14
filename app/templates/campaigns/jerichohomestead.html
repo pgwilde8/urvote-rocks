@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}The House of Mary & Joseph - Jericho Homestead - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">🎵 Sacred Music Contest</h1>
+        <p class="text-xl text-gray-600">Listen, vote, and help choose the best AI-generated sacred music!</p>
+        <p class="text-lg text-green-600 font-semibold mt-2">Spiritual reflection and community building through music</p>
+    </div>
+
+    <!-- Contest Info -->
+    <div class="bg-gradient-to-r from-green-500 to-teal-600 text-white p-6 rounded-lg mb-8">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold mb-2">🏠 The House of Mary & Joseph</h2>
+            <p class="text-lg opacity-90">Sponsored by Jericho Homestead: Sacred music for spiritual communities</p>
+            <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm">
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🙏 Sacred Music</span>
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🏠 Community</span>
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🤖 AI-Generated</span>
+                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🌿 Spiritual</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Creator Backlink -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-8 text-center">
+        <p class="text-sm text-gray-600 mb-2">🎵 Creator Backlink:</p>
+        <a href="https://www.jerichohomestead.org" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="text-green-600 hover:text-green-800 underline font-medium">
+            www.jerichohomestead.org
+        </a>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-green-600" id="totalSongs">0</div>
+            <div class="text-sm text-gray-600">Songs</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-teal-600" id="totalVotes">0</div>
+            <div class="text-sm text-gray-600">Total Votes</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-green-500" id="activeVoters">0</div>
+            <div class="text-sm text-gray-600">Voters</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md text-center">
+            <div class="text-2xl font-bold text-teal-500" id="daysLeft">∞</div>
+            <div class="text-sm text-gray-600">Always Open</div>
+        </div>
+    </div>
+
+    <!-- Featured Song -->
+    <div class="bg-gradient-to-r from-green-400 to-teal-500 text-white p-6 rounded-lg mb-8">
+        <div class="text-center mb-4">
+            <h3 class="text-2xl font-bold mb-2">🌟 Featured Sacred Song</h3>
+            <p class="text-lg opacity-90">Listen to this week's highlighted AI-generated spiritual masterpiece</p>
+        </div>
+        <div class="bg-white bg-opacity-20 p-6 rounded-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div>
+                    <h4 class="text-xl font-semibold mb-2">Coming Soon</h4>
+                    <p class="text-sm opacity-90 mb-4">Be the first to submit a sacred song for this spiritual community</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">🙏 Sacred</span>
+                        <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">🏠 Community</span>
+                        <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">🤖 AI-Generated</span>
+                    </div>
+                    <div class="flex items-center gap-4 text-sm">
+                        <span>🎧 Duration: TBD</span>
+                        <span>🎯 Contest Entry</span>
+                    </div>
+                </div>
+                <div class="bg-white bg-opacity-10 p-4 rounded-lg text-center">
+                    <div class="text-6xl mb-4">🙏</div>
+                    <p class="text-sm opacity-90 mb-4">No songs yet</p>
+                    <div class="mt-4 text-center">
+                        <a href="/upload" class="bg-white text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                            📤 Submit First Song
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Song List -->
+    <div class="space-y-4" id="songList">
+        <!-- Songs will be populated here -->
+        <div class="text-center py-12 text-gray-500">
+            <div class="text-6xl mb-4">🙏</div>
+            <p class="text-xl font-medium">No sacred songs available yet</p>
+            <p class="text-sm">Be the first to submit a spiritual song for this community</p>
+            <a href="/upload" class="mt-4 inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                Submit the First Sacred Song
+            </a>
+        </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div class="text-center mt-8" id="loadMoreSection" style="display: none;">
+        <button id="loadMoreBtn" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+            Load More Songs
+        </button>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-12">
+        <div class="bg-gradient-to-r from-green-50 to-teal-50 p-8 rounded-lg border border-green-200">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Join the Sacred Music Community</h3>
+            <p class="text-gray-600 mb-6">Share your AI-generated spiritual music and help build a community of faith through song</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/upload" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                    📤 Submit Your Sacred Song
+                </a>
+                <a href="/campaigns" class="border-2 border-green-600 text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-green-600 hover:text-white transition-colors">
+                    🎵 View All Campaigns
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Load campaign stats
+async function loadCampaignStats() {
+    try {
+        const response = await fetch('/api/voting/stats?client=jerichohomestead&contest=house-of-mary-joseph');
+        const stats = await response.json();
+        
+        // Update stats display
+        document.getElementById('totalSongs').textContent = stats.total_songs || 0;
+        document.getElementById('totalVotes').textContent = stats.total_votes || 0;
+        document.getElementById('activeVoters').textContent = stats.active_voters || 0;
+        
+    } catch (error) {
+        console.error('Error loading campaign stats:', error);
+    }
+}
+
+// Load stats on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadCampaignStats();
+});
+</script>
+{% endblock %}

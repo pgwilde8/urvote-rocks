@@ -3,7 +3,7 @@
 {% block title %}Active Campaigns - UrVote.Rocks{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 sm:px-6">
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
     <!-- Header -->
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-800 mb-4">🎵 Active Music Campaigns</h1>
@@ -14,127 +14,170 @@
     <!-- Platform Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <div class="text-2xl font-bold text-primary" id="totalCampaigns">2</div>
+            <div class="text-2xl font-bold text-primary" id="totalCampaigns">{{ platform_stats.total_campaigns or 0 }}</div>
             <div class="text-sm text-gray-600">Active Campaigns</div>
         </div>
         <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <div class="text-2xl font-bold text-secondary" id="totalSongs">0</div>
+            <div class="text-2xl font-bold text-secondary" id="totalSongs">{{ platform_stats.total_songs or 0 }}</div>
             <div class="text-sm text-gray-600">Total Submissions</div>
         </div>
         <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <div class="text-2xl font-bold text-accent" id="totalVotes">0</div>
+            <div class="text-2xl font-bold text-accent" id="totalVotes">{{ platform_stats.total_votes or 0 }}</div>
             <div class="text-sm text-gray-600">Total Votes Cast</div>
         </div>
         <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <div class="text-2xl font-bold text-green-600" id="activeUsers">0</div>
+            <div class="text-2xl font-bold text-green-600" id="activeUsers">{{ platform_stats.active_users or 1 }}</div>
             <div class="text-sm text-gray-600">Active Participants</div>
         </div>
     </div>
 
-    <!-- Campaigns Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        
-        <!-- PayPortPro Campaign -->
-        <div class="bg-gradient-to-br from-red-500 to-blue-600 text-white rounded-lg shadow-lg overflow-hidden">
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-2xl font-bold">🇺🇸 PayPortPro</h3>
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">ACTIVE</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3">Patriotic AI Music Challenge</h4>
-                <p class="text-white text-opacity-90 mb-4">
-                    Celebrate American values through AI-generated patriotic music. 
-                    Bridging dollars to stable coins with the power of music.
-                </p>
-                
-                <!-- Campaign Stats -->
-                <div class="grid grid-cols-3 gap-4 mb-6">
-                    <div class="text-center">
-                        <div class="text-2xl font-bold">15</div>
-                        <div class="text-sm text-white text-opacity-80">Songs</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold">127</div>
-                        <div class="text-sm text-white text-opacity-80">Votes</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold">7</div>
-                        <div class="text-sm text-white text-opacity-80">Days Left</div>
-                    </div>
-                </div>
-                
-                <!-- Campaign Features -->
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🎵 Patriotic Theme</span>
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🇺🇸 American Values</span>
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🤖 AI-Generated</span>
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🗳️ Community Voting</span>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <a href="/campaigns/payportpro/patriotic-2024" 
-                       class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
-                        🎵 Enter Contest
-                    </a>
-                    <a href="/upload" 
-                       class="bg-white bg-opacity-20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-colors text-center">
-                        📤 Submit Song
-                    </a>
+    <!-- Search and Filter Controls -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Search Bar -->
+            <div class="relative">
+                <input type="text" 
+                       id="searchBoards" 
+                       placeholder="Search campaigns..." 
+                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
                 </div>
             </div>
+            
+            <!-- Category Filter -->
+            <div>
+                <select id="categoryFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="">All Categories</option>
+                    <option value="patriotic">Patriotic</option>
+                    <option value="spiritual">Spiritual</option>
+                    <option value="community">Community</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="events">Events</option>
+                    <option value="education">Education</option>
+                </select>
+            </div>
+            
+            <!-- Sort Options -->
+            <div>
+                <select id="sortBoards" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="alphabetical">A-Z</option>
+                </select>
+            </div>
         </div>
+    </div>
 
-        <!-- Sound of Chi's Playlist Campaign -->
-        <div class="bg-gradient-to-br from-purple-500 to-pink-600 text-white rounded-lg shadow-lg overflow-hidden">
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-2xl font-bold">🎵 Sound of Chi</h3>
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">ACTIVE</span>
-                </div>
-                <h4 class="text-xl font-semibold mb-3">Community Playlist Contest</h4>
-                <p class="text-white text-opacity-90 mb-4">
-                    Like Spotify playlists, but with AI-generated music! Upload your songs, 
-                    vote for favorites, and build the ultimate community-curated playlist.
-                </p>
-                
-                <!-- Campaign Stats -->
-                <div class="grid grid-cols-3 gap-4 mb-6">
-                    <div class="text-center">
-                        <div class="text-2xl font-bold">8</div>
-                        <div class="text-sm text-white text-opacity-80">Songs</div>
+    <!-- Campaigns Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12" id="campaignsGrid">
+        
+        {% if campaigns and campaigns|length > 0 %}
+            {% for campaign in campaigns %}
+            <div class="bg-gradient-to-br {{ campaign.colors }} text-white rounded-lg shadow-lg overflow-hidden campaign-card" 
+                 data-category="{{ campaign.campaign_type }}" 
+                 data-title="{{ campaign.client_name }} {{ campaign.contest_name }}"
+                 data-date="{{ campaign.created_at or '2024-01-01' }}">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-2xl font-bold">
+                            {% if campaign.campaign_type == "patriotic" %}🇺🇸{% elif campaign.campaign_type == "spiritual" %}🏠{% elif campaign.campaign_type == "community" %}🎵{% else %}🎯{% endif %}
+                            {{ campaign.client_name }}
+                        </h3>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">ACTIVE</span>
                     </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold">43</div>
-                        <div class="text-sm text-white text-opacity-80">Votes</div>
+                    <h4 class="text-xl font-semibold mb-3">{{ campaign.contest_name }}</h4>
+                    <p class="text-white text-opacity-90 mb-4">
+                        {{ campaign.description }}
+                    </p>
+                    
+                    <!-- Campaign Stats -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">{{ campaign.song_count }}</div>
+                            <div class="text-sm text-white text-opacity-80">Songs</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold">{{ campaign.vote_count }}</div>
+                            <div class="text-sm text-white text-opacity-80">Votes</div>
+                        </div>
+                        <div class="text-center">
+                            {% if campaign.is_always_open %}
+                            <div class="text-2xl font-bold">∞</div>
+                            <div class="text-sm text-white text-opacity-80">Always Open</div>
+                            {% else %}
+                            <div class="text-2xl font-bold">{{ campaign.days_remaining or 0 }}</div>
+                            <div class="text-sm text-white text-opacity-80">Days Left</div>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold">∞</div>
-                        <div class="text-sm text-white text-opacity-80">Always Open</div>
+                    
+                    <!-- Campaign Features -->
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        {% for feature in campaign.features %}
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">{{ feature }}</span>
+                        {% endfor %}
                     </div>
-                </div>
-                
-                <!-- Campaign Features -->
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🎵 Community Playlist</span>
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🤖 AI-Generated</span>
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">📱 Spotify-Style</span>
-                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">🌍 Global Community</span>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <a href="/campaigns/soundofchi/playlist" 
-                       class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
-                        🎵 View Playlist
-                    </a>
-                    <a href="/upload" 
-                       class="bg-white bg-opacity-20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-colors text-center">
-                        📤 Add to Playlist
-                    </a>
+                    
+                    <!-- Creator Backlink -->
+                    {% if campaign.website_url %}
+                    <div class="mb-6 p-3 bg-white bg-opacity-10 rounded-lg">
+                        <p class="text-sm text-white text-opacity-90 mb-2">🎵 Creator Backlink:</p>
+                        <a href="{{ campaign.website_url }}" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="text-white text-opacity-90 hover:text-white underline break-all">
+                            {{ campaign.website_display or campaign.website_url }}
+                        </a>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="{{ campaign.action_url }}" 
+                           class="bg-white text-{{ campaign.campaign_type }}-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
+                            🎵 {{ campaign.action_text }}
+                        </a>
+                        <a href="/upload" 
+                           class="bg-white bg-opacity-20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-colors text-center">
+                            📤 Submit Song
+                        </a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
+        {% else %}
+            <!-- No campaigns available -->
+            <div class="col-span-full text-center py-12 text-gray-500">
+                <div class="text-6xl mb-4">🎵</div>
+                <p class="text-xl font-medium">No campaigns available yet</p>
+                <p class="text-sm">Create your first campaign to get started</p>
+                <a href="/campaigns/create" class="mt-4 inline-block bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+                    🚀 Create First Campaign
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-center items-center space-x-2 mb-8" id="paginationControls">
+        <button id="prevPage" class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Previous
+        </button>
+        <div class="flex space-x-1" id="pageNumbers">
+            <button class="px-3 py-2 text-sm font-medium text-white bg-primary border border-primary rounded-md">1</button>
         </div>
+        <button id="nextPage" class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Next
+        </button>
+    </div>
+
+    <!-- Results Info -->
+    <div class="text-center text-gray-600 mb-8" id="resultsInfo">
+        Showing 1-3 of 3 campaigns
     </div>
 
     <!-- Platform Benefits -->
@@ -159,40 +202,218 @@
         </div>
     </div>
 
+    <!-- Creator Pro CTA Section -->
+    <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-white text-center mb-8">
+        <h2 class="text-3xl font-bold mb-4">🚀 Ready to Create Your Own Boards?</h2>
+        <p class="text-xl mb-6 text-purple-100">
+            Join Creator Pro and build your AI music empire with 3 boards, creator backlinks, and UrVote promotion
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="/signup" class="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors transform hover:scale-105">
+                🎵 Start Creating Today
+            </a>
+            <a href="/pricing" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-purple-600 transition-colors">
+                💎 View Pricing
+            </a>
+        </div>
+        <div class="mt-4 text-purple-100">
+            <span class="text-2xl font-bold">$19/month</span> • 3 Boards • Creator Backlinks • UrVote Promotion
+        </div>
+    </div>
+
     <!-- Call to Action -->
     <div class="text-center mb-8">
         <p class="text-lg text-gray-600 mb-4">Ready to launch your own music contest?</p>
-        <a href="/pricing" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
-            View Pricing & Get Started
-        </a>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/campaigns/create" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+                🚀 Create New Campaign
+            </a>
+            <a href="/pricing" class="inline-block border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary hover:text-white transition-colors">
+                View Pricing
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-// Load platform stats
-async function loadPlatformStats() {
-    try {
-        const response = await fetch('/api/voting/stats');
-        const stats = await response.json();
+// Campaign management system for scalability
+class CampaignManager {
+    constructor() {
+        this.campaigns = [];
+        this.filteredCampaigns = [];
+        this.currentPage = 1;
+        this.campaignsPerPage = 12; // Show 12 campaigns per page (3 rows of 4)
+        this.currentCategory = '';
+        this.currentSearch = '';
+        this.currentSort = 'newest';
         
-        // Update stats display
-        document.getElementById('totalSongs').textContent = stats.total_songs || 0;
-        document.getElementById('totalVotes').textContent = stats.total_votes || 0;
-        
-        // Calculate active users (simplified)
-        const activeUsers = Math.max(1, Math.floor((stats.total_votes || 0) / 10));
-        document.getElementById('activeUsers').textContent = activeUsers;
-        
-    } catch (error) {
-        console.error('Error loading platform stats:', error);
+        this.init();
     }
+    
+    init() {
+        this.setupEventListeners();
+        // Data is loaded directly from server via Jinja2 templates
+        // No need for additional API calls or sample data
+    }
+    
+    setupEventListeners() {
+        // Search functionality
+        document.getElementById('searchBoards').addEventListener('input', (e) => {
+            this.currentSearch = e.target.value.toLowerCase();
+            this.filterAndDisplayCampaigns();
+        });
+        
+        // Category filter
+        document.getElementById('categoryFilter').addEventListener('change', (e) => {
+            this.currentCategory = e.target.value;
+            this.filterAndDisplayCampaigns();
+        });
+        
+        // Sort functionality
+        document.getElementById('sortBoards').addEventListener('change', (e) => {
+            this.currentSort = e.target.value;
+            this.filterAndDisplayCampaigns();
+        });
+        
+        // Pagination
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.displayCurrentPage();
+            }
+        });
+        
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const maxPages = Math.ceil(this.filteredCampaigns.length / this.campaignsPerPage);
+            if (this.currentPage < maxPages) {
+                this.currentPage++;
+                this.displayCurrentPage();
+            }
+        });
+    }
+    
+    setupSampleCampaigns() {
+        // This would normally come from your API
+        // For now, we'll create sample campaigns to demonstrate scalability
+        this.campaigns = [
+            // Your existing 3 campaigns are already in the HTML
+            // Here we'd add more from the database
+        ];
+        
+        // Update total count
+        document.getElementById('totalCampaigns').textContent = this.campaigns.length;
+    }
+    
+    filterAndDisplayCampaigns() {
+        this.currentPage = 1; // Reset to first page when filtering
+        
+        // Filter campaigns
+        this.filteredCampaigns = this.campaigns.filter(campaign => {
+            const matchesSearch = !this.currentSearch || 
+                campaign.title.toLowerCase().includes(this.currentSearch) ||
+                campaign.client.toLowerCase().includes(this.currentSearch);
+            
+            const matchesCategory = !this.currentCategory || 
+                campaign.category === this.currentCategory;
+            
+            return matchesSearch && matchesCategory;
+        });
+        
+        // Sort campaigns
+        this.sortCampaigns();
+        
+        // Display current page
+        this.displayCurrentPage();
+        
+        // Update results info
+        this.updateResultsInfo();
+    }
+    
+    sortCampaigns() {
+        switch (this.currentSort) {
+            case 'newest':
+                this.filteredCampaigns.sort((a, b) => new Date(b.date) - new Date(a.date));
+                break;
+            case 'oldest':
+                this.filteredCampaigns.sort((a, b) => new Date(a.date) - new Date(b.date));
+                break;
+            case 'popular':
+                this.filteredCampaigns.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+                break;
+            case 'alphabetical':
+                this.filteredCampaigns.sort((a, b) => a.title.localeCompare(b.title));
+                break;
+        }
+    }
+    
+    displayCurrentPage() {
+        const startIndex = (this.currentPage - 1) * this.campaignsPerPage;
+        const endIndex = startIndex + this.campaignsPerPage;
+        const campaignsToShow = this.filteredCampaigns.slice(startIndex, endIndex);
+        
+        // Update pagination controls
+        this.updatePagination();
+        
+        // Show/hide campaign cards based on current page
+        const campaignCards = document.querySelectorAll('.campaign-card');
+        campaignCards.forEach((card, index) => {
+            if (index >= startIndex && index < endIndex) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    
+    updatePagination() {
+        const totalPages = Math.ceil(this.filteredCampaigns.length / this.campaignsPerPage);
+        const pageNumbers = document.getElementById('pageNumbers');
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        
+        // Update page numbers
+        pageNumbers.innerHTML = '';
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `px-3 py-2 text-sm font-medium border rounded-md ${
+                i === this.currentPage 
+                    ? 'text-white bg-primary border-primary' 
+                    : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-50'
+            }`;
+            pageBtn.textContent = i;
+            pageBtn.addEventListener('click', () => {
+                this.currentPage = i;
+                this.displayCurrentPage();
+            });
+            pageNumbers.appendChild(pageBtn);
+        }
+        
+        // Update prev/next buttons
+        prevBtn.disabled = this.currentPage === 1;
+        nextBtn.disabled = this.currentPage === totalPages;
+    }
+    
+    updateResultsInfo() {
+        const total = this.filteredCampaigns.length;
+        const start = total === 0 ? 0 : (this.currentPage - 1) * this.campaignsPerPage + 1;
+        const end = Math.min(this.currentPage * this.campaignsPerPage, total);
+        
+        document.getElementById('resultsInfo').textContent = 
+            `Showing ${start}-${end} of ${total} campaigns`;
+    }
+    
+    // loadPlatformStats() removed - data comes directly from server
+    
+    // loadCampaignCount() removed - data comes directly from server
+    
+    // loadIndividualCampaignStats() removed - data comes directly from server
 }
 
-// Load stats on page load
+// Initialize campaign manager
 document.addEventListener('DOMContentLoaded', function() {
-    loadPlatformStats();
+    window.campaignManager = new CampaignManager();
 });
 </script>
 {% endblock %}

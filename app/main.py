@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request, Depends, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request, Depends, HTTPException, Form, File, UploadFile
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,12 +7,14 @@ from pathlib import Path
 import os
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Optional
+from datetime import datetime
 
-from .routers import auth, songs, voting
+from .routers import auth, songs, voting, campaigns
 from . import admin
 from .config import settings
 from .database import get_db
-from .models import Contest, Client, Song
+from .models import Contest, Client, Song, Vote
 
 # Create FastAPI app
 app = FastAPI(
@@ -43,6 +45,7 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(songs.router, prefix="/api")
 app.include_router(voting.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
+app.include_router(campaigns.router)
 
 # Root route - Home page
 @app.get("/", response_class=HTMLResponse)
@@ -54,20 +57,75 @@ async def home(request: Request):
 async def upload_page(request: Request):
     return templates.TemplateResponse("upload.html", {"request": request})
 
-# Campaigns list page
-@app.get("/campaigns", response_class=HTMLResponse)
-async def campaigns_page(request: Request):
-    return templates.TemplateResponse("campaigns.html", {"request": request})
+# Upload success page
+@app.get("/upload/success", response_class=HTMLResponse)
+async def upload_success_page(request: Request, song_id: int = None):
+    from app.database import get_db
+    from app.models import Song
+    from sqlalchemy import select
+    
+    # Get song details if song_id is provided
+    song_data = None
+    if song_id:
+        db = await anext(get_db())
+        try:
+            result = await db.execute(select(Song).where(Song.id == song_id))
+            song_data = result.scalar_one_or_none()
+        except:
+            pass
+    
+    return templates.TemplateResponse("upload-success.html", {
+        "request": request,
+        "song": song_data
+    })
 
-# Campaign-specific leaderboard page
-@app.get("/campaigns/{client_slug}/{contest_slug}", response_class=HTMLResponse)
-async def campaign_leaderboard_page(
-    client_slug: str, 
-    contest_slug: str, 
-    request: Request
+# Handle form submission and redirect to success page
+@app.post("/upload", response_class=HTMLResponse)
+async def handle_upload_form(
+    request: Request,
+    title: str = Form(...),
+    artist_name: str = Form(...),
+    email: str = Form(...),
+    genre: Optional[str] = Form(None),
+    ai_tools_used: str = Form(...),
+    description: Optional[str] = Form(None),
+    license_type: str = Form("stream_only"),
+    external_link: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None),
+    db: AsyncSession = Depends(get_db)
 ):
-    """Campaign-specific leaderboard page"""
-    return templates.TemplateResponse("leaderboard.html", {"request": request})
+    """Handle form submission and redirect to success page"""
+    from app.routers.songs import upload_song_logic
+    
+    try:
+        # Call the upload logic
+        song = await upload_song_logic(
+            title=title,
+            artist_name=artist_name,
+            email=email,
+            genre=genre,
+            ai_tools_used=ai_tools_used,
+            description=description,
+            license_type=license_type,
+            external_link=external_link,
+            file=file,
+            request=request,
+            db=db
+        )
+        
+        # Redirect to success page
+        return RedirectResponse(
+            url=f"/upload/success?song_id={song.id}",
+            status_code=303
+        )
+    except HTTPException as e:
+        # Handle errors - you might want to create an error template
+        return templates.TemplateResponse("upload.html", {
+            "request": request,
+            "error": e.detail
+        })
+
+# Campaigns routes are now handled by app/routers/campaigns.py
 
 # Legacy leaderboard page (redirect to campaigns)
 @app.get("/leaderboard", response_class=HTMLResponse)
@@ -167,6 +225,8 @@ async def pricing_page(request: Request):
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "service": "UrVote.Rocks"}
+
+# Debug route moved to app/routers/campaigns.py
 
 # Client leaderboard route
 @app.get("/client/{client_slug}/leaderboard", response_class=HTMLResponse)

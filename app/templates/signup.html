@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">🚀 Join UrVote Creator Pro</h1>
+        <p class="text-xl text-gray-600">
+            Start building your AI music empire with 3 boards, creator backlinks, and UrVote promotion
+        </p>
+        <div class="mt-4 text-2xl font-bold text-blue-600">$19/month</div>
+    </div>
+
+    <!-- Signup Form -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+        <form id="signupForm" class="space-y-6">
+            <!-- Personal Information -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                    <input type="text" id="firstName" name="firstName" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Enter your first name">
+                </div>
+                <div>
+                    <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                    <input type="text" id="lastName" name="lastName" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Enter your last name">
+                </div>
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                <input type="email" id="email" name="email" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       placeholder="your@email.com">
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password *</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       placeholder="Create a strong password">
+                <p class="text-sm text-gray-500 mt-1">Minimum 8 characters with letters and numbers</p>
+            </div>
+
+            <!-- Creator Profile -->
+            <div class="border-t pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">🎵 Creator Profile</h3>
+                
+                <div>
+                    <label for="creatorName" class="block text-sm font-medium text-gray-700 mb-2">Creator/Brand Name *</label>
+                    <input type="text" id="creatorName" name="creatorName" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Your music brand or artist name">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div>
+                        <label for="website" class="block text-sm font-medium text-gray-700 mb-2">Website URL</label>
+                        <input type="url" id="website" name="website"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="https://yourwebsite.com">
+                    </div>
+                    <div>
+                        <label for="socialMedia" class="block text-sm font-medium text-gray-700 mb-2">Social Media Handle</label>
+                        <input type="text" id="socialMedia" name="socialMedia"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="@yourhandle">
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label for="musicStyle" class="block text-sm font-medium text-gray-700 mb-2">Primary Music Style *</label>
+                    <select id="musicStyle" name="musicStyle" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Select your primary music style</option>
+                        <option value="rock">Rock</option>
+                        <option value="pop">Pop</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="hip-hop">Hip-Hop</option>
+                        <option value="jazz">Jazz</option>
+                        <option value="classical">Classical</option>
+                        <option value="country">Country</option>
+                        <option value="r&b">R&B</option>
+                        <option value="ambient">Ambient</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Board Ideas -->
+            <div class="border-t pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">📋 Your First 3 Boards</h3>
+                <p class="text-gray-600 mb-4">Tell us about the boards you want to create (you can change these later)</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="board1" class="block text-sm font-medium text-gray-700 mb-2">Board 1: Main Style *</label>
+                        <input type="text" id="board1" name="board1" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="e.g., 'Chill Electronic Vibes' or 'Rock Anthems'">
+                    </div>
+                    <div>
+                        <label for="board2" class="block text-sm font-medium text-gray-700 mb-2">Board 2: Mood/Theme *</label>
+                        <input type="text" id="board2" name="board2" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="e.g., 'Workout Energy' or 'Relaxation Zone'">
+                    </div>
+                    <div>
+                        <label for="board3" class="block text-sm font-medium text-gray-700 mb-2">Board 3: Use Case *</label>
+                        <input type="text" id="board3" name="board3" required
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="e.g., 'Party Starters' or 'Study Focus'">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscription Details -->
+            <div class="border-t pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">💳 Subscription Details</h3>
+                
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-medium text-blue-900">Creator Pro Plan</span>
+                        <span class="text-2xl font-bold text-blue-600">$19</span>
+                    </div>
+                    <div class="text-sm text-blue-700 mb-3">per month</div>
+                    <ul class="text-sm text-blue-700 space-y-1">
+                        <li>• 3 AI Music Boards (expandable)</li>
+                        <li>• Creator backlinks & SEO</li>
+                        <li>• UrVote promotion</li>
+                        <li>• Analytics dashboard</li>
+                        <li>• Priority support</li>
+                    </ul>
+                </div>
+
+                <div class="mt-4">
+                    <label class="flex items-start space-x-3">
+                        <input type="checkbox" id="agreeTerms" name="agreeTerms" required
+                               class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <span class="text-sm text-gray-700">
+                            I agree to the <a href="/terms" class="text-blue-600 hover:underline">Terms of Service</a> and 
+                            <a href="/privacy" class="text-blue-600 hover:underline">Privacy Policy</a>. 
+                            I understand I can cancel anytime.
+                        </span>
+                    </label>
+                </div>
+
+                <div class="mt-4">
+                    <label class="flex items-start space-x-3">
+                        <input type="checkbox" id="agreeMarketing" name="agreeMarketing"
+                               class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <span class="text-sm text-gray-700">
+                            I want to receive updates about new features and creator opportunities (optional)
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-6">
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 focus:ring-4 focus:ring-blue-300">
+                    🚀 Start My 7-Day Free Trial
+                </button>
+                <p class="text-center text-sm text-gray-500 mt-3">
+                    No credit card required for trial • Cancel anytime
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Trust Signals -->
+    <div class="mt-12 text-center">
+        <div class="flex flex-wrap justify-center items-center space-x-8 text-gray-500">
+            <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>7-Day Free Trial</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Cancel Anytime</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span>No Setup Fees</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for form handling -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('signupForm');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Basic validation
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('border-red-500');
+                isValid = false;
+            } else {
+                field.classList.remove('border-red-500');
+            }
+        });
+        
+        if (!isValid) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        // Collect form data
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+        
+        // Show loading state
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '🔄 Processing...';
+        submitBtn.disabled = true;
+        
+        // Submit to backend (you'll need to implement this)
+        console.log('Form data:', data);
+        
+        // For now, show success message
+        setTimeout(() => {
+            alert('Thank you for signing up! We\'ll be in touch soon to complete your subscription.');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
+    });
+    
+    // Real-time validation
+    const inputs = form.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.hasAttribute('required') && !this.value.trim()) {
+                this.classList.add('border-red-500');
+            } else {
+                this.classList.remove('border-red-500');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
