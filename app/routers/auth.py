@@ -7,6 +7,27 @@ from ..models import User
 from ..schemas import UserCreate, UserLogin, UserResponse
 from ..auth import get_password_hash, verify_password, create_access_token
 from ..config import settings
+from datetime import datetime
+from fastapi import Depends, HTTPException, status
+from .models import User
+from datetime import datetime
+from .models import User
+# This assumes you already have a get_current_user dependency that returns the authenticated User object
+async def get_current_board_owner(current_user: User = Depends(get_current_user)):
+    if not current_user.membership_expires_at or current_user.membership_expires_at < datetime.utcnow():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You must have an active board owner membership."
+        )
+    return current_user
+    
+async def get_current_board_owner(current_user: User = Depends(get_current_user)):
+    if not current_user.membership_expires_at or current_user.membership_expires_at < datetime.utcnow():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You must have an active board owner membership."
+        )
+    return current_user
 import secrets
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -121,3 +142,5 @@ async def resend_verification(email: str, db: AsyncSession = Depends(get_db)):
     
     # TODO: Send verification email
     return {"message": "Verification email sent"}
+
+    

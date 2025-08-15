@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, Foreign
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .database import Base
+from sqlalchemy import DateTime
+  
 
 class User(Base):
     __tablename__ = "users"
@@ -24,6 +26,7 @@ class User(Base):
     profile_image = Column(String(500), nullable=True)  # Profile picture
     is_contestant = Column(Boolean, default=False)  # Can submit songs
     is_voter = Column(Boolean, default=True)  # Can vote (default for all)
+    membership_expires_at = Column(DateTime, nullable=True)
     
     # Additional fields for better artist profiles
     location = Column(String(255), nullable=True)  # Artist location
