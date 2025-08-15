@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Signup Success - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Success Header -->
+    <div class="text-center mb-12">
+        <div class="text-6xl mb-6">🎉</div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to UrVote Creator Pro!</h1>
+        <p class="text-xl text-gray-600">
+            Your account has been created successfully and your first board is ready to go!
+        </p>
+    </div>
+
+    <!-- Success Details -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Account Created -->
+            <div class="text-center">
+                <div class="text-4xl mb-4">✅</div>
+                <h3 class="text-xl font-semibold mb-2">Account Created</h3>
+                <p class="text-gray-600">
+                    Your Creator Pro account is now active with access to 3 boards, creator backlinks, and UrVote promotion.
+                </p>
+            </div>
+            
+                                        <!-- First Board -->
+                            <div class="text-center">
+                                <div class="text-4xl mb-4">🎵</div>
+                                <h3 class="text-xl font-semibold mb-2">First Board Ready</h3>
+                                <p class="text-gray-600">
+                                    Your first music contest board has been created with a beautiful theme and is now live on the platform.
+                                </p>
+                                {% if request.query_params.get('theme_applied') %}
+                                <div class="mt-3 inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium">
+                                    🎨 Theme: {{ request.query_params.get('theme_applied') }}
+                                </div>
+                                {% endif %}
+                            </div>
+        </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center mb-8">
+        <h2 class="text-3xl font-bold mb-6">🚀 What's Next?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div>
+                <div class="text-3xl mb-2">1️⃣</div>
+                <h4 class="text-lg font-semibold mb-2">Customize Your Board</h4>
+                <p class="text-blue-100">Add your logo, colors, and branding to make it uniquely yours</p>
+            </div>
+            <div>
+                <div class="text-3xl mb-2">2️⃣</div>
+                <h4 class="text-lg font-semibold mb-2">Start Promoting</h4>
+                <p class="text-blue-100">Share your board with your audience and start collecting submissions</p>
+            </div>
+            <div>
+                <div class="text-3xl mb-2">3️⃣</div>
+                <h4 class="text-lg font-semibold mb-2">Grow Your Empire</h4>
+                <p class="text-blue-100">Create up to 2 more boards and expand your AI music presence</p>
+            </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/campaigns" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors transform hover:scale-105">
+                🎵 View All Campaigns
+            </a>
+            <a href="/dashboard" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-blue-600 transition-colors">
+                📊 Go to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Creator Pro Benefits -->
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Your Creator Pro Benefits</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <div class="text-green-500 text-xl">✅</div>
+                    <span class="text-gray-700">3 Growing Boards</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="text-green-500 text-xl">✅</div>
+                    <span class="text-gray-700">Creator Backlinks</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="text-green-500 text-xl">✅</div>
+                    <span class="text-gray-700">UrVote Promotion</span>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <div class="text-green-500 text-xl">✅</div>
+                    <span class="text-gray-700">Analytics Dashboard</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="text-green-500 text-xl">✅</div>
+                    <span class="text-gray-700">Priority Support</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="text-green-500 text-xl">✅</div>
+                    <span class="text-gray-700">$19/month</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support -->
+    <div class="text-center mt-12">
+        <p class="text-gray-600 mb-4">Need help getting started?</p>
+        <a href="mailto:support@urvote.rocks" class="text-blue-600 hover:text-blue-800 font-semibold">
+            📧 Contact Support
+        </a>
+    </div>
+</div>
+{% endblock %}

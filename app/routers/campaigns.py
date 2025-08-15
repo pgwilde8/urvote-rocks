@@ -25,6 +25,17 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
         )
         contests_with_clients = result.all()
         
+        # Sort contests to pin PayPortPro first (premium placement)
+        def sort_contests(contest_client_tuple):
+            contest, client = contest_client_tuple
+            if client.slug == "payportpro":
+                return (0, contest.created_at)  # PayPortPro gets priority 0 (first)
+            else:
+                return (1, contest.created_at)  # Others get priority 1 (after PayPortPro)
+        
+        # Sort contests: PayPortPro first, then others by creation date
+        contests_with_clients.sort(key=sort_contests)
+        
         print(f"DEBUG: Found {len(contests_with_clients)} contests in database")
         
         # Prepare campaign data for template
@@ -218,23 +229,15 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
             }
         })
 
-@router.get("/create", response_class=HTMLResponse)
+@router.get("/campaigns/create", response_class=HTMLResponse)
 async def create_campaign_page(request: Request):
     """Campaign creation page"""
     return templates.TemplateResponse("campaigns/create.html", {"request": request})
 
-@router.get("/signup", response_class=HTMLResponse)
-async def signup_page(request: Request):
-    """Signup page for premium subscription"""
-    return templates.TemplateResponse("signup.html", {"request": request})
 
-@router.get("/pricing", response_class=HTMLResponse)
-async def pricing_page(request: Request):
-    """Pricing page for premium subscription"""
-    return templates.TemplateResponse("pricing.html", {"request": request})
 
-@router.get("/{client_slug}/{contest_slug}", response_class=HTMLResponse)
-async def campaign_detail_page(request: Request, client_slug: str, contest_slug: str):
+@router.get("/campaigns/{client_slug}/{contest_slug}", response_class=HTMLResponse)
+async def campaign_detail_page(request: Request, client_slug: str, contest_slug: str, db: AsyncSession = Depends(get_db)):
     """Individual campaign page"""
     # Route to specific templates based on client and contest
     if client_slug == "jerichohomestead" and contest_slug == "house-of-mary-joseph":
@@ -245,9 +248,73 @@ async def campaign_detail_page(request: Request, client_slug: str, contest_slug:
         return templates.TemplateResponse("campaigns/payportpro.html", {"request": request})
     else:
         # Generic dynamic template for unknown campaigns
-        return templates.TemplateResponse("campaigns/dynamic.html", {"request": request})
+        try:
+            # Fetch contest and client data from database
+            client_result = await db.execute(
+                select(Client).where(Client.slug == client_slug)
+            )
+            client = client_result.scalar_one_or_none()
+            
+            if not client:
+                raise HTTPException(status_code=404, detail="Client not found")
+            
+            # Try to find contest by ID (contest_slug might be an ID for generic routes)
+            try:
+                contest_id = int(contest_slug)
+                contest_result = await db.execute(
+                    select(Contest).where(Contest.id == contest_id, Contest.client_id == client.id)
+                )
+            except ValueError:
+                # If contest_slug is not an ID, try to find by name
+                contest_result = await db.execute(
+                    select(Contest).where(Contest.name.ilike(f"%{contest_slug}%"), Contest.client_id == client.id)
+                )
+            
+            contest = contest_result.scalar_one_or_none()
+            
+            if not contest:
+                raise HTTPException(status_code=404, detail="Contest not found")
+            
+            # Fetch songs for this contest
+            songs_result = await db.execute(
+                select(Song).where(Song.contest_id == contest.id)
+            )
+            songs = songs_result.scalars().all()
+            
+            # Calculate stats
+            stats = {
+                "total_songs": len(songs),
+                "total_votes": 0,
+                "active_voters": 0
+            }
+            
+            # Get featured song (first song or None)
+            featured_song = songs[0] if songs else None
+            
+            return templates.TemplateResponse("campaigns/dynamic.html", {
+                "request": request,
+                "contest": contest,
+                "client": client,
+                "songs": songs,
+                "stats": stats,
+                "featured_song": featured_song
+            })
+            
+        except HTTPException:
+            raise
+        except Exception as e:
+            print(f"Error loading dynamic campaign: {str(e)}")
+            # Fallback to basic template
+            return templates.TemplateResponse("campaigns/dynamic.html", {
+                "request": request,
+                "contest": {"name": "Unknown Contest", "description": "Contest details unavailable"},
+                "client": {"name": "Unknown Client", "slug": client_slug, "website_url": None},
+                "songs": [],
+                "stats": {"total_songs": 0, "total_votes": 0, "active_voters": 0},
+                "featured_song": None
+            })
 
-@router.get("/api/count")
+@router.get("/campaigns/api/count")
 async def get_campaign_count(db: AsyncSession = Depends(get_db)):
     """API endpoint to get total count of active contests"""
     try:
@@ -258,7 +325,7 @@ async def get_campaign_count(db: AsyncSession = Depends(get_db)):
         print(f"Error getting campaign count: {str(e)}")
         return {"count": 0}
 
-@router.get("/debug/campaigns")
+@router.get("/campaigns/debug/campaigns")
 async def debug_campaigns(db: AsyncSession = Depends(get_db)):
     """Debug endpoint to check database connection and counts"""
     try:

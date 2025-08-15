@@ -99,23 +99,131 @@
                 
                 <div class="space-y-4">
                     <div>
-                        <label for="board1" class="block text-sm font-medium text-gray-700 mb-2">Board 1: Main Style *</label>
-                        <input type="text" id="board1" name="board1" required
+                        <label for="board1Name" class="block text-sm font-medium text-gray-700 mb-2">Board 1: Main Style *</label>
+                        <input type="text" id="board1Name" name="board1Name" required
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                placeholder="e.g., 'Chill Electronic Vibes' or 'Rock Anthems'">
                     </div>
                     <div>
-                        <label for="board2" class="block text-sm font-medium text-gray-700 mb-2">Board 2: Mood/Theme *</label>
-                        <input type="text" id="board2" name="board2" required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="e.g., 'Workout Energy' or 'Relaxation Zone'">
+                        <label for="board1Description" class="block text-sm font-medium text-gray-700 mb-2">Board 1 Description</label>
+                        <textarea id="board1Description" name="board1Description" rows="3"
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="Describe what kind of music this board will feature..."></textarea>
                     </div>
                     <div>
-                        <label for="board3" class="block text-sm font-medium text-gray-700 mb-2">Board 3: Use Case *</label>
-                        <input type="text" id="board3" name="board3" required
+                        <label for="board1Tags" class="block text-sm font-medium text-gray-700 mb-2">Board 1 Tags (comma-separated)</label>
+                        <input type="text" id="board1Tags" name="board1Tags"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="e.g., 'Party Starters' or 'Study Focus'">
+                               placeholder="e.g., Electronic, Chill, Ambient, Lo-fi">
+                        <p class="text-sm text-gray-500 mt-1">Add tags to help people discover your board</p>
                     </div>
+                </div>
+                
+                <!-- Theme Selection -->
+                <div class="border-t pt-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">🎨 Choose Your Board Theme</h3>
+                    <p class="text-gray-600 mb-4">Select a theme that matches your board's vibe, or let us auto-match based on your description</p>
+                    
+                    <!-- Auto-Match Option -->
+                    <div class="mb-6">
+                        <label class="flex items-center space-x-3">
+                            <input type="radio" id="autoTheme" name="themeSelection" value="auto" checked
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                            <span class="text-sm font-medium text-gray-700">
+                                🎯 Auto-Match Theme (Recommended)
+                            </span>
+                        </label>
+                        <p class="text-xs text-gray-500 ml-7 mt-1">We'll automatically choose the best theme based on your board description</p>
+                    </div>
+                    
+                    <!-- Manual Theme Selection -->
+                    <div class="mb-6">
+                        <label class="flex items-center space-x-3">
+                            <input type="radio" id="manualTheme" name="themeSelection" value="manual"
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                            <span class="text-sm font-medium text-gray-700">
+                                🎨 Choose Theme Manually
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <!-- Theme Grid (initially hidden) -->
+                    <div id="themeGrid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Chilled Vibe -->
+                        <div class="theme-option border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-300 transition-all" data-theme="chilled_vibe">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-4 h-4 rounded-full bg-blue-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-green-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-cyan-500"></div>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Chilled Vibe</h4>
+                            <p class="text-xs text-gray-600 mb-3">Cool, relaxed atmosphere</p>
+                            <div class="h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+                        </div>
+                        
+                        <!-- High Energy -->
+                        <div class="theme-option border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-amber-300 transition-all" data-theme="high_energy">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-4 h-4 rounded-full bg-amber-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-red-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-purple-500"></div>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">High Energy</h4>
+                            <p class="text-xs text-gray-600 mb-3">Bold, dynamic styling</p>
+                            <div class="h-2 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"></div>
+                        </div>
+                        
+                        <!-- Professional -->
+                        <div class="theme-option border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-gray-400 transition-all" data-theme="professional">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-4 h-4 rounded-full bg-gray-700"></div>
+                                <div class="w-4 h-4 rounded-full bg-gray-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-blue-500"></div>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Professional</h4>
+                            <p class="text-xs text-gray-600 mb-3">Clean, corporate styling</p>
+                            <div class="h-2 bg-gradient-to-r from-gray-700 to-gray-800 rounded-full"></div>
+                        </div>
+                        
+                        <!-- Creative -->
+                        <div class="theme-option border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-purple-300 transition-all" data-theme="creative">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-4 h-4 rounded-full bg-purple-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-pink-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-green-500"></div>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Creative</h4>
+                            <p class="text-xs text-gray-600 mb-3">Artistic, vibrant styling</p>
+                            <div class="h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+                        </div>
+                        
+                        <!-- Elegant -->
+                        <div class="theme-option border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-purple-400 transition-all" data-theme="elegant">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-4 h-4 rounded-full bg-purple-600"></div>
+                                <div class="w-4 h-4 rounded-full bg-amber-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-emerald-500"></div>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Elegant</h4>
+                            <p class="text-xs text-gray-600 mb-3">Sophisticated, luxury styling</p>
+                            <div class="h-2 bg-gradient-to-r from-purple-600 to-purple-700 rounded-full"></div>
+                        </div>
+                        
+                        <!-- Nature -->
+                        <div class="theme-option border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-green-300 transition-all" data-theme="nature">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-4 h-4 rounded-full bg-emerald-500"></div>
+                                <div class="w-4 h-4 rounded-full bg-amber-500"></div>
+                                <div class="w-4 h-3 rounded-full bg-purple-500"></div>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Nature</h4>
+                            <p class="text-xs text-gray-600 mb-3">Organic, earthy styling</p>
+                            <div class="h-2 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden theme input -->
+                    <input type="hidden" id="selectedTheme" name="selectedTheme" value="auto">
                 </div>
             </div>
 
@@ -204,8 +312,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('signupForm');
     
+    if (!form) {
+        console.error('Signup form not found!');
+        return;
+    }
+    
+    console.log('Signup form found, adding submit listener...');
+    
     form.addEventListener('submit', function(e) {
+        console.log('Form submit event triggered');
         e.preventDefault();
+        console.log('Default prevented, form submission stopped');
         
         // Basic validation
         const requiredFields = form.querySelectorAll('[required]');
@@ -235,15 +352,45 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.innerHTML = '🔄 Processing...';
         submitBtn.disabled = true;
         
-        // Submit to backend (you'll need to implement this)
-        console.log('Form data:', data);
+        // Submit to backend
+        console.log('Submitting form data:', data);
+        console.log('FormData entries:');
+        for (let [key, value] of formData.entries()) {
+            console.log(key + ':', value);
+        }
         
-        // For now, show success message
-        setTimeout(() => {
-            alert('Thank you for signing up! We\'ll be in touch soon to complete your subscription.');
+        // Use Promise-based approach instead of async/await
+        console.log('Sending POST request to /signup/process...');
+        fetch('/signup/process', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function(response) {
+            console.log('Response received:', response);
+            return response.json();
+        })
+        .then(function(result) {
+            console.log('Response data:', result);
+            
+            if (result.success) {
+                // Redirect to success page with data
+                const params = new URLSearchParams({
+                    user_id: result.data.user_id,
+                    client_slug: result.data.client_slug,
+                    contest_slug: result.data.contest_slug,
+                    theme_applied: result.data.theme_applied
+                });
+                window.location.href = `/signup/success?${params.toString()}`;
+            } else {
+                throw new Error(result.detail || 'Signup failed');
+            }
+        })
+        .catch(function(error) {
+            console.error('Signup error:', error);
+            alert(`Signup failed: ${error.message}`);
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
-        }, 2000);
+        });
     });
     
     // Real-time validation
@@ -257,6 +404,80 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Theme selection handling
+    const autoThemeRadio = document.getElementById('autoTheme');
+    const manualThemeRadio = document.getElementById('manualTheme');
+    const themeGrid = document.getElementById('themeGrid');
+    const selectedThemeInput = document.getElementById('selectedTheme');
+    const themeOptions = document.querySelectorAll('.theme-option');
+    
+    // Show/hide theme grid based on selection
+    function toggleThemeGrid() {
+        if (manualThemeRadio.checked) {
+            themeGrid.classList.remove('hidden');
+        } else {
+            themeGrid.classList.add('hidden');
+        }
+    }
+    
+    autoThemeRadio.addEventListener('change', toggleThemeGrid);
+    manualThemeRadio.addEventListener('change', toggleThemeGrid);
+    
+    // Theme option selection
+    themeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Remove active state from all options
+            themeOptions.forEach(opt => {
+                opt.classList.remove('border-blue-500', 'border-amber-500', 'border-gray-500', 'border-purple-400', 'border-green-300');
+                opt.classList.add('border-gray-200');
+            });
+            
+            // Add active state to selected option
+            const theme = this.dataset.theme;
+            this.classList.remove('border-gray-200');
+            
+            // Apply theme-specific border color
+            if (theme === 'chilled_vibe') this.classList.add('border-blue-500');
+            else if (theme === 'high_energy') this.classList.add('border-amber-500');
+            else if (theme === 'professional') this.classList.add('border-gray-500');
+            else if (theme === 'creative') this.classList.add('border-purple-400');
+            else if (theme === 'elegant') this.classList.add('border-purple-400');
+            else if (theme === 'nature') this.classList.add('border-green-300');
+            
+            // Update hidden input
+            selectedThemeInput.value = theme;
+        });
+    });
+    
+    // Auto-theme preview based on board description
+    const boardDescription = document.getElementById('board1Description');
+    const boardName = document.getElementById('board1Name');
+    
+    function updateAutoThemePreview() {
+        if (autoThemeRadio.checked) {
+            const text = (boardName.value + ' ' + boardDescription.value).toLowerCase();
+            let suggestedTheme = 'chilled_vibe'; // default
+            
+            // Simple keyword matching for preview
+            if (text.includes('energy') || text.includes('party') || text.includes('bold')) {
+                suggestedTheme = 'high_energy';
+            } else if (text.includes('professional') || text.includes('business') || text.includes('corporate')) {
+                suggestedTheme = 'professional';
+            } else if (text.includes('creative') || text.includes('artistic') || text.includes('fun')) {
+                suggestedTheme = 'creative';
+            } else if (text.includes('elegant') || text.includes('luxury') || text.includes('sophisticated')) {
+                suggestedTheme = 'elegant';
+            } else if (text.includes('nature') || text.includes('organic') || text.includes('earth')) {
+                suggestedTheme = 'nature';
+            }
+            
+            selectedThemeInput.value = suggestedTheme;
+        }
+    }
+    
+    boardDescription.addEventListener('input', updateAutoThemePreview);
+    boardName.addEventListener('input', updateAutoThemePreview);
 });
 </script>
 {% endblock %}

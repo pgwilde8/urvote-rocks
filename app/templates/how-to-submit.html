@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}How to Submit Your Song - UrVote.Rocks{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+        <h1 class="text-4xl font-bold text-primary mb-4">Submit Your Song to UrVote.Rocks</h1>
+        <p class="text-lg text-gray-700 mb-6">Share your AI-generated music with the world and compete for recognition, prizes, and a spot on the leaderboard!</p>
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">Why Submit?</h2>
+            <ul class="text-left text-gray-700 space-y-2 mb-4 mx-auto max-w-lg">
+                <li>• <span class="font-semibold">Global Exposure:</span> Get your music heard by a worldwide audience.</li>
+                <li>• <span class="font-semibold">Fair Voting:</span> Every song is judged by the community, not just a panel.</li>
+                <li>• <span class="font-semibold">Win Prizes:</span> Top songs earn recognition and special rewards.</li>
+                <li>• <span class="font-semibold">Artist Profile:</span> Build your brand and connect your social links.</li>
+                <li>• <span class="font-semibold">Free to Enter:</span> No cost to submit your AI-generated track!</li>
+            </ul>
+        </div>
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">How It Works</h2>
+            <ol class="text-left text-gray-700 space-y-2 mb-4 mx-auto max-w-lg list-decimal list-inside">
+                <li><span class="font-semibold">Login or Register</span> for a free account.</li>
+                <li><span class="font-semibold">Complete Your Profile</span> (add artist name, bio, and links).</li>
+                <li><span class="font-semibold">Upload Your Song</span> (MP3, WAV, FLAC, or M4A).</li>
+                <li><span class="font-semibold">Get Approved</span> by our team for quality and compliance.</li>
+                <li><span class="font-semibold">Share & Compete</span>—promote your entry and climb the leaderboard!</li>
+            </ol>
+        </div>
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-2">Ready to Get Started?</h2>
+            <p class="text-gray-700 mb-6">You must be logged in to submit a song. If you don’t have an account, registration is quick and free!</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/login" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors">Login to Submit</a>
+                <a href="/register" class="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold text-lg hover:bg-primary hover:text-white transition-colors">Register to Submit</a>
+            </div>
+        </div>
+        <div class="mt-8 text-gray-500 text-sm">
+            <p>Questions? <a href="/contact" class="text-primary underline">Contact us</a> for support.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

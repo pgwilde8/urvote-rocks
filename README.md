@@ -298,3 +298,12 @@ This project is proprietary software. All rights reserved.
 ---
 
 **UrVote.Rocks** - The Future of AI Music Contests 🎵✨
+How to Communicate This on Your Platform
+You can add a section to your site or voting page that says:
+> Why Vote?
+> - Help choose the next big AI music hit
+> - Support your favorite artists and friends
+> - Discover new, innovative music
+> - Join a global community of music lovers
+> - Make your voice heard—every vote counts!
+If you want, I can help you add a “Why Vote?” section to your leaderboard or voting page to encourage participation!

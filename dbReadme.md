@@ -292,13 +292,3 @@ ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 6. **Test database connections** and basic operations
 7. **Set up monitoring** and backup procedures
 
-    client_name    |           contest_name            | is_active 
--------------------+-----------------------------------+-----------
- PayPortPro        | Patriotic AI Music Challenge 2024 | t
- Sound of Chi      | Community Playlist Contest        | t
- Jericho Homestead | The House of Mary & Joseph        | t
- Sound of Chi      | Community Playlist Contest        | t
- Jericho Homestead | The House of Mary & Joseph        | t
- Sound of Chi      | Community Playlist Contest        | t
- Jericho Homestead | The House of Mary & Joseph        | t
-(7 rows)

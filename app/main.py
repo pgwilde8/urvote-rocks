@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
 from datetime import datetime
 
-from .routers import auth, songs, voting, campaigns
+from .routers import auth, songs, voting, campaigns, signup
 from . import admin
 from .config import settings
 from .database import get_db
@@ -46,9 +46,15 @@ app.include_router(songs.router, prefix="/api")
 app.include_router(voting.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 app.include_router(campaigns.router)
+app.include_router(signup.router)
 
-# Root route - Home page
+# Root route - Landing page (no navigation, just info)
 @app.get("/", response_class=HTMLResponse)
+async def landing(request: Request):
+    return templates.TemplateResponse("lander.html", {"request": request})
+
+# Home page with navigation (moved to /home)
+@app.get("/home", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
@@ -293,3 +299,7 @@ async def legacy_upload(
 ):
     """Legacy upload endpoint - redirects to new system"""
     return {"message": "Please use the new upload form at /upload"}
+
+@app.get("/how-to-submit", response_class=HTMLResponse)
+async def how_to_submit_page(request: Request):
+    return templates.TemplateResponse("how-to-submit.html", {"request": request})

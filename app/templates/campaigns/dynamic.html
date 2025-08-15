@@ -1,26 +1,27 @@
 {% extends "base.html" %}
 
-{% block title %}{{ campaign.title }} - {{ client.name }} - UrVote.Rocks{% endblock %}
+{% block title %}{{ contest.name }} - {{ client.name }} - UrVote.Rocks{% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <!-- Header -->
     <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-4">🎵 {{ campaign.title }}</h1>
-        <p class="text-xl text-gray-600">{{ campaign.description or "Listen, vote, and help choose the best AI-generated songs!" }}</p>
-        <p class="text-lg text-primary font-semibold mt-2">{{ campaign.tagline or "Join the AI music revolution" }}</p>
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">🎵 {{ contest.name }}</h1>
+        <p class="text-xl text-gray-600">{{ contest.description or "Listen, vote, and help choose the best AI-generated songs!" }}</p>
+        <p class="text-lg text-primary font-semibold mt-2">{{ contest.tagline or "Join the AI music revolution" }}</p>
     </div>
 
     <!-- Contest Info -->
-    <div class="bg-gradient-to-br from-{{ campaign.color_primary|default('primary') }} to-{{ campaign.color_secondary|default('blue') }}-600 text-white p-6 rounded-lg mb-8">
+    <div class="bg-gradient-to-br from-{{ contest.color_primary|default('primary') }} to-{{ contest.color_secondary|default('blue') }}-600 text-white p-6 rounded-lg mb-8">
         <div class="text-center">
-            <h2 class="text-2xl font-bold mb-2">{{ campaign.name }}</h2>
-            <p class="text-lg opacity-90">Sponsored by {{ client.name }}: {{ campaign.sponsor_description or "AI-generated music contest" }}</p>
+            <h2 class="text-2xl font-bold mb-2">{{ contest.name }}</h2>
+            <p class="text-lg opacity-90">Sponsored by {{ client.name }}: {{ contest.sponsor_description or "AI-generated music contest" }}</p>
             <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm">
-                {% for tag in campaign.tags %}
-                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">{{ tag }}</span>
-                {% endfor %}
-                {% if not campaign.tags %}
+                {% if contest.tags %}
+                    {% for tag in contest.tags %}
+                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">{{ tag }}</span>
+                    {% endfor %}
+                {% else %}
                 <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🎵 AI-Generated</span>
                 <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🗳️ Community Voting</span>
                 <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full">🤖 AI Music</span>
@@ -36,8 +37,8 @@
         <a href="{{ client.website_url }}" 
            target="_blank" 
            rel="noopener noreferrer"
-           class="text-{{ campaign.color_primary|default('primary') }}-600 hover:text-{{ campaign.color_primary|default('primary') }}-800 underline font-medium">
-            {{ client.website_display or client.website_url }}
+           class="text-{{ contest.color_primary|default('primary') }}-600 hover:text-{{ contest.color_primary|default('primary') }}-800 underline font-medium">
+            {{ client.website_url }}
         </a>
     </div>
     {% endif %}
@@ -45,20 +46,20 @@
     <!-- Stats Bar -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <div class="text-2xl font-bold text-{{ campaign.color_primary|default('primary') }}" id="totalSongs">{{ stats.total_songs or 0 }}</div>
+            <div class="text-2xl font-bold text-{{ contest.color_primary|default('primary') }}" id="totalSongs">{{ stats.total_songs or 0 }}</div>
             <div class="text-sm text-gray-600">Songs</div>
         </div>
         <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <div class="text-2xl font-bold text-{{ campaign.color_secondary|default('secondary') }}" id="totalVotes">{{ stats.total_votes or 0 }}</div>
+            <div class="text-2xl font-bold text-{{ contest.color_secondary|default('secondary') }}" id="totalVotes">{{ stats.total_votes or 0 }}</div>
             <div class="text-sm text-gray-600">Total Votes</div>
         </div>
         <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            <div class="text-2xl font-bold text-{{ campaign.color_accent|default('accent') }}" id="activeVoters">{{ stats.active_voters or 0 }}</div>
+            <div class="text-2xl font-bold text-{{ contest.color_accent|default('accent') }}" id="activeVoters">{{ stats.active_voters or 0 }}</div>
             <div class="text-sm text-gray-600">Voters</div>
         </div>
         <div class="bg-white p-4 rounded-lg shadow-md text-center">
-            {% if campaign.end_date %}
-            <div class="text-2xl font-bold text-green-600" id="daysLeft">{{ campaign.days_remaining or 0 }}</div>
+            {% if contest.end_date %}
+            <div class="text-2xl font-bold text-green-600" id="daysLeft">{{ contest.days_remaining or 0 }}</div>
             <div class="text-sm text-gray-600">Days Left</div>
             {% else %}
             <div class="text-2xl font-bold text-green-600" id="daysLeft">∞</div>
@@ -68,7 +69,7 @@
     </div>
 
     <!-- Featured Song -->
-    <div class="bg-gradient-to-r from-{{ campaign.color_primary|default('primary') }}-400 to-{{ campaign.color_secondary|default('blue') }}-500 text-white p-6 rounded-lg mb-8">
+    <div class="bg-gradient-to-r from-{{ contest.color_primary|default('primary') }}-400 to-{{ contest.color_secondary|default('blue') }}-500 text-white p-6 rounded-lg mb-8">
         <div class="text-center mb-4">
             <h3 class="text-2xl font-bold mb-2">🌟 Featured Song</h3>
             <p class="text-lg opacity-90">Listen to this week's highlighted AI-generated masterpiece</p>
@@ -80,9 +81,11 @@
                     <h4 class="text-xl font-semibold mb-2">{{ featured_song.title }}</h4>
                     <p class="text-sm opacity-90 mb-4">{{ featured_song.description or "A featured song from this contest" }}</p>
                     <div class="flex flex-wrap gap-2 mb-4">
-                        {% for tag in featured_song.tags %}
-                        <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">{{ tag }}</span>
-                        {% endfor %}
+                        {% if featured_song.tags %}
+                            {% for tag in featured_song.tags %}
+                            <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm">{{ tag }}</span>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                     <div class="flex items-center gap-4 text-sm">
                         <span>🎧 {{ featured_song.duration or "Duration: TBD" }}</span>
@@ -95,7 +98,7 @@
                         Your browser does not support the audio element.
                     </audio>
                     <div class="mt-4 text-center">
-                        <button class="bg-white text-{{ campaign.color_primary|default('primary') }}-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        <button class="bg-white text-{{ contest.color_primary|default('primary') }}-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                             🗳️ Vote for This Song
                         </button>
                     </div>
@@ -120,7 +123,7 @@
                     <div class="text-6xl mb-4">🎵</div>
                     <p class="text-sm opacity-90 mb-4">No songs yet</p>
                     <div class="mt-4 text-center">
-                        <a href="/upload" class="bg-white text-{{ campaign.color_primary|default('primary') }}-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
+                        <a href="/upload" class="bg-white text-{{ contest.color_primary|default('primary') }}-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
                             📤 Submit First Song
                         </a>
                     </div>
@@ -149,7 +152,7 @@
                             <source src="{{ song.audio_url }}" type="audio/mpeg">
                             Your browser does not support the audio element.
                         </audio>
-                        <button class="bg-{{ campaign.color_primary|default('primary') }} text-white px-4 py-2 rounded-lg font-semibold hover:bg-{{ campaign.color_primary|default('primary') }}-dark transition-colors">
+                        <button class="bg-{{ contest.color_primary|default('primary') }} text-white px-4 py-2 rounded-lg font-semibold hover:bg-{{ contest.color_primary|default('primary') }}-dark transition-colors">
                             🗳️ Vote
                         </button>
                     </div>
@@ -162,7 +165,7 @@
             <div class="text-6xl mb-4">🎵</div>
             <p class="text-xl font-medium">No songs available yet</p>
             <p class="text-sm">Be the first to submit a song for this contest</p>
-            <a href="/upload" class="mt-4 inline-block bg-{{ campaign.color_primary|default('primary') }} text-white px-6 py-3 rounded-lg font-semibold hover:bg-{{ campaign.color_primary|default('primary') }}-dark transition-colors">
+            <a href="/upload" class="mt-4 inline-block bg-{{ contest.color_primary|default('primary') }} text-white px-6 py-3 rounded-lg font-semibold hover:bg-{{ contest.color_primary|default('primary') }}-dark transition-colors">
                 Submit the First Song
             </a>
         </div>
@@ -180,14 +183,14 @@
 
     <!-- Call to Action -->
     <div class="text-center mt-12">
-        <div class="bg-gradient-to-r from-{{ campaign.color_primary|default('primary') }}-50 to-{{ campaign.color_secondary|default('blue') }}-50 p-8 rounded-lg border border-{{ campaign.color_primary|default('primary') }}-200">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Join the {{ campaign.name }} Contest</h3>
-            <p class="text-gray-600 mb-6">{{ campaign.call_to_action or "Share your AI-generated music and help choose the best songs" }}</p>
+        <div class="bg-gradient-to-r from-{{ contest.color_primary|default('primary') }}-50 to-{{ contest.color_secondary|default('blue') }}-50 p-8 rounded-lg border border-{{ contest.color_primary|default('primary') }}-200">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Join the {{ contest.name }} Contest</h3>
+            <p class="text-gray-600 mb-6">{{ contest.call_to_action or "Share your AI-generated music and help choose the best songs" }}</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/upload" class="bg-{{ campaign.color_primary|default('primary') }} text-white px-8 py-3 rounded-lg font-semibold hover:bg-{{ campaign.color_primary|default('primary') }}-dark transition-colors">
+                <a href="/upload" class="bg-{{ contest.color_primary|default('primary') }} text-white px-8 py-3 rounded-lg font-semibold hover:bg-{{ contest.color_primary|default('primary') }}-dark transition-colors">
                     📤 Submit Your Song
                 </a>
-                <a href="/campaigns" class="border-2 border-{{ campaign.color_primary|default('primary') }} text-{{ campaign.color_primary|default('primary') }} px-8 py-3 rounded-lg font-semibold hover:bg-{{ campaign.color_primary|default('primary') }} hover:text-white transition-colors">
+                <a href="/campaigns" class="border-2 border-{{ contest.color_primary|default('primary') }} text-{{ contest.color_primary|default('primary') }} px-8 py-3 rounded-lg font-semibold hover:bg-{{ contest.color_primary|default('primary') }} hover:text-white transition-colors">
                     🎵 View All Campaigns
                 </a>
             </div>
@@ -201,7 +204,7 @@
 // Load campaign stats
 async function loadCampaignStats() {
     try {
-        const response = await fetch(`/api/voting/stats?client={{ client.slug }}&contest={{ campaign.slug }}`);
+        const response = await fetch(`/api/voting/stats?client={{ client.slug }}&contest={{ contest.id }}`);
         const stats = await response.json();
         
         // Update stats display
@@ -209,7 +212,7 @@ async function loadCampaignStats() {
         document.getElementById('totalVotes').textContent = stats.total_votes || 0;
         document.getElementById('activeVoters').textContent = stats.active_voters || 0;
         
-        {% if campaign.end_date %}
+        {% if contest.end_date %}
         document.getElementById('daysLeft').textContent = stats.days_remaining || 0;
         {% endif %}
         

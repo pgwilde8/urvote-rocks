@@ -87,7 +87,12 @@
                             {% if campaign.campaign_type == "patriotic" %}🇺🇸{% elif campaign.campaign_type == "spiritual" %}🏠{% elif campaign.campaign_type == "community" %}🎵{% else %}🎯{% endif %}
                             {{ campaign.client_name }}
                         </h3>
-                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">ACTIVE</span>
+                        <div class="flex items-center space-x-2">
+                            {% if campaign.client_slug == "payportpro" %}
+                            <span class="bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-bold">⭐ PINNED</span>
+                            {% endif %}
+                            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">ACTIVE</span>
+                        </div>
                     </div>
                     <h4 class="text-xl font-semibold mb-3">{{ campaign.contest_name }}</h4>
                     <p class="text-white text-opacity-90 mb-4">
@@ -138,7 +143,7 @@
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3">
                         <a href="{{ campaign.action_url }}" 
-                           class="bg-white text-{{ campaign.campaign_type }}-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
+                           class="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
                             🎵 {{ campaign.action_text }}
                         </a>
                         <a href="/upload" 
@@ -202,27 +207,30 @@
         </div>
     </div>
 
-    <!-- Creator Pro CTA Section -->
-    <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-white text-center mb-8">
-        <h2 class="text-3xl font-bold mb-4">🚀 Ready to Create Your Own Boards?</h2>
-        <p class="text-xl mb-6 text-purple-100">
-            Join Creator Pro and build your AI music empire with 3 boards, creator backlinks, and UrVote promotion
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="/signup" class="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors transform hover:scale-105">
-                🎵 Start Creating Today
-            </a>
-            <a href="/pricing" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-purple-600 transition-colors">
-                💎 View Pricing
-            </a>
-        </div>
-        <div class="mt-4 text-purple-100">
-            <span class="text-2xl font-bold">$19/month</span> • 3 Boards • Creator Backlinks • UrVote Promotion
-        </div>
-    </div>
+    <!-- Creator Pro CTA Section - COMMENTED OUT -->
+                    <!-- <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-white text-center mb-8">
+                    <h2 class="text-3xl font-bold mb-4">🚀 Ready to Create Your Own Boards?</h2>
+                    <p class="text-xl mb-6 text-purple-100">
+                        Join Premium and build your AI music empire with 3 boards, creator backlinks, and UrVote promotional videos
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <a href="/signup" class="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-colors transform hover:scale-105">
+                            🚀 Start Yours Today
+                        </a>
+                        <a href="/pricing" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white hover:text-purple-600 transition-colors">
+                            💎 View Pricing
+                        </a>
+                    </div>
+                    <div class="mt-4 text-purple-100">
+                        <span class="text-2xl font-bold">$49/month</span> • 3 Boards • Up to 5,000 people per board • Creator Backlinks • Promotional Videos
+                    </div>
+                    <div class="mt-3 text-purple-200 text-sm">
+                        💡 <strong>Premium Placement:</strong> Get your board pinned to the top like PayPortPro!
+                    </div>
+                </div> -->
 
-    <!-- Call to Action -->
-    <div class="text-center mb-8">
+    <!-- Call to Action - COMMENTED OUT -->
+    <!-- <div class="text-center mb-8">
         <p class="text-lg text-gray-600 mb-4">Ready to launch your own music contest?</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/campaigns/create" class="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
@@ -232,7 +240,7 @@
                 View Pricing
             </a>
         </div>
-    </div>
+    </div> -->
 </div>
 {% endblock %}
 
