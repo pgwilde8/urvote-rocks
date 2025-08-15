@@ -73,6 +73,10 @@ class Song(Base):
     file_hash = Column(String(64), nullable=False)  # SHA256
     external_link = Column(String(500), nullable=True)  # YouTube/SoundCloud
     
+    url = Column(String(500), nullable=True)
+    linktree = Column(String(500), nullable=True)
+    social_link = Column(String(500), nullable=True)
+    
     # Status
     is_approved = Column(Boolean, default=False)
     is_rejected = Column(Boolean, default=False)

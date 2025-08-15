@@ -15,6 +15,11 @@ from . import admin
 from .config import settings
 from .database import get_db
 from .models import Contest, Client, Song, Vote
+from app.routers import submitter
+from app.routers import board_owner
+from app.routers import voter
+
+  
 
 # Create FastAPI app
 app = FastAPI(
@@ -47,6 +52,9 @@ app.include_router(voting.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 app.include_router(campaigns.router)
 app.include_router(signup.router)
+app.include_router(submitter.router)
+app.include_router(board_owner.router)
+
 
 # Root route - Landing page (no navigation, just info)
 @app.get("/", response_class=HTMLResponse)

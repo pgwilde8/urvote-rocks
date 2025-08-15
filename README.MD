@@ -1,8 +1,3 @@
-Alright — here’s a **full, professional README** you can hand to your new Philippines team so they can get up to speed on **UrVote.Rocks** and its first client **PayPortPro** in one read.
-This is written so a developer, designer, or project manager can immediately understand the project, goals, tech, and deliverables.
-
----
-
 # **UrVote.Rocks – Contest Platform README**
 
 ## **Overview**

@@ -9,12 +9,12 @@ from typing import List, Dict, Any
 from app.models import Contest, Client, Song, Vote
 from app.database import get_db
 
-router = APIRouter(tags=["campaigns"])
+router = APIRouter(tags=["songboards"])
 templates = Jinja2Templates(directory="app/templates")
 
-@router.get("/campaigns", response_class=HTMLResponse)
-async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
-    """Campaigns page with dynamic data"""
+@router.get("/songboards", response_class=HTMLResponse)
+async def songboards_page(request: Request, db: AsyncSession = Depends(get_db)):
+    """Songboards page with dynamic data"""
     try:
         # Get all active contests with their client information
         result = await db.execute(
@@ -26,20 +26,20 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
         contests_with_clients = result.all()
         
         # Sort contests to pin PayPortPro first (premium placement)
-        def sort_contests(contest_client_tuple):
+        def sort_songboards(contest_client_tuple):
             contest, client = contest_client_tuple
             if client.slug == "payportpro":
                 return (0, contest.created_at)  # PayPortPro gets priority 0 (first)
             else:
                 return (1, contest.created_at)  # Others get priority 1 (after PayPortPro)
         
-        # Sort contests: PayPortPro first, then others by creation date
-        contests_with_clients.sort(key=sort_contests)
+        # Sort songboards: PayPortPro first, then others by creation date
+        contests_with_clients.sort(key=sort_songboards)
         
-        print(f"DEBUG: Found {len(contests_with_clients)} contests in database")
+        print(f"DEBUG: Found {len(contests_with_clients)} songboards in database")
         
-        # Prepare campaign data for template
-        campaigns = []
+        # Prepare songboard data for template
+        songboards = []
         for contest, client in contests_with_clients:
             print(f"DEBUG: Processing contest: {contest.name} for client: {client.name}")
             
@@ -57,34 +57,34 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
             )
             vote_count = votes_result.scalar() or 0
             
-            # Determine campaign type and styling based on client and contest name
+            # Determine songboard type and styling based on client and contest name
             if client.slug == "payportpro":
-                campaign_type = "patriotic"
+                songboard_type = "patriotic"
                 colors = "from-red-500 to-blue-600"
                 features = ["🎵 Patriotic Theme", "🇺🇸 American Values", "🤖 AI-Generated", "🗳️ Community Voting"]
                 action_text = "Enter Contest"
-                action_url = f"/campaigns/{client.slug}/american-greatness"
+                action_url = f"/songboards/{client.slug}/american-greatness"
             elif client.slug == "soundofchi":
-                campaign_type = "community"
+                songboard_type = "community"
                 colors = "from-purple-500 to-pink-600"
                 features = ["🎵 Community Playlist", "🤖 AI-Generated", "📱 Spotify-Style", "🌍 Global Community"]
                 action_text = "View Playlist"
-                action_url = f"/campaigns/{client.slug}/playlist"
+                action_url = f"/songboards/{client.slug}/playlist"
             elif client.slug == "jerichohomestead":
-                campaign_type = "spiritual"
+                songboard_type = "spiritual"
                 colors = "from-green-500 to-teal-600"
                 features = ["🙏 Sacred Music", "🏠 Community", "🤖 AI-Generated", "🌿 Spiritual"]
                 action_text = "Enter Contest"
-                action_url = f"/campaigns/{client.slug}/house-of-mary-joseph"
+                action_url = f"/songboards/{client.slug}/house-of-mary-joseph"
             else:
-                # Generic campaign for any new ones
-                campaign_type = "generic"
+                # Generic songboard for any new ones
+                songboard_type = "generic"
                 colors = "from-blue-500 to-indigo-600"
                 features = ["🎵 AI-Generated", "🤖 AI Music", "🗳️ Community Voting", "🎯 Contest"]
                 action_text = "Enter Contest"
-                action_url = f"/campaigns/{client.slug}/{contest.id}"
+                action_url = f"/songboards/{client.slug}/{contest.id}"
             
-            campaigns.append({
+            songboards.append({
                 "client_name": client.name,
                 "client_slug": client.slug,
                 "contest_name": contest.name,
@@ -92,7 +92,7 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
                 "description": contest.description or "AI-generated music contest",
                 "song_count": song_count,
                 "vote_count": vote_count,
-                "campaign_type": campaign_type,
+                "songboard_type": songboard_type,
                 "colors": colors,
                 "features": features,
                 "action_text": action_text,
@@ -104,10 +104,10 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
                 "created_at": contest.created_at
             })
         
-        # If no campaigns in database, create default campaigns
-        if not campaigns:
-            print("DEBUG: No campaigns found in database, using fallback data")
-            campaigns = [
+        # If no songboards in database, create default songboards
+        if not songboards:
+            print("DEBUG: No songboards found in database, using fallback data")
+            songboards = [
                 {
                     "client_name": "PayPortPro",
                     "client_slug": "payportpro",
@@ -116,11 +116,11 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
                     "description": "Show us your best AI-generated patriotic music! Brought to you by PayPortPro - Bridging Dollars To Stable Coins",
                     "song_count": 15,
                     "vote_count": 127,
-                    "campaign_type": "patriotic",
+                    "songboard_type": "patriotic",
                     "colors": "from-red-500 to-blue-600",
                     "features": ["🎵 Patriotic Theme", "🇺🇸 American Values", "🤖 AI-Generated", "🗳️ Community Voting"],
                     "action_text": "Enter Contest",
-                    "action_url": "/campaigns/payportpro/american-greatness",
+                    "action_url": "/songboards/payportpro/american-greatness",
                     "website_url": "https://www.payportpro.com",
                     "website_display": "www.payportpro.com",
                     "end_date": None,
@@ -135,11 +135,11 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
                     "description": "Like Spotify playlists, but with AI-generated music! Upload your songs, vote for favorites, and build the ultimate community-curated playlist.",
                     "song_count": 8,
                     "vote_count": 43,
-                    "campaign_type": "community",
+                    "songboard_type": "community",
                     "colors": "from-purple-500 to-pink-600",
                     "features": ["🎵 Community Playlist", "🤖 AI-Generated", "📱 Spotify-Style", "🌍 Global Community"],
                     "action_text": "View Playlist",
-                    "action_url": "/campaigns/soundofchi/playlist",
+                    "action_url": "/songboards/soundofchi/playlist",
                     "website_url": "https://soundcloud.com/sound-of-chi",
                     "website_display": "soundcloud.com/sound-of-chi",
                     "end_date": None,
@@ -154,11 +154,11 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
                     "description": "Sacred music for spiritual reflection and community building. AI-generated hymns and worship songs that inspire faith and hope.",
                     "song_count": 0,
                     "vote_count": 0,
-                    "campaign_type": "spiritual",
+                    "songboard_type": "spiritual",
                     "colors": "from-green-500 to-teal-600",
                     "features": ["🙏 Sacred Music", "🏠 Community", "🤖 AI-Generated", "🌿 Spiritual"],
                     "action_text": "Enter Contest",
-                    "action_url": "/campaigns/jerichohomestead/house-of-mary-joseph",
+                    "action_url": "/songboards/jerichohomestead/house-of-mary-joseph",
                     "website_url": "https://www.jerichohomestead.org",
                     "website_display": "www.jerichohomestead.org",
                     "end_date": None,
@@ -177,23 +177,23 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
             total_votes_result = await db.execute(select(func.count(Vote.id)))
             total_votes = total_votes_result.scalar() or 0
             
-            # Get total campaigns
-            total_campaigns = len(campaigns)
+            # Get total songboards
+            total_songboards = len(songboards)
             
-            print(f"DEBUG: Site-wide stats - Songs: {total_songs}, Votes: {total_votes}, Campaigns: {total_campaigns}")
+            print(f"DEBUG: Site-wide stats - Songs: {total_songs}, Votes: {total_votes}, Songboards: {total_songboards}")
             
         except Exception as e:
             print(f"Error getting site-wide stats: {str(e)}")
-            # Fallback to campaign-based stats
-            total_songs = sum(c["song_count"] for c in campaigns)
-            total_votes = sum(c["vote_count"] for c in campaigns)
-            total_campaigns = len(campaigns)
+            # Fallback to songboard-based stats
+            total_songs = sum(c["song_count"] for c in songboards)
+            total_votes = sum(c["vote_count"] for c in songboards)
+            total_songboards = len(songboards)
         
-        return templates.TemplateResponse("campaigns.html", {
+        return templates.TemplateResponse("songboards.html", {
             "request": request,
-            "campaigns": campaigns,
+            "songboards": songboards,
             "platform_stats": {
-                "total_campaigns": total_campaigns,
+                "total_songboards": total_songboards,
                 "total_songs": total_songs,
                 "total_votes": total_votes,
                 "active_users": max(1, total_votes // 10) if total_votes > 0 else 1
@@ -201,7 +201,7 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
         })
         
     except Exception as e:
-        print(f"Error loading campaigns: {str(e)}")
+        print(f"Error loading songboards: {str(e)}")
         # Fallback to static template with default data
         try:
             # Even in fallback, try to get site-wide stats
@@ -218,36 +218,36 @@ async def campaigns_page(request: Request, db: AsyncSession = Depends(get_db)):
             total_songs = 0
             total_votes = 0
         
-        return templates.TemplateResponse("campaigns.html", {
+        return templates.TemplateResponse("songboards.html", {
             "request": request,
-            "campaigns": [],
+            "songboards": [],
             "platform_stats": {
-                "total_campaigns": 0,
+                "total_songboards": 0,
                 "total_songs": total_songs,
                 "total_votes": total_votes,
                 "active_users": max(1, total_votes // 10) if total_votes > 0 else 1
             }
         })
 
-@router.get("/campaigns/create", response_class=HTMLResponse)
-async def create_campaign_page(request: Request):
-    """Campaign creation page"""
-    return templates.TemplateResponse("campaigns/create.html", {"request": request})
+@router.get("/songboards/create", response_class=HTMLResponse)
+async def create_songboard_page(request: Request):
+    """Songboard creation page"""
+    return templates.TemplateResponse("songboards/create.html", {"request": request})
 
 
 
-@router.get("/campaigns/{client_slug}/{contest_slug}", response_class=HTMLResponse)
-async def campaign_detail_page(request: Request, client_slug: str, contest_slug: str, db: AsyncSession = Depends(get_db)):
-    """Individual campaign page"""
+@router.get("/songboards/{client_slug}/{contest_slug}", response_class=HTMLResponse)
+async def songboard_detail_page(request: Request, client_slug: str, contest_slug: str, db: AsyncSession = Depends(get_db)):
+    """Individual songboard page"""
     # Route to specific templates based on client and contest
     if client_slug == "jerichohomestead" and contest_slug == "house-of-mary-joseph":
-        return templates.TemplateResponse("campaigns/jerichohomestead.html", {"request": request})
+        return templates.TemplateResponse("songboards/jerichohomestead.html", {"request": request})
     elif client_slug == "soundofchi" and contest_slug == "playlist":
-        return templates.TemplateResponse("campaigns/soundofchi.html", {"request": request})
+        return templates.TemplateResponse("songboards/soundofchi.html", {"request": request})
     elif client_slug == "payportpro" and contest_slug == "american-greatness":
-        return templates.TemplateResponse("campaigns/payportpro.html", {"request": request})
+        return templates.TemplateResponse("songboards/payportpro.html", {"request": request})
     else:
-        # Generic dynamic template for unknown campaigns
+        # Generic dynamic template for unknown songboards
         try:
             # Fetch contest and client data from database
             client_result = await db.execute(
@@ -291,7 +291,7 @@ async def campaign_detail_page(request: Request, client_slug: str, contest_slug:
             # Get featured song (first song or None)
             featured_song = songs[0] if songs else None
             
-            return templates.TemplateResponse("campaigns/dynamic.html", {
+            return templates.TemplateResponse("songboards/dynamic.html", {
                 "request": request,
                 "contest": contest,
                 "client": client,
@@ -303,9 +303,9 @@ async def campaign_detail_page(request: Request, client_slug: str, contest_slug:
         except HTTPException:
             raise
         except Exception as e:
-            print(f"Error loading dynamic campaign: {str(e)}")
+            print(f"Error loading dynamic songboard: {str(e)}")
             # Fallback to basic template
-            return templates.TemplateResponse("campaigns/dynamic.html", {
+            return templates.TemplateResponse("songboards/dynamic.html", {
                 "request": request,
                 "contest": {"name": "Unknown Contest", "description": "Contest details unavailable"},
                 "client": {"name": "Unknown Client", "slug": client_slug, "website_url": None},
@@ -314,19 +314,19 @@ async def campaign_detail_page(request: Request, client_slug: str, contest_slug:
                 "featured_song": None
             })
 
-@router.get("/campaigns/api/count")
-async def get_campaign_count(db: AsyncSession = Depends(get_db)):
+@router.get("/songboards/api/count")
+async def get_songboard_count(db: AsyncSession = Depends(get_db)):
     """API endpoint to get total count of active contests"""
     try:
         result = await db.execute(select(func.count(Contest.id)).where(Contest.is_active == True))
         count = result.scalar() or 0
         return {"count": count}
     except Exception as e:
-        print(f"Error getting campaign count: {str(e)}")
+        print(f"Error getting songboard count: {str(e)}")
         return {"count": 0}
 
-@router.get("/campaigns/debug/campaigns")
-async def debug_campaigns(db: AsyncSession = Depends(get_db)):
+@router.get("/songboards/debug/songboards")
+async def debug_songboards(db: AsyncSession = Depends(get_db)):
     """Debug endpoint to check database connection and counts"""
     try:
         # Check Contest table

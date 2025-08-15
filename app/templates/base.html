@@ -35,25 +35,6 @@
                     <a href="/campaigns" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">View Active Contests</a>
                     <a href="/how-to-submit" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Submit Song</a>
                     
-                    <!-- Pricing Section -->
-                    <div class="relative group">
-                        <button class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                            💎 Pricing
-                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <!-- Dropdown Menu -->
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                            <a href="/pricing" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                💎 Premium Plan ($49/month)
-                            </a>
-                            <div class="border-t border-gray-100 my-1"></div>
-                            <!-- <a href="/campaigns/create" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                📋 Create Board
-                            </a> -->
-                        </div>
-                    </div>
                     
                     {% if current_user %}
                         <a href="/profile" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Profile</a>
@@ -64,9 +45,8 @@
                     {% endif %}
                     
                     <!-- Premium CTA Button -->
-                    <a href="/signup" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg">
-                        💎 Premium ($49)
-                    </a>
+                    <a href="/songboards" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg">Songboards</a>
+                    <a href="/songboard" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-green-600 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg">Songboard</a>
                 </div>
             </div>
         </div>
@@ -78,13 +58,50 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white mt-auto">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <p class="text-gray-300">Powered by <span class="text-primary font-semibold">UrVote.Rocks</span></p>
-                <p class="text-sm text-gray-400 mt-2">Contest Platform for Brands, Events, and Creators</p>
-            </div>
+    <footer class="bg-gray-900 text-white mt-20">
+      <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="/" class="hover:underline">Home</a></li>
+            <li><a href="/campaigns" class="hover:underline">Active Contests</a></li>
+            <li><a href="/how-to-submit" class="hover:underline">Submit Song</a></li>
+            <li><a href="/songboards" class="hover:underline">Songboards</a></li>
+            <li><a href="/login" class="hover:underline">Login</a></li>
+            <li><a href="/register" class="hover:underline">Register</a></li>
+          </ul>
         </div>
+        <!-- Social Media -->
+        <div>
+          <h3 class="text-lg font-bold mb-4">Follow Us</h3>
+          <div class="flex space-x-4">
+            <a href="#" class="hover:text-blue-400 text-2xl">📘</a>
+            <a href="#" class="hover:text-blue-300 text-2xl">🐦</a>
+            <a href="#" class="hover:text-pink-400 text-2xl">📷</a>
+            <a href="#" class="hover:text-red-400 text-2xl">📺</a>
+          </div>
+        </div>
+        <!-- Latest Blog Post -->
+        <div>
+          <h3 class="text-lg font-bold mb-4">Latest from Our Blog</h3>
+          <p class="text-gray-300">Coming Soon!</p>
+          <!-- Later: <a href="/blog/latest" class="hover:underline">How AI is Changing Music (Read More)</a> -->
+        </div>
+        <!-- Contact & Branding -->
+        <div>
+          <h3 class="text-lg font-bold mb-4">Contact & Info</h3>
+          <ul class="space-y-2">
+            <li><a href="/contact" class="hover:underline">Contact Us</a></li>
+            <li><a href="/faq" class="hover:underline">FAQ</a></li>
+          </ul>
+          <div class="mt-6 text-gray-400 text-sm">
+            Powered by <span class="text-primary font-semibold">UrVote.Rocks</span><br>
+            Contest Platform for Brands, Events, and Creators<br>
+            &copy; {{ year }} UrVote.Rocks. All rights reserved.
+          </div>
+        </div>
+      </div>
     </footer>
 
     {% block extra_scripts %}{% endblock %}

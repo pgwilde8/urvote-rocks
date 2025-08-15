@@ -18,33 +18,7 @@ from ..config import settings
 
 router = APIRouter(prefix="/songs", tags=["songs"])
 
-@router.get("/upload", response_class=HTMLResponse)
-async def upload_form(request: Request):
-    """Show song upload form"""
-    from .. import templates
-    return templates.TemplateResponse("upload.html", {"request": request})
-
-@router.get("/upload/success", response_class=HTMLResponse)
-async def upload_success(request: Request, song_id: int = None):
-    """Show upload success page"""
-    from .. import templates
-    from ..database import get_db
-    from sqlalchemy.ext.asyncio import AsyncSession
-    
-    # Get song details if song_id is provided
-    song_data = None
-    if song_id:
-        db = await anext(get_db())
-        try:
-            result = await db.execute(select(Song).where(Song.id == song_id))
-            song_data = result.scalar_one_or_none()
-        except:
-            pass
-    
-    return templates.TemplateResponse("upload-success.html", {
-        "request": request,
-        "song": song_data
-    })
+# Removed HTML-rendering routes for '/upload' and '/upload/success'.
 
 async def upload_song_logic(
     title: str,
