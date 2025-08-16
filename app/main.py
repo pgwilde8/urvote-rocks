@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, Request, Depends, HTTPException, Form, File, UploadFile
+from fastapi import FastAPI, Request, Depends, HTTPException, Form, File, UploadFile, APIRouter, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -290,3 +290,15 @@ async def not_found_handler(request: Request, exc: HTTPException):
     # Optional: serve a friendly 404 template if you have one
     # return templates.TemplateResponse("errors/404.html", {"request": request}, status_code=404)
     return JSONResponse({"detail": "Not Found"}, status_code=404)
+
+
+
+@router.post("/api/openwebui/webhook")
+async def openwebui_webhook(req: Request):
+    payload = await req.json()
+    # TODO: validate shared secret header if configured
+    # Example: log or route events by type
+    event_type = payload.get("type", "unknown")
+    # e.g., store prompt snippets, trigger moderation, etc.
+    return {"status": "ok", "received": event_type}
+
