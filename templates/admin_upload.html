@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Admin Song Upload{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
+  <h1 class="text-2xl font-bold mb-4">Admin: Upload New Song</h1>
+  <form method="post">
+    <div class="mb-4">
+      <label class="block font-medium mb-1" for="title">Song Title</label>
+      <input class="w-full border rounded px-3 py-2" type="text" id="title" name="title" required>
+    </div>
+    <div class="mb-4">
+      <label class="block font-medium mb-1" for="artist_name">Artist Name</label>
+      <input class="w-full border rounded px-3 py-2" type="text" id="artist_name" name="artist_name" required>
+    </div>
+    <div class="mb-4">
+      <label class="block font-medium mb-1" for="url">Audio URL</label>
+      <input class="w-full border rounded px-3 py-2" type="url" id="url" name="url" required>
+    </div>
+    <div class="mb-4">
+      <label class="block font-medium mb-1" for="social_link">Artist Social Link (optional)</label>
+      <input class="w-full border rounded px-3 py-2" type="url" id="social_link" name="social_link">
+    </div>
+    <div class="mb-6">
+      <label class="block font-medium mb-1" for="board_id">Board</label>
+      <select class="w-full border rounded px-3 py-2" id="board_id" name="board_id" required>
+        <option value="">Select a board...</option>
+        {% for board in boards %}
+          <option value="{{ board.id }}">{{ board.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="px-4 py-2 bg-blue-600 text-white rounded" type="submit">Upload Song</button>
+  </form>
+</div>
+{% endblock %}

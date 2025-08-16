@@ -18,7 +18,7 @@ from .database import get_db
 from .models import Contest, Client, Song, Vote
 
 # Routers (updated: campaigns -> songboards, add sales)
-from .routers import auth, songs, voting, songboards, signup, sales
+from .routers import auth, songs, voting, songboards, signup, static_pages
 from . import admin
 from app.routers import submitter, board_owner
 
@@ -73,7 +73,7 @@ app.include_router(songboards.router, tags=["songboards"])   # replaces campaign
 app.include_router(signup.router, tags=["signup"])
 app.include_router(submitter.router, tags=["submitter"])
 app.include_router(board_owner.router, tags=["board_owner"])
-app.include_router(sales.router, tags=["sales"])
+# app.include_router(sales.router, tags=["sales"])  # Removed because 'sales' is not defined
 
 
 # ------------------------------------------------------------------------------
@@ -293,7 +293,7 @@ async def not_found_handler(request: Request, exc: HTTPException):
 
 
 
-@router.post("/api/openwebui/webhook")
+@app.post("/api/openwebui/webhook")
 async def openwebui_webhook(req: Request):
     payload = await req.json()
     # TODO: validate shared secret header if configured

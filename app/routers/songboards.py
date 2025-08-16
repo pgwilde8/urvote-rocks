@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models import Client, Contest, Song, Vote
-from app.dependencies import get_current_board_owner  # <-- ensure this exists
+from app.dependencies import get_current_board_owner
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Request
-from ..auth import get_current_board_owner
+from app.dependencies import get_current_board_owner
 from .. import templates
 
 router = APIRouter(

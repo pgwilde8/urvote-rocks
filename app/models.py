@@ -75,7 +75,6 @@ class Song(Base):
     file_size = Column(BigInteger, nullable=False)
     file_hash = Column(String(64), nullable=False)  # SHA256
     external_link = Column(String(500), nullable=True)  # YouTube/SoundCloud
-    
     url = Column(String(500), nullable=True)
     linktree = Column(String(500), nullable=True)
     social_link = Column(String(500), nullable=True)
@@ -96,7 +95,9 @@ class Song(Base):
     artist = relationship("User", back_populates="songs")
     contest = relationship("Contest")
     votes = relationship("Vote", back_populates="song")
-
+    board_id = Column(BigInteger, ForeignKey("boards.id", ondelete="CASCADE"), nullable=True, index=True)
+    board = relationship("Board", back_populates="songs")
+    
 class Vote(Base):
     __tablename__ = "votes"
     
@@ -140,3 +141,10 @@ class Contest(Base):
     
     # Relationships
     client = relationship("Client", back_populates="contests")
+class Board(Base):
+    __tablename__ = "boards"
+    id = Column(BigInteger, primary_key=True)
+    slug = Column(String(255), unique=True, index=True, nullable=False)
+    title = Column(String(255), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    songs = relationship("Song", back_populates="board", cascade="all, delete-orphan")
