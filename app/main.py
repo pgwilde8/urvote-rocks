@@ -20,7 +20,7 @@ from .models import Contest, Client, Song, Vote
 # Routers (updated: campaigns -> songboards, add sales)
 from .routers import auth, songs, voting, songboards, signup, sales
 from . import admin
-from app.routers import submitter, board_owner, voter
+from app.routers import submitter, board_owner
 
 # ------------------------------------------------------------------------------
 # FastAPI app
@@ -74,7 +74,7 @@ app.include_router(signup.router, tags=["signup"])
 app.include_router(submitter.router, tags=["submitter"])
 app.include_router(board_owner.router, tags=["board_owner"])
 app.include_router(sales.router, tags=["sales"])
-app.include_router(voter.router, tags=["voter"])
+
 
 # ------------------------------------------------------------------------------
 # Pages
