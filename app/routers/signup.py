@@ -21,10 +21,7 @@ async def signup_page(request: Request):
     """Signup page for premium subscription"""
     return templates.TemplateResponse("signup.html", {"request": request})
 
-@router.get("/pricing", response_class=HTMLResponse)
-async def pricing_page(request: Request):
-    """Pricing page for premium subscription"""
-    return templates.TemplateResponse("pricing.html", {"request": request})
+# Removed duplicate pricing route - now handled by main.py
 
 @router.post("/signup/process")
 async def process_signup(

@@ -48,6 +48,13 @@ class Settings(BaseSettings):
     spaces_secret_key: str = "KTWro6oES5YqxAvI2Oq52MlqxkuVjz8NJlL9WdEncT0"
     spaces_region: str = "sfo3"
     
+    # Stripe Configuration
+    stripe_secret_key: str
+    stripe_publishable_key: str
+    stripe_price_id: str
+    stripe_prod_id: str
+    stripe_webhook_secret: str
+    
     @property
     def allowed_extensions(self) -> set:
         """Get allowed file extensions"""

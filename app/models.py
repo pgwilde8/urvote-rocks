@@ -88,6 +88,7 @@ class Song(Base):
     artist_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     contest_id = Column(Integer, ForeignKey("contests.id"), nullable=True)  # Changed from False to True
     audio_url = Column(String(500), nullable=True)  # Web-accessible URL for audio files
+    content_source = Column(String(50), default="upload")  # upload or external
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     approved_at = Column(DateTime(timezone=True), nullable=True)
     
@@ -98,13 +99,112 @@ class Song(Base):
     board_id = Column(BigInteger, ForeignKey("boards.id", ondelete="CASCADE"), nullable=True, index=True)
     board = relationship("Board", back_populates="songs")
     
+class Board(Base):
+    __tablename__ = "boards"
+    id = Column(BigInteger, primary_key=True)
+    slug = Column(String(255), unique=True, index=True, nullable=False)
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    theme = Column(String(100), nullable=True)
+    user_id = Column(BigInteger, ForeignKey("users.id"), nullable=True)
+    
+    # Business information
+    website_url = Column(String(500), nullable=True)
+    contact_email = Column(String(255), nullable=True)
+    industry = Column(String(100), nullable=True)
+    
+    # Social media links
+    social_facebook = Column(String(500), nullable=True)
+    social_linkedin = Column(String(500), nullable=True)
+    social_twitter = Column(String(500), nullable=True)
+    social_instagram = Column(String(500), nullable=True)
+    
+    # Media type preferences
+    allow_music = Column(Boolean, default=True)
+    allow_video = Column(Boolean, default=True)
+    allow_visuals = Column(Boolean, default=True)
+    max_music_uploads = Column(Integer, default=100)
+    max_video_uploads = Column(Integer, default=50)
+    max_visuals_uploads = Column(Integer, default=100)
+    require_approval = Column(Boolean, default=False)
+    allow_anonymous_uploads = Column(Boolean, default=True)
+    
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    
+    # Relationships
+    songs = relationship("Song", back_populates="board", cascade="all, delete-orphan")
+    videos = relationship("Video", back_populates="board", cascade="all, delete-orphan")
+    visuals = relationship("Visual", back_populates="board", cascade="all, delete-orphan")
+
+class Video(Base):
+    __tablename__ = "videos"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(255), nullable=False)
+    artist_name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    video_type = Column(String(100), nullable=True)  # music_video, visualizer, etc.
+    file_path = Column(String(500), nullable=True)  # For uploaded files
+    external_link = Column(String(500), nullable=True)  # YouTube/Vimeo links
+    file_size = Column(BigInteger, nullable=True)
+    file_hash = Column(String(64), nullable=True)
+    
+    # Status
+    is_approved = Column(Boolean, default=True)
+    is_rejected = Column(Boolean, default=False)
+    rejection_reason = Column(Text, nullable=True)
+    
+    # Metadata
+    artist_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    board_id = Column(BigInteger, ForeignKey("boards.id", ondelete="CASCADE"), nullable=True, index=True)
+    content_source = Column(String(50), default="upload")  # upload or external
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    approved_at = Column(DateTime(timezone=True), nullable=True)
+    
+    # Relationships
+    board = relationship("Board", back_populates="videos")
+
+class Visual(Base):
+    __tablename__ = "visuals"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(255), nullable=False)
+    artist_name = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    visual_type = Column(String(100), nullable=True)  # artwork, photo, graphic, etc.
+    file_path = Column(String(500), nullable=True)  # For uploaded files
+    external_link = Column(String(500), nullable=True)  # Unsplash/Pexels links
+    file_size = Column(BigInteger, nullable=True)
+    file_hash = Column(String(64), nullable=True)
+    
+    # Status
+    is_approved = Column(Boolean, default=True)
+    is_rejected = Column(Boolean, default=False)
+    rejection_reason = Column(Text, nullable=True)
+    
+    # Metadata
+    artist_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    board_id = Column(BigInteger, ForeignKey("boards.id", ondelete="CASCADE"), nullable=True, index=True)
+    content_source = Column(String(50), default="upload")  # upload or external
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    approved_at = Column(DateTime(timezone=True), nullable=True)
+    
+    # Relationships
+    board = relationship("Board", back_populates="visuals")
+
 class Vote(Base):
     __tablename__ = "votes"
     
     id = Column(Integer, primary_key=True, index=True)
-    song_id = Column(Integer, ForeignKey("songs.id"), nullable=False)
+    song_id = Column(Integer, ForeignKey("songs.id"), nullable=True)  # Made nullable for generic voting
     voter_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Made optional for anonymous voting
     voter_type = Column(String(20), default="authenticated")  # "authenticated" or "anonymous"
+    
+    # Generic voting fields for all media types
+    media_type = Column(String(20), nullable=True)  # "music", "video", "visuals"
+    media_id = Column(BigInteger, nullable=True)  # ID of the content being voted on
+    vote_type = Column(String(20), default="like")  # "like" or "dislike"
+    
     ip_address = Column(String(45), nullable=False)  # IPv6 compatible
     user_agent = Column(Text, nullable=True)
     device_fingerprint = Column(String(255), nullable=True)
@@ -141,10 +241,3 @@ class Contest(Base):
     
     # Relationships
     client = relationship("Client", back_populates="contests")
-class Board(Base):
-    __tablename__ = "boards"
-    id = Column(BigInteger, primary_key=True)
-    slug = Column(String(255), unique=True, index=True, nullable=False)
-    title = Column(String(255), nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    songs = relationship("Song", back_populates="board", cascade="all, delete-orphan")

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Up Your Media Board - UrVote.Rocks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-purple-600">UrVote.Rocks</a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-purple-600 transition-colors">Home</a>
+                    <a href="/media-boards" class="text-gray-700 hover:text-purple-600 transition-colors">Media Boards</a>
+                    <a href="/dashboard" class="text-gray-700 hover:text-purple-600 transition-colors">Dashboard</a>
+                    <a href="/templates" class="text-gray-700 hover:text-purple-600 transition-colors">Themes</a>
+                    <a href="/leaderboard" class="text-gray-700 hover:text-purple-600 transition-colors">Leaderboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-purple-600 to-blue-600 text-white py-20">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Set Up Your <span class="gradient-text">Media Board</span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                Customize your Media Board with your business information and branding
+            </p>
+            <div class="bg-white bg-opacity-10 rounded-2xl p-6 backdrop-blur-sm">
+                <div class="flex items-center justify-center space-x-3 text-lg">
+                    <span>🎨</span>
+                    <span>Selected Theme: <strong id="selected-theme">Loading...</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Business Setup Form -->
+    <div class="py-16">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">🏢 Business Information</h2>
+                
+                <form id="business-setup-form" class="space-y-8">
+                    <!-- Business Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Business/Organization Name *</label>
+                        <input type="text" name="business_name" required 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
+                               placeholder="e.g., Acme Corporation, My Startup, etc.">
+                        <p class="text-sm text-gray-500 mt-2">This will be the main title of your Media Board</p>
+                    </div>
+
+                    <!-- Business Description -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Business Description *</label>
+                        <textarea name="business_description" rows="4" required
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
+                                  placeholder="Tell people about your business, what you do, and what kind of content you'll be sharing..."></textarea>
+                        <p class="text-sm text-gray-500 mt-2">This description will appear on your Media Board</p>
+                    </div>
+
+                    <!-- Website -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Website URL</label>
+                        <input type="url" name="website_url" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
+                               placeholder="https://yourbusiness.com">
+                        <p class="text-sm text-gray-500 mt-2">Optional: Link to your main website</p>
+                    </div>
+
+                    <!-- Industry/Category -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Industry/Category</label>
+                        <select name="industry" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg">
+                            <option value="">Select an industry...</option>
+                            <option value="technology">Technology</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="finance">Finance</option>
+                            <option value="cryptocurrency">Cryptocurrency</option>
+                            <option value="education">Education</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="retail">Retail</option>
+                            <option value="food">Food & Beverage</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="automotive">Automotive</option>
+                            <option value="real_estate">Real Estate</option>
+                            <option value="consulting">Consulting</option>
+                            <option value="non_profit">Non-Profit</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <p class="text-sm text-gray-500 mt-2">Helps categorize your Media Board</p>
+                    </div>
+
+                    <!-- Contact Email -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Contact Email</label>
+                        <input type="email" name="contact_email" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-lg"
+                               placeholder="contact@yourbusiness.com">
+                        <p class="text-sm text-gray-500 mt-2">Optional: For business inquiries</p>
+                    </div>
+
+                    <!-- Social Media Links -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Social Media Links</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="url" name="social_linkedin" 
+                                   class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                   placeholder="LinkedIn URL">
+                            <input type="url" name="social_twitter" 
+                                   class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                   placeholder="Twitter/X URL">
+                            <input type="url" name="social_instagram" 
+                                   class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                   placeholder="Instagram URL">
+                            <input type="url" name="social_facebook" 
+                                   class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                   placeholder="Facebook URL">
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Optional: Connect your social media presence</p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-6">
+                        <button type="submit" 
+                                class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 px-8 rounded-xl font-semibold text-xl hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                            🚀 Create My Media Board
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get theme from URL parameters and localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const theme = urlParams.get('theme') || localStorage.getItem('selectedTheme') || 'default';
+            
+            // Display selected theme
+            document.getElementById('selected-theme').textContent = theme.charAt(0).toUpperCase() + theme.slice(1) + ' Theme';
+            
+            // Store theme for form submission
+            localStorage.setItem('selectedTheme', theme);
+        });
+
+        // Handle form submission
+        document.getElementById('business-setup-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const theme = localStorage.getItem('selectedTheme') || 'default';
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '⏳ Creating Your Media Board...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Create board with business info
+                const response = await fetch('/api/boards/create-board', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        theme_name: theme,
+                        business_name: formData.get('business_name'),
+                        business_description: formData.get('business_description'),
+                        website_url: formData.get('website_url'),
+                        industry: formData.get('industry'),
+                        contact_email: formData.get('contact_email'),
+                        social_linkedin: formData.get('social_linkedin'),
+                        social_twitter: formData.get('social_twitter'),
+                        social_instagram: formData.get('social_instagram'),
+                        social_facebook: formData.get('social_facebook')
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('🎉 Your Media Board has been created successfully! Redirecting...');
+                        window.location.href = `/board/${data.slug}`;
+                    } else {
+                        throw new Error(data.message || 'Failed to create board');
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+            } catch (error) {
+                console.error('Error creating board:', error);
+                alert('❌ Error creating your Media Board: ' + error.message);
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

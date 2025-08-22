@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to UrVote.Rocks! 🎉</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .success-card { animation: slideInUp 0.8s ease-out; }
+        .feature-card { transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .confetti { position: absolute; width: 10px; height: 10px; background: #f0f; animation: confetti 3s ease-in-out infinite; }
+        .confetti:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .confetti:nth-child(2) { left: 20%; animation-delay: 0.5s; }
+        .confetti:nth-child(3) { left: 30%; animation-delay: 1s; }
+        .confetti:nth-child(4) { left: 40%; animation-delay: 1.5s; }
+        .confetti:nth-child(5) { left: 50%; animation-delay: 2s; }
+        .confetti:nth-child(6) { left: 60%; animation-delay: 2.5s; }
+        .confetti:nth-child(7) { left: 70%; animation-delay: 3s; }
+        .confetti:nth-child(8) { left: 80%; animation-delay: 3.5s; }
+        .confetti:nth-child(9) { left: 90%; animation-delay: 4s; }
+        
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 min-h-screen">
+    <!-- Confetti Animation -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="confetti bg-purple-400"></div>
+        <div class="confetti bg-blue-400"></div>
+        <div class="confetti bg-pink-400"></div>
+        <div class="confetti bg-yellow-400"></div>
+        <div class="confetti bg-green-400"></div>
+        <div class="confetti bg-red-400"></div>
+        <div class="confetti bg-indigo-400"></div>
+        <div class="confetti bg-orange-400"></div>
+        <div class="confetti bg-teal-400"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-sm shadow-sm border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-purple-600">UrVote.Rocks</a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-purple-600 transition-colors">Home</a>
+                    <a href="/media-boards" class="text-gray-700 hover:text-purple-600 transition-colors">Media Boards</a>
+                    <a href="/dashboard" class="text-gray-700 hover:text-purple-600 transition-colors">Dashboard</a>
+                    <a href="/templates" class="text-gray-700 hover:text-purple-600 transition-colors">Themes</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Hero Section -->
+    <section class="py-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="success-card">
+                <!-- Success Icon -->
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-green-100 rounded-full mb-8">
+                    <span class="text-6xl">🎉</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
+                    Welcome to <span class="gradient-text">UrVote.Rocks!</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                    Your Media Board subscription has been activated successfully! 
+                    Next, you'll choose your theme and create your Media Board.
+                </p>
+                
+                <!-- Subscription Details -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-12 max-w-3xl mx-auto">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Your Subscription Details</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
+                            <span class="text-3xl">✅</span>
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-900 text-lg mb-1">Plan</div>
+                                <div class="text-gray-600">Media Boards - $49/month</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
+                            <span class="text-3xl">🎨</span>
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-900 text-lg mb-1">Boards</div>
+                                <div class="text-gray-600">One Media Board</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
+                            <span class="text-3xl">👥</span>
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-900 text-lg mb-1">Capacity</div>
+                                <div class="text-gray-600">Up to 500 people per board</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-lg">
+                            <span class="text-3xl">🚀</span>
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-900 text-lg mb-1">Features</div>
+                                <div class="text-gray-600">Custom themes, analytics, promotional tools</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Benefits -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">What's Included</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="p-3 bg-blue-50 rounded-lg">
+                            <span class="text-blue-600 font-medium">🎨 Beautiful Themes</span>
+                        </div>
+                        <div class="p-3 bg-green-50 rounded-lg">
+                            <span class="text-green-600 font-medium">📊 Analytics</span>
+                        </div>
+                        <div class="p-3 bg-purple-50 rounded-lg">
+                            <span class="text-purple-600 font-medium">🚀 Promotion</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="space-y-6">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">What's Next?</h2>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="/templates" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                            🎨 Choose Your Theme & Create Board
+                        </a>
+                        <a href="/dashboard" class="bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all border-2 border-purple-600">
+                            📊 Go to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">What You Can Do Now</h2>
+                <p class="text-lg text-gray-600">Your Media Board platform is ready to go!</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-6">
+                        <span class="text-3xl">🎨</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Design Your Boards</h3>
+                    <p class="text-gray-600">Choose from beautiful themes and customize your Media Boards with your own branding and style.</p>
+                </div>
+                
+                <div class="feature-card bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
+                        <span class="text-3xl">📱</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Upload Your Content</h3>
+                    <p class="text-gray-600">Start adding your AI-generated tracks, videos, and visual content to showcase your creativity.</p>
+                </div>
+                
+                <div class="feature-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
+                        <span class="text-3xl">🚀</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Grow Your Community</h3>
+                    <p class="text-gray-600">Invite people to discover, vote, and share content on your Media Boards. Build your audience!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Guide -->
+    <section class="py-16 bg-gradient-to-r from-gray-50 to-blue-50">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Quick Start Guide</h2>
+                <p class="text-lg text-gray-600">Get your first Media Board up and running in minutes</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Choose Your Theme</h3>
+                            <p class="text-gray-600">Browse our collection of beautiful themes and pick the one that matches your style and content.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Create Your Board</h3>
+                            <p class="text-gray-600">Your Media Board will be created automatically with your chosen theme and settings.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Upload Content</h3>
+                            <p class="text-gray-600">Add your first music, videos, or visuals to showcase what your Media Board is about.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Share & Grow</h3>
+                            <p class="text-gray-600">Share your Media Board with your audience and start building your community of creators and fans.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button onclick="createBoardWithTheme()" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                        🚀 Create My Media Board
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <p class="text-gray-600">
+                    Powered by <span class="font-semibold text-purple-600">UrVote.Rocks</span>
+                </p>
+                <p class="text-sm text-gray-500 mt-2">
+                    Pinterest for AI Music - Visual Music Discovery Platform
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Get theme from URL parameters and store in localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const theme = urlParams.get('theme');
+            const sessionId = urlParams.get('session_id');
+            
+            if (theme) {
+                localStorage.setItem('selectedTheme', theme);
+                console.log('Theme stored:', theme);
+            }
+            
+            if (sessionId) {
+                console.log('Stripe session ID:', sessionId);
+            }
+        });
+        
+        // No automatic redirect - let users read and explore at their own pace
+        console.log('Success page loaded - no automatic redirect');
+
+        function createBoardWithTheme() {
+            const themeName = localStorage.getItem('selectedTheme') || 'default';
+            if (!themeName) {
+                alert('No theme selected. Using default theme.');
+            }
+
+            fetch(`/api/boards/create-board?theme_name=${encodeURIComponent(themeName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Media Board created successfully!');
+                        window.location.href = `/board/${data.slug}`;
+                    } else {
+                        alert('Failed to create Media Board: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error creating board:', error);
+                    alert('An error occurred while creating the board.');
+                });
+        }
+    </script>
+</body>
+</html>

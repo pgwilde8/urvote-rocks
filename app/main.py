@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, Request, Depends, HTTPException, Form, File, UploadFile, APIRouter, Request, HTTPException
+from fastapi import FastAPI, Request, Depends, HTTPException, Form, File, UploadFile, APIRouter, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -20,7 +20,7 @@ from .models import Contest, Client, Song, Vote
 # Routers (updated: campaigns -> songboards, add sales)
 from .routers import auth, songs, voting, songboards, signup, static_pages
 from . import admin
-from app.routers import submitter, board_owner
+from app.routers import submitter, board_owner, boards
 
 # ------------------------------------------------------------------------------
 # FastAPI app
@@ -53,28 +53,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Add security headers middleware for uploads
+from fastapi.responses import Response
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    
+    # Add security headers for uploaded files
+    if request.url.path.startswith("/uploads/"):
+        response.headers["Content-Disposition"] = "inline"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Cache-Control"] = "public, max-age=3600"
+    
+    return response
+
 # ------------------------------------------------------------------------------
 # Static & Templates
 # ------------------------------------------------------------------------------
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")  # Re-enable static mount
 templates = Jinja2Templates(directory="app/templates")
 
-# ------------------------------------------------------------------------------
-# Routers
-# ------------------------------------------------------------------------------
-# API namespace
-app.include_router(auth.router, prefix="/api", tags=["auth"])
-app.include_router(songs.router, prefix="/api", tags=["songs"])
-app.include_router(voting.router, prefix="/api", tags=["voting"])
-app.include_router(admin.router, prefix="/api", tags=["admin"])
-
-# Site features
-app.include_router(songboards.router, tags=["songboards"])   # replaces campaigns
-app.include_router(signup.router, tags=["signup"])
-app.include_router(submitter.router, tags=["submitter"])
-app.include_router(board_owner.router, tags=["board_owner"])
-# app.include_router(sales.router, tags=["sales"])  # Removed because 'sales' is not defined
-
+# Remove the custom file serving route since it conflicts with board routes
+# The static mount will handle file serving, and we'll add security through other means
 
 # ------------------------------------------------------------------------------
 # Pages
@@ -86,6 +88,77 @@ async def landing(request: Request):
 @app.get("/home", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
+
+# Media Boards landing page
+@app.get("/media-boards", response_class=HTMLResponse)
+async def media_boards_page(request: Request):
+    """Media Boards landing page explaining what Media Boards are"""
+    return templates.TemplateResponse("media-boards.html", {"request": request})
+
+# Business setup page
+@app.get("/business-setup", response_class=HTMLResponse)
+async def business_setup_page(request: Request):
+    """Business setup page where users input business information before creating their Media Board"""
+    return templates.TemplateResponse("business-setup.html", {"request": request})
+
+# Board page route - moved here to ensure it takes precedence
+@app.get("/board/{slug}", response_class=HTMLResponse)
+async def board_page(
+    slug: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    # Import Board model here to avoid circular imports
+    from .models import Board
+    
+    # Find board by slug
+    board_res = await db.execute(select(Board).where(Board.slug == slug))
+    board = board_res.scalar_one_or_none()
+    
+    if not board:
+        raise HTTPException(status_code=404, detail="Board not found")
+    
+    return templates.TemplateResponse("board.html", {
+        "request": request,
+        "board": board
+    })
+
+# Create checkout session with theme
+@app.get("/create-checkout-session")
+async def create_checkout_session(
+    request: Request,
+    theme: str = Query("default", description="Selected theme name")
+):
+    """Create Stripe checkout session for Media Board subscription"""
+    try:
+        # Import stripe here to avoid circular imports
+        import stripe
+        from app.config import settings
+        
+        stripe.api_key = settings.stripe_secret_key
+        
+        # Create checkout session
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[{
+                "price": settings.stripe_price_id,
+                "quantity": 1,
+            }],
+            mode="subscription",
+            success_url=f"{request.base_url}success?session_id={{CHECKOUT_SESSION_ID}}&theme={theme}",
+            cancel_url=f"{request.base_url}media-boards",
+            metadata={
+                "theme": theme,
+                "product": "media_board"
+            }
+        )
+        
+        # Redirect to Stripe checkout
+        return RedirectResponse(url=session.url, status_code=303)
+        
+    except Exception as e:
+        # If Stripe fails, redirect back to media-boards with error
+        return RedirectResponse(url="/media-boards?error=checkout_failed", status_code=303)
 
 # Upload form (UI)
 @app.get("/upload", response_class=HTMLResponse)
@@ -108,6 +181,24 @@ async def upload_success_page(request: Request, song_id: Optional[int] = None):
         "request": request,
         "song": song_data,
     })
+
+# ------------------------------------------------------------------------------
+# Routers
+# ------------------------------------------------------------------------------
+# API namespace
+app.include_router(auth.router, prefix="/api", tags=["auth"])
+app.include_router(songs.router, prefix="/api", tags=["songs"])
+app.include_router(voting.router, prefix="/api", tags=["voting"])
+app.include_router(admin.router, prefix="/api", tags=["admin"])
+
+# Site features
+app.include_router(songboards.router, tags=["songboards"])   # replaces campaigns
+app.include_router(signup.router, tags=["signup"])
+app.include_router(submitter.router, tags=["submitter"])
+app.include_router(board_owner.router, tags=["board_owner"])
+app.include_router(boards.router, tags=["boards"])  # Media Board Content API
+app.include_router(static_pages.router, tags=["static_pages"])  # Sales, pricing, contact pages
+# app.include_router(sales.router, tags=["sales"])  # Removed because 'sales' is not defined
 
 # Handle form submission (UI -> calls upload logic, then redirects)
 @app.post("/upload", response_class=HTMLResponse)
@@ -277,6 +368,16 @@ async def client_leaderboard(
 @app.get("/how-to-submit", response_class=HTMLResponse)
 async def how_to_submit_page(request: Request):
     return templates.TemplateResponse("how-to-submit.html", {"request": request})
+
+# Templates page route
+@app.get("/templates", response_class=HTMLResponse)
+async def templates_page(request: Request):
+    return templates.TemplateResponse("templates.html", {"request": request})
+
+# Success page route (post-purchase)
+@app.get("/success", response_class=HTMLResponse)
+async def success_page(request: Request, session_id: str = None):
+    return templates.TemplateResponse("success.html", {"request": request, "session_id": session_id})
 
 # ------------------------------------------------------------------------------
 # Health & Error Handlers

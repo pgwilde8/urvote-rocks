@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Board - {{ board.title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .content-card { transition: all 0.3s ease; }
+        .content-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .theme-sunset { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
+        .theme-sunrise { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .theme-ocean { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .theme-mountain { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .theme-garden { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-purple-600">UrVote.Rocks</a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-purple-600 transition-colors">Home</a>
+                    <a href="/media-boards" class="text-gray-700 hover:text-purple-600 transition-colors">Media Boards</a>
+                    <a href="/dashboard" class="text-gray-700 hover:text-purple-600 transition-colors">Dashboard</a>
+                    <a href="/templates" class="text-gray-700 hover:text-purple-600 transition-colors">Themes</a>
+                    <a href="/leaderboard" class="text-gray-700 hover:text-purple-600 transition-colors">Leaderboard</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Theme Background -->
+    <div class="theme-{{ board.theme }} min-h-[500px] relative overflow-hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center text-white">
+                <!-- Business Name -->
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">{{ board.title }}</h1>
+                
+                <!-- Business Tagline -->
+                <div class="mb-6">
+                    <p class="text-lg md:text-xl opacity-90 font-medium">Professional Media Board</p>
+                </div>
+                
+                <!-- Business Description - Enhanced -->
+                {% if board.description %}
+                <div class="mb-8">
+                    <p class="text-xl md:text-2xl max-w-4xl mx-auto drop-shadow-md leading-relaxed">{{ board.description }}</p>
+                </div>
+                {% endif %}
+                
+                <!-- Business Info Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+                    <div class="bg-white bg-opacity-15 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
+                        <div class="text-2xl mb-2">🌐</div>
+                        <div class="font-semibold">
+                            {% if board.website_url %}
+                                <a href="{{ board.website_url }}" target="_blank" class="hover:underline">{{ board.website_url|replace('https://', '')|replace('http://', '') }}</a>
+                            {% else %}
+                                Website Coming Soon
+                            {% endif %}
+                        </div>
+                        <div class="text-sm opacity-90">Business Website</div>
+                    </div>
+                    <div class="bg-white bg-opacity-15 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
+                        <div class="text-2xl mb-2">📧</div>
+                        <div class="font-semibold">
+                            {% if board.contact_email %}
+                                <a href="mailto:{{ board.contact_email }}" class="hover:underline">{{ board.contact_email }}</a>
+                            {% else %}
+                                Contact Available
+                            {% endif %}
+                        </div>
+                        <div class="text-sm opacity-90">Business Contact</div>
+                    </div>
+                    <div class="bg-white bg-opacity-15 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
+                        <div class="text-2xl mb-2">📱</div>
+                        <div class="font-semibold">
+                            {% if board.social_facebook %}
+                                <a href="{{ board.social_facebook }}" target="_blank" class="hover:underline">Facebook</a>
+                            {% elif board.social_linkedin %}
+                                <a href="{{ board.social_linkedin }}" target="_blank" class="hover:underline">LinkedIn</a>
+                            {% elif board.social_twitter %}
+                                <a href="{{ board.social_twitter }}" target="_blank" class="hover:underline">Twitter</a>
+                            {% elif board.social_instagram %}
+                                <a href="{{ board.social_instagram }}" target="_blank" class="hover:underline">Instagram</a>
+                            {% else %}
+                                Connect With Us
+                            {% endif %}
+                        </div>
+                        <div class="text-sm opacity-90">Social Media</div>
+                    </div>
+                </div>
+                
+                <!-- Call to Action -->
+                <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <button onclick="scrollToUpload()" class="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 px-8 py-4 rounded-full font-semibold shadow-lg transition-all transform hover:scale-105 text-lg">
+                        🚀 Start Sharing Content
+                    </button>
+                    <button onclick="scrollToGallery()" class="bg-transparent hover:bg-white hover:bg-opacity-20 text-white border-2 border-white px-8 py-4 rounded-full font-semibold transition-all transform hover:scale-105 text-lg">
+                        🎭 View Gallery
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div id="content-area" class="py-16">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">🎭 Media Gallery</h2>
+                <p class="text-xl text-gray-600">Discover and vote on amazing content from the community</p>
+            </div>
+            
+            <!-- Content will be loaded here dynamically -->
+            <div id="content-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-4">🎵</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No Content Yet</h3>
+                    <p class="text-gray-500">Be the first to upload content to this Media Board!</p>
+                    <button onclick="scrollToUpload()" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        Upload First Content
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Section -->
+    <section id="upload-section" class="py-12 bg-gradient-to-br from-gray-50 to-gray-100">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">📤 Upload Content</h2>
+                <p class="text-lg text-gray-600">Share your music, videos, and visuals with the community</p>
+            </div>
+            
+            <!-- Music Upload -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">🎵 Upload Music</h3>
+                <p class="text-gray-600 mb-6">Upload your music files or share links from music platforms</p>
+                
+                <form id="music-upload-form" class="space-y-6">
+                    <!-- Common Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                            <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Artist Name</label>
+                            <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                        <textarea name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+
+                    <!-- File Upload Option -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold mb-3">📁 Upload Music File</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Music File</label>
+                            <input type="file" name="file" accept="audio/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-sm text-gray-500 mt-1">Supported formats: MP3, WAV, FLAC, AAC (Max 50MB)</p>
+                        </div>
+                    </div>
+
+                    <!-- External Link Option -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold mb-3">🔗 Share Music Link</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Music Platform Link</label>
+                            <input type="url" name="external_link" placeholder="https://soundcloud.com/..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-sm text-gray-500 mt-1">SoundCloud, Spotify, YouTube Music, etc.</p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button type="submit" name="upload_type" value="file" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            🎵 Upload Music File
+                        </button>
+                        <button type="submit" name="upload_type" value="link" class="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                            🔗 Share Music Link
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Video Upload -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">🎬 Upload Video</h3>
+                <p class="text-gray-600 mb-6">Upload your video files or share links from video platforms</p>
+                
+                <form id="video-upload-form" class="space-y-6">
+                    <!-- Common Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                            <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Creator Name</label>
+                            <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                        <textarea name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+
+                    <!-- File Upload Option -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold mb-3">📁 Upload Video File</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Video File</label>
+                            <input type="file" name="file" accept="video/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-sm text-gray-500 mt-1">Supported formats: MP4, MOV, AVI, WebM (Max 100MB)</p>
+                        </div>
+                    </div>
+
+                    <!-- External Link Option -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold mb-3">🔗 Share Video Link</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Video Platform Link</label>
+                            <input type="url" name="external_link" placeholder="https://youtube.com/watch?v=..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-sm text-gray-500 mt-1">YouTube, Vimeo, TikTok, etc.</p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button type="submit" name="upload_type" value="file" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            🎬 Upload Video File
+                        </button>
+                        <button type="submit" name="upload_type" value="link" class="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                            🔗 Share Video Link
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Visuals Upload -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">🖼️ Upload Visuals</h3>
+                <p class="text-gray-600 mb-6">Upload your images, artwork, or share links from image platforms</p>
+                
+                <form id="visuals-upload-form" class="space-y-6">
+                    <!-- Common Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                            <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Artist Name</label>
+                            <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                        <textarea name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+
+                    <!-- File Upload Option -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold mb-3">📁 Upload Image File</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image File</label>
+                            <input type="file" name="file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-sm text-gray-500 mt-1">Supported formats: JPG, PNG, GIF, WebP (Max 25MB)</p>
+                        </div>
+                    </div>
+
+                    <!-- External Link Option -->
+                    <div class="border-t pt-6">
+                        <h4 class="text-lg font-semibold mb-3">🔗 Share Image Link</h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image Platform Link</label>
+                            <input type="url" name="external_link" placeholder="https://unsplash.com/..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <p class="text-sm text-gray-500 mt-1">Unsplash, Pexels, DeviantArt, etc.</p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button type="submit" name="upload_type" value="file" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            🖼️ Upload Image File
+                        </button>
+                        <button type="submit" name="upload_type" value="link" class="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                            🔗 Share Image Link
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Basic content loading
+        async function loadContent() {
+            try {
+                const boardId = '{{ board.id }}';
+                console.log('Loading content for board:', boardId);
+                
+                const response = await fetch(`/api/boards/${boardId}/content`);
+                console.log('API response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('API response data:', data);
+                    
+                    if (data.content && data.content.length > 0) {
+                        displayContent(data.content);
+                    } else {
+                        console.log('No content found');
+                    }
+                } else {
+                    console.error('API request failed:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error loading content:', error);
+            }
+        }
+
+        function displayContent(content) {
+            console.log('=== DISPLAY CONTENT CALLED ===');
+            console.log('displayContent called with:', content);
+            console.log('Content type:', typeof content);
+            console.log('Content is array:', Array.isArray(content));
+            
+            const area = document.getElementById('content-grid');
+            console.log('Content grid element:', area);
+            
+            if (!area) {
+                console.error('Content grid element not found!');
+                return;
+            }
+            
+            if (!Array.isArray(content)) {
+                console.error('Content is not an array:', content);
+                return;
+            }
+            
+            if (content.length === 0) {
+                console.log('No content to display, keeping default message');
+                return; // Keep the default "No Content Yet" message
+            }
+
+            console.log('Displaying content:', content); // Debug log
+            
+            area.innerHTML = content.map(item => {
+                let mediaContent = '';
+                
+                // Handle different content types
+                if (item.content_type === 'music') {
+                    if (item.file_path && item.file_path !== '') {
+                        // File upload - show custom audio player with no download option
+                        // Handle both old and new file paths
+                        let fileUrl;
+                        if (item.file_path.startsWith('http')) {
+                            fileUrl = item.file_path; // External URL
+                        } else if (item.file_path.startsWith('uploads/')) {
+                            fileUrl = `/${item.file_path}`; // New format: uploads/music/file.mp3
+                        } else {
+                            fileUrl = `/uploads/music/${item.file_path}`; // Old format: just filename
+                        }
+                        
+                        console.log('Generated file URL:', fileUrl);
+                        
+                        // Create custom audio player with no download option
+                        mediaContent = `
+                            <div class="custom-audio-player bg-gray-100 rounded-lg p-4 mb-4">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <button onclick="togglePlayPause(this, '${fileUrl}')" class="play-btn bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-700 transition-colors">
+                                        <span class="text-lg">▶️</span>
+                                    </button>
+                                    <div class="flex-1">
+                                        <div class="text-sm font-medium text-gray-700">${item.title}</div>
+                                        <div class="text-xs text-gray-500">${item.artist_name}</div>
+                                    </div>
+                                    <div class="text-xs text-gray-400">🎵</div>
+                                </div>
+                                <div class="relative">
+                                    <div class="bg-gray-300 rounded-full h-2">
+                                        <div class="progress-bar bg-blue-600 h-2 rounded-full transition-all duration-100" style="width: 0%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span class="current-time">0:00</span>
+                                        <span class="total-time">0:00</span>
+                                    </div>
+                                </div>
+                                <audio id="audio-${item.id}" preload="metadata" style="display: none;" onerror="console.error('Audio error for ${item.id}:', this.error);" onloadedmetadata="console.log('Audio metadata loaded for ${item.id}, duration:', this.duration);">
+                                    <source src="${fileUrl}" type="audio/mpeg">
+                                    <source src="${fileUrl}" type="audio/wav">
+                                    <source src="${fileUrl}" type="audio/flac">
+                                </audio>
+                                <div class="text-xs text-gray-400 mt-2">File: ${fileUrl}</div>
+                            </div>
+                        `;
+                        
+                        console.log('Generated custom audio player HTML');
+                    } else if (item.external_link) {
+                        // External link - show platform-specific embed or link
+                        if (item.external_link.includes('soundcloud.com')) {
+                            mediaContent = `<div class="mb-4 p-4 bg-gray-100 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-2">🎵 SoundCloud Track</p>
+                                <a href="${item.external_link}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    🎧 Listen on SoundCloud
+                                </a>
+                            </div>`;
+                        } else if (item.external_link.includes('spotify.com')) {
+                            mediaContent = `<div class="mb-4 p-4 bg-green-100 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-2">🎵 Spotify Track</p>
+                                <a href="${item.external_link}" target="_blank" class="text-green-600 hover:text-green-800 font-medium">
+                                    🎧 Listen on Spotify
+                                </a>
+                            </div>`;
+                        } else {
+                            mediaContent = `<div class="mb-4 p-4 bg-blue-100 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-2">🎵 External Music Link</p>
+                                <a href="${item.external_link}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    🔗 Listen to Music
+                                </a>
+                            </div>`;
+                        }
+                    }
+                } else if (item.content_type === 'video') {
+                    if (item.file_path && item.file_path !== '') {
+                        // File upload - show video player with absolute URL
+                        // Handle both old and new file paths
+                        let fileUrl;
+                        if (item.file_path.startsWith('http')) {
+                            fileUrl = item.file_path; // External URL
+                        } else if (item.file_path.startsWith('uploads/')) {
+                            fileUrl = `/${item.file_path}`; // New format: uploads/video/file.mp4
+                        } else {
+                            fileUrl = `/uploads/video/${item.file_path}`; // Old format: just filename
+                        }
+                        
+                        mediaContent = `<video controls class="w-full mb-4">
+                            <source src="${fileUrl}" type="video/mp4">
+                            <source src="${fileUrl}" type="video/webm">
+                            Your browser does not support the video element.
+                        </video>`;
+                    } else if (item.external_link) {
+                        // External link - show platform-specific embed
+                        if (item.external_link.includes('youtube.com') || item.external_link.includes('youtu.be')) {
+                            const videoId = extractYouTubeId(item.external_link);
+                            if (videoId) {
+                                mediaContent = `<div class="mb-4">
+                                    <iframe class="w-full h-64 rounded-lg" 
+                                            src="https://www.youtube.com/embed/${videoId}" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen>
+                                    </iframe>
+                                </div>`;
+                            } else {
+                                mediaContent = `<a href="${item.external_link}" target="_blank" class="text-red-600 hover:text-red-800 mb-4 block">🎬 Watch on YouTube</a>`;
+                            }
+                        } else {
+                            mediaContent = `<a href="${item.external_link}" target="_blank" class="text-blue-600 hover:text-blue-800 mb-4 block">🎬 Watch Video</a>`;
+                        }
+                    }
+                } else if (item.content_type === 'visuals') {
+                    if (item.file_path && item.file_path !== '') {
+                        // File upload - show image with absolute URL
+                        // Handle both old and new file paths
+                        let fileUrl;
+                        if (item.file_path.startsWith('http')) {
+                            fileUrl = item.file_path; // External URL
+                        } else if (item.file_path.startsWith('uploads/')) {
+                            fileUrl = `/${item.file_path}`; // New format: uploads/visuals/file.jpg
+                        } else {
+                            fileUrl = `/uploads/visuals/${item.file_path}`; // Old format: just filename
+                        }
+                        
+                        mediaContent = `<img src="${fileUrl}" alt="${item.title}" class="w-full h-48 object-cover rounded mb-4">`;
+                    } else if (item.external_link) {
+                        // External link - show image or link
+                        if (item.external_link.includes('unsplash.com') || item.external_link.includes('pexels.com')) {
+                            mediaContent = `<div class="mb-4 p-4 bg-gray-100 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-2">🖼️ Image from ${item.external_link.includes('unsplash.com') ? 'Unsplash' : 'Pexels'}</p>
+                                <a href="${item.external_link}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    🖼️ View Full Image
+                                </a>
+                            </div>`;
+                        } else {
+                            mediaContent = `<img src="${item.external_link}" alt="${item.title}" class="w-full h-48 object-cover rounded mb-4">`;
+                        }
+                    }
+                }
+
+                return `
+                    <div class="content-card bg-white rounded-lg shadow p-6">
+                        <h3 class="text-xl font-bold mb-2">${item.title}</h3>
+                        <p class="text-gray-600 mb-4">${item.artist_name}</p>
+                        ${item.description ? `<p class="text-gray-500 mb-4">${item.description}</p>` : ''}
+                        
+                        <!-- Media Content -->
+                        ${mediaContent}
+                        
+                        <!-- Content Source Info -->
+                        <div class="text-xs text-gray-400 mb-4">
+                            ${item.content_source === 'upload' ? '📁 File Upload' : '🔗 External Link'}
+                        </div>
+                        
+                        <!-- Voting Section -->
+                        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+                            <div class="flex items-center space-x-2">
+                                <button onclick="voteContent(${item.id}, 'like', '${item.content_type}')" 
+                                        class="vote-btn like-btn flex items-center space-x-1 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors ${item.userVote === 'like' ? 'bg-green-100 text-green-700' : 'text-gray-600 hover:text-green-600'}">
+                                    <span class="text-lg">👍</span>
+                                    <span class="vote-count">${item.upvotes || 0}</span>
+                                </button>
+                                
+                                <button onclick="voteContent(${item.id}, 'dislike', '${item.content_type}')" 
+                                        class="vote-btn dislike-btn flex items-center space-x-1 px-3 py-2 rounded-lg hover:bg-red-50 transition-colors ${item.userVote === 'dislike' ? 'bg-red-100 text-red-700' : 'text-gray-600 hover:text-red-700'}">
+                                    <span class="text-lg">👎</span>
+                                    <span class="vote-count">${item.downvotes || 0}</span>
+                                </button>
+                            </div>
+                            
+                            <div class="text-sm text-gray-500">
+                                ${item.content_type === 'music' ? '🎵' : item.content_type === 'video' ? '🎬' : '🖼️'} ${item.content_type}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Helper function to extract YouTube video ID
+        function extractYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        // Custom audio player functions
+        let currentAudio = null;
+        let currentPlayBtn = null;
+
+        function togglePlayPause(button, audioSrc) {
+            const audioId = button.closest('.custom-audio-player').querySelector('audio').id;
+            const audio = document.getElementById(audioId);
+            const progressBar = button.closest('.custom-audio-player').querySelector('.progress-bar');
+            const currentTimeSpan = button.closest('.custom-audio-player').querySelector('.current-time');
+            const totalTimeSpan = button.closest('.custom-audio-player').querySelector('.total-time');
+            
+            console.log('Toggle play/pause called for audio:', audioId);
+            console.log('Audio element:', audio);
+            console.log('Audio src:', audio.src);
+            console.log('Audio duration:', audio.duration);
+            console.log('Audio readyState:', audio.readyState);
+            
+            // Stop any currently playing audio
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+                if (currentPlayBtn) {
+                    currentPlayBtn.innerHTML = '<span class="text-lg">▶️</span>';
+                }
+            }
+            
+            if (audio.paused) {
+                // Try to load metadata if not already loaded
+                if (audio.readyState < 2) { // HAVE_METADATA = 2
+                    console.log('Metadata not loaded, trying to load...');
+                    audio.load();
+                }
+                
+                // Play audio
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log('Audio started playing successfully');
+                        button.innerHTML = '<span class="text-lg">⏸️</span>';
+                        currentAudio = audio;
+                        currentPlayBtn = button;
+                        
+                        // Update progress bar and time
+                        audio.addEventListener('timeupdate', function() {
+                            const progress = (audio.currentTime / audio.duration) * 100;
+                            progressBar.style.width = progress + '%';
+                            currentTimeSpan.textContent = formatTime(audio.currentTime);
+                        });
+                        
+                        // Set total time when metadata is loaded
+                        if (audio.duration && !isNaN(audio.duration)) {
+                            totalTimeSpan.textContent = formatTime(audio.duration);
+                            console.log('Duration set from existing metadata:', audio.duration);
+                        } else {
+                            audio.addEventListener('loadedmetadata', function() {
+                                console.log('Metadata loaded, duration:', audio.duration);
+                                totalTimeSpan.textContent = formatTime(audio.duration);
+                            });
+                        }
+                        
+                        // Handle audio end
+                        audio.addEventListener('ended', function() {
+                            button.innerHTML = '<span class="text-lg">▶️</span>';
+                            progressBar.style.width = '0%';
+                            currentTimeSpan.textContent = '0:00';
+                        });
+                        
+                    }).catch(error => {
+                        console.error('Error playing audio:', error);
+                        showToast('Error playing audio. Please try again.', 'error');
+                    });
+                }
+                
+            } else {
+                // Pause audio
+                audio.pause();
+                button.innerHTML = '<span class="text-lg">▶️</span>';
+                currentAudio = null;
+                currentPlayBtn = null;
+            }
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        async function voteContent(contentId, voteType, mediaType) {
+            try {
+                const boardId = '{{ board.id }}';
+                const response = await fetch(`/api/boards/${boardId}/content/${contentId}/vote`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        vote_type: voteType
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Vote result:', result);
+                    
+                    // Reload content to update vote counts
+                    loadContent();
+                    
+                    // Show feedback
+                    const message = result.action === 'added' ? 'Vote added!' : 
+                                  result.action === 'updated' ? 'Vote updated!' : 'Vote removed!';
+                    
+                    // Simple toast notification
+                    showToast(message, result.action === 'removed' ? 'info' : 'success');
+                } else {
+                    console.error('Vote failed:', response.statusText);
+                    showToast('Vote failed. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error voting:', error);
+                showToast('Error voting. Please try again.', 'error');
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 transition-all transform translate-x-full`;
+            
+            // Set color based on type
+            if (type === 'success') toast.className += ' bg-green-500';
+            else if (type === 'error') toast.className += ' bg-red-500';
+            else toast.className += ' bg-blue-500';
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => toast.classList.remove('translate-x-full'), 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        function scrollToUpload() {
+            document.getElementById('upload-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToGallery() {
+            document.getElementById('content-area').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Form submission handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, setting up handlers...');
+            setupFormHandlers();
+            
+            // Simple test - just log that we're here
+            console.log('About to load content...');
+            
+            // Add a small delay to ensure everything is ready
+            setTimeout(() => {
+                console.log('Loading content after delay...');
+                loadContent();
+            }, 100);
+        });
+
+        function setupFormHandlers() {
+            // Music upload form
+            document.getElementById('music-upload-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const uploadType = e.submitter?.name === 'upload_type' ? e.submitter.value : 'file';
+                handleUploadFormSubmit('music', this, uploadType);
+            });
+
+            // Video upload form
+            document.getElementById('video-upload-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const uploadType = e.submitter?.name === 'upload_type' ? e.submitter.value : 'file';
+                handleUploadFormSubmit('video', this, uploadType);
+            });
+
+            // Visuals upload form
+            document.getElementById('visuals-upload-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const uploadType = e.submitter?.name === 'upload_type' ? e.submitter.value : 'file';
+                handleUploadFormSubmit('visuals', this, uploadType);
+            });
+        }
+
+        async function handleUploadFormSubmit(mediaType, form, uploadType) {
+            let originalText = ""; // Declare at function start
+            
+            try {
+                const formData = new FormData(form);
+                const boardId = '{{ board.id }}';
+                
+                // Validate that we have either a file or external link
+                const file = formData.get('file');
+                const externalLink = formData.get('external_link');
+                
+                if (uploadType === 'file' && !file) {
+                    showToast('❌ Please select a file to upload', 'error');
+                    return;
+                }
+                
+                if (uploadType === 'link' && !externalLink) {
+                    showToast('❌ Please provide an external link', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                const submitBtn = form.querySelector(`button[name="upload_type"][value="${uploadType}"]`);
+                if (submitBtn) {
+                    originalText = submitBtn.textContent;
+                    submitBtn.textContent = '⏳ Processing...';
+                    submitBtn.disabled = true;
+                }
+
+                const response = await fetch(`/api/boards/${boardId}/upload/${mediaType}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Upload successful:', result);
+                    const action = uploadType === 'file' ? 'uploaded' : 'shared';
+                    showToast(`🎉 ${mediaType.charAt(0).toUpperCase() + mediaType.slice(1)} ${action} successfully!`, 'success');
+                    form.reset();
+                    
+                    console.log('Reloading content after successful upload...');
+                    // Reload content to show new upload
+                    await loadContent();
+                    console.log('Content reload completed');
+                } else {
+                    const error = await response.json();
+                    console.error('Upload failed:', error);
+                    showToast(`❌ ${uploadType === 'file' ? 'Upload' : 'Link sharing'} failed: ${error.detail}`, 'error');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                showToast('❌ Operation failed. Please try again.', 'error');
+            } finally {
+                // Reset button state
+                const submitBtn = form.querySelector(`button[name="upload_type"][value="${uploadType}"]`);
+                if (submitBtn && originalText) {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
