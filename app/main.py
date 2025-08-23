@@ -123,6 +123,127 @@ async def board_page(
         "board": board
     })
 
+# Smart Voting Link Page - Dynamic for each piece of content
+@app.get("/vote/{content_id}/{slug}", response_class=HTMLResponse)
+async def smart_vote_page(
+    content_id: int,
+    slug: str,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Dynamic voting page that loads specific content and shows leaderboard"""
+    try:
+        # Import models here to avoid circular imports
+        from .models import Board, Song, Video, Visual, Vote
+        from sqlalchemy import select, func
+        
+        # Find the board by slug
+        board_res = await db.execute(select(Board).where(Board.slug == slug))
+        board = board_res.scalar_one_or_none()
+        
+        if not board:
+            raise HTTPException(status_code=404, detail="Board not found")
+        
+        # Find the specific content being voted on
+        content = None
+        content_type = None
+        
+        # Check songs
+        song_res = await db.execute(select(Song).where(Song.id == content_id, Song.board_id == board.id))
+        song = song_res.scalar_one_or_none()
+        if song:
+            content = song
+            content_type = "music"
+        
+        # Check videos
+        if not content:
+            video_res = await db.execute(select(Video).where(Video.id == content_id, Video.board_id == board.id))
+            video = video_res.scalar_one_or_none()
+            if video:
+                content = video
+                content_type = "video"
+        
+        # Check visuals
+        if not content:
+            visual_res = await db.execute(select(Visual).where(Visual.id == content_id, Visual.board_id == board.id))
+            visual = visual_res.scalar_one_or_none()
+            if visual:
+                content = visual
+                content_type = "visuals"
+        
+        if not content:
+            raise HTTPException(status_code=404, detail="Content not found")
+        
+        # Get top voted content for leaderboard
+        leaderboard = []
+        
+        # Get top music
+        if board.allow_music:
+            music_query = select(Song, func.count(Vote.id).label('vote_count')).join(
+                Vote, (Vote.media_type == "music") & (Vote.media_id == Song.id) & (Vote.vote_type == "like")
+            ).where(Song.board_id == board.id).group_by(Song.id).order_by(func.count(Vote.id).desc()).limit(10)
+            music_res = await db.execute(music_query)
+            music_items = music_res.all()
+            for song, vote_count in music_items:
+                leaderboard.append({
+                    "id": song.id,
+                    "title": song.title,
+                    "artist_name": song.artist_name,
+                    "content_type": "music",
+                    "vote_count": vote_count,
+                    "rank": len(leaderboard) + 1
+                })
+        
+        # Get top videos
+        if board.allow_video:
+            video_query = select(Video, func.count(Vote.id).label('vote_count')).join(
+                Vote, (Vote.media_type == "video") & (Vote.media_id == Video.id) & (Vote.vote_type == "like")
+            ).where(Video.board_id == board.id).group_by(Video.id).order_by(func.count(Vote.id).desc()).limit(10)
+            video_res = await db.execute(video_query)
+            video_items = video_res.all()
+            for video, vote_count in video_items:
+                leaderboard.append({
+                    "id": video.id,
+                    "title": video.title,
+                    "artist_name": video.artist_name,
+                    "content_type": "video",
+                    "vote_count": vote_count,
+                    "rank": len(leaderboard) + 1
+                })
+        
+        # Get top visuals
+        if board.allow_visuals:
+            visual_query = select(Visual, func.count(Vote.id).label('vote_count')).join(
+                Vote, (Vote.media_type == "visuals") & (Vote.media_id == Visual.id) & (Vote.vote_type == "like")
+            ).where(Visual.board_id == board.id).group_by(Visual.id).order_by(func.count(Vote.id).desc()).limit(10)
+            visual_res = await db.execute(visual_query)
+            visual_items = visual_res.all()
+            for visual, vote_count in visual_items:
+                leaderboard.append({
+                    "id": visual.id,
+                    "title": visual.title,
+                    "artist_name": visual.artist_name,
+                    "content_type": "visuals",
+                    "vote_count": vote_count,
+                    "rank": len(leaderboard) + 1
+                })
+        
+        # Sort leaderboard by vote count and assign final ranks
+        leaderboard.sort(key=lambda x: x['vote_count'], reverse=True)
+        for i, item in enumerate(leaderboard):
+            item['rank'] = i + 1
+        
+        return templates.TemplateResponse("smart-vote.html", {
+            "request": request,
+            "board": board,
+            "content": content,
+            "content_type": content_type,
+            "leaderboard": leaderboard[:10]  # Top 10
+        })
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading voting page: {str(e)}")
+
 # Create checkout session with theme
 @app.get("/create-checkout-session")
 async def create_checkout_session(

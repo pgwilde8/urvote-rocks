@@ -79,6 +79,14 @@ class Song(Base):
     linktree = Column(String(500), nullable=True)
     social_link = Column(String(500), nullable=True)
     
+    # Creator information for backlinks
+    creator_website = Column(String(500), nullable=True)
+    creator_linktree = Column(String(500), nullable=True)
+    creator_instagram = Column(String(500), nullable=True)
+    creator_twitter = Column(String(500), nullable=True)
+    creator_youtube = Column(String(500), nullable=True)
+    creator_tiktok = Column(String(500), nullable=True)
+    
     # Status
     is_approved = Column(Boolean, default=False)
     is_rejected = Column(Boolean, default=False)
@@ -112,6 +120,7 @@ class Board(Base):
     website_url = Column(String(500), nullable=True)
     contact_email = Column(String(255), nullable=True)
     industry = Column(String(100), nullable=True)
+    business_tagline = Column(String(255), nullable=True)
     
     # Social media links
     social_facebook = Column(String(500), nullable=True)
@@ -149,6 +158,14 @@ class Video(Base):
     file_size = Column(BigInteger, nullable=True)
     file_hash = Column(String(64), nullable=True)
     
+    # Creator information for backlinks
+    creator_website = Column(String(500), nullable=True)
+    creator_linktree = Column(String(500), nullable=True)
+    creator_instagram = Column(String(500), nullable=True)
+    creator_twitter = Column(String(500), nullable=True)
+    creator_youtube = Column(String(500), nullable=True)
+    creator_tiktok = Column(String(500), nullable=True)
+    
     # Status
     is_approved = Column(Boolean, default=True)
     is_rejected = Column(Boolean, default=False)
@@ -176,6 +193,14 @@ class Visual(Base):
     external_link = Column(String(500), nullable=True)  # Unsplash/Pexels links
     file_size = Column(BigInteger, nullable=True)
     file_hash = Column(String(64), nullable=True)
+    
+    # Creator information for backlinks
+    creator_website = Column(String(500), nullable=True)
+    creator_linktree = Column(String(500), nullable=True)
+    creator_instagram = Column(String(500), nullable=True)
+    creator_twitter = Column(String(500), nullable=True)
+    creator_youtube = Column(String(500), nullable=True)
+    creator_tiktok = Column(String(500), nullable=True)
     
     # Status
     is_approved = Column(Boolean, default=True)

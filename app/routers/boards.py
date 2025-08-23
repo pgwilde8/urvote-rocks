@@ -73,7 +73,13 @@ async def get_board_content(
                     "upvotes": upvotes_res.scalar() or 0,
                     "downvotes": downvotes_res.scalar() or 0,
                     "created_at": song.created_at,
-                    "content_source": song.content_source
+                    "content_source": song.content_source,
+                    "creator_website": song.creator_website,
+                    "creator_linktree": song.creator_linktree,
+                    "creator_instagram": song.creator_instagram,
+                    "creator_twitter": song.creator_twitter,
+                    "creator_youtube": song.creator_youtube,
+                    "creator_tiktok": song.creator_tiktok
                 })
         
         # Get video content if board allows it
@@ -114,7 +120,13 @@ async def get_board_content(
                     "upvotes": upvotes_res.scalar() or 0,
                     "downvotes": downvotes_res.scalar() or 0,
                     "created_at": video.created_at,
-                    "content_source": video.content_source
+                    "content_source": video.content_source,
+                    "creator_website": video.creator_website,
+                    "creator_linktree": video.creator_linktree,
+                    "creator_instagram": video.creator_instagram,
+                    "creator_twitter": video.creator_twitter,
+                    "creator_youtube": video.creator_youtube,
+                    "creator_tiktok": video.creator_tiktok
                 })
         
         # Get visual content if board allows it
@@ -155,7 +167,13 @@ async def get_board_content(
                     "upvotes": upvotes_res.scalar() or 0,
                     "downvotes": downvotes_res.scalar() or 0,
                     "created_at": visual.created_at,
-                    "content_source": visual.content_source
+                    "content_source": visual.content_source,
+                    "creator_website": visual.creator_website,
+                    "creator_linktree": visual.creator_linktree,
+                    "creator_instagram": visual.creator_instagram,
+                    "creator_twitter": visual.creator_twitter,
+                    "creator_youtube": visual.creator_youtube,
+                    "creator_tiktok": visual.creator_tiktok
                 })
         
         # Sort by creation date (newest first)
@@ -299,6 +317,7 @@ async def create_media_board(
         body = await request.json()
         theme_name = body.get("theme_name", "default")
         business_name = body.get("business_name", "My Media Board")
+        business_tagline = body.get("business_tagline")
         business_description = body.get("business_description", "A beautiful Media Board")
         website_url = body.get("website_url")
         industry = body.get("industry")
@@ -330,6 +349,7 @@ async def create_media_board(
             website_url=website_url,
             contact_email=contact_email,
             industry=industry,
+            business_tagline=business_tagline,
             social_facebook=social_facebook,
             social_linkedin=social_linkedin,
             social_twitter=social_twitter,
@@ -369,6 +389,12 @@ async def upload_music(
     description: str = Form(None),
     file: UploadFile = File(None),
     external_link: str = Form(None),
+    creator_website: str = Form(None),
+    creator_linktree: str = Form(None),
+    creator_instagram: str = Form(None),
+    creator_twitter: str = Form(None),
+    creator_youtube: str = Form(None),
+    creator_tiktok: str = Form(None),
     db: AsyncSession = Depends(get_db)
 ):
     """Upload music content to a Media Board"""
@@ -449,6 +475,12 @@ async def upload_music(
             file_hash=file_hash,
             external_link=external_link,
             content_source=content_source,
+            creator_website=creator_website,
+            creator_linktree=creator_linktree,
+            creator_instagram=creator_instagram,
+            creator_twitter=creator_twitter,
+            creator_youtube=creator_youtube,
+            creator_tiktok=creator_tiktok,
             is_approved=True  # For now, auto-approve
         )
         
@@ -473,6 +505,12 @@ async def upload_video(
     description: str = Form(None),
     file: UploadFile = File(None),
     external_link: str = Form(None),
+    creator_website: str = Form(None),
+    creator_linktree: str = Form(None),
+    creator_instagram: str = Form(None),
+    creator_twitter: str = Form(None),
+    creator_youtube: str = Form(None),
+    creator_tiktok: str = Form(None),
     db: AsyncSession = Depends(get_db)
 ):
     """Upload video content to a Media Board"""
@@ -551,6 +589,12 @@ async def upload_video(
             file_path=file_path,
             external_link=external_link,
             content_source=content_source,
+            creator_website=creator_website,
+            creator_linktree=creator_linktree,
+            creator_instagram=creator_instagram,
+            creator_twitter=creator_twitter,
+            creator_youtube=creator_youtube,
+            creator_tiktok=creator_tiktok,
             is_approved=True  # For now, auto-approve
         )
         
@@ -575,6 +619,12 @@ async def upload_visuals(
     description: str = Form(None),
     file: UploadFile = File(None),
     external_link: str = Form(None),
+    creator_website: str = Form(None),
+    creator_linktree: str = Form(None),
+    creator_instagram: str = Form(None),
+    creator_twitter: str = Form(None),
+    creator_youtube: str = Form(None),
+    creator_tiktok: str = Form(None),
     db: AsyncSession = Depends(get_db)
 ):
     """Upload visual content to a Media Board"""
@@ -653,6 +703,12 @@ async def upload_visuals(
             file_path=file_path,
             external_link=external_link,
             content_source=content_source,
+            creator_website=creator_website,
+            creator_linktree=creator_linktree,
+            creator_instagram=creator_instagram,
+            creator_twitter=creator_twitter,
+            creator_youtube=creator_youtube,
+            creator_tiktok=creator_tiktok,
             is_approved=True  # For now, auto-approve
         )
         

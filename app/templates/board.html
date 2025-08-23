@@ -46,9 +46,11 @@
                 <h1 class="text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">{{ board.title }}</h1>
                 
                 <!-- Business Tagline -->
+                {% if board.business_tagline %}
                 <div class="mb-6">
-                    <p class="text-lg md:text-xl opacity-90 font-medium">Professional Media Board</p>
+                    <p class="text-xl md:text-2xl opacity-90 font-medium text-center">{{ board.business_tagline }}</p>
                 </div>
+                {% endif %}
                 
                 <!-- Business Description - Enhanced -->
                 {% if board.description %}
@@ -149,20 +151,64 @@
                 <p class="text-gray-600 mb-6">Upload your music files or share links from music platforms</p>
                 
                 <form id="music-upload-form" class="space-y-6">
-                    <!-- Common Fields -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                            <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <!-- Content Information -->
+                    <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-lg font-semibold text-blue-900 mb-3">📝 Content Details</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                                <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Artist/Creator Name *</label>
+                                <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Artist Name</label>
-                            <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea name="description" rows="3" placeholder="Tell us about your music, inspiration, or story..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
-                        <textarea name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+
+                    <!-- Creator Information - Backlink Benefits -->
+                    <div class="bg-green-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-lg font-semibold text-green-900 mb-3">🌟 Creator Information & Backlinks</h4>
+                        <p class="text-sm text-green-700 mb-4">Share your links to get valuable backlinks and drive traffic to your platforms!</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Website</label>
+                                <input type="url" name="creator_website" placeholder="https://yourwebsite.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <p class="text-xs text-green-600 mt-1">Get backlinks to boost your SEO!</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Linktree</label>
+                                <input type="url" name="creator_linktree" placeholder="https://linktr.ee/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <p class="text-xs text-green-600 mt-1">Share all your important links</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
+                                <input type="url" name="creator_instagram" placeholder="https://instagram.com/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Twitter/X</label>
+                                <input type="url" name="creator_twitter" placeholder="https://twitter.com/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">YouTube</label>
+                                <input type="url" name="creator_youtube" placeholder="https://youtube.com/@yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">TikTok</label>
+                                <input type="url" name="creator_tiktok" placeholder="https://tiktok.com/@yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
                     </div>
 
                     <!-- File Upload Option -->
@@ -203,20 +249,64 @@
                 <p class="text-gray-600 mb-6">Upload your video files or share links from video platforms</p>
                 
                 <form id="video-upload-form" class="space-y-6">
-                    <!-- Common Fields -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                            <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <!-- Content Information -->
+                    <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-lg font-semibold text-blue-900 mb-3">📝 Content Details</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                                <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Creator Name *</label>
+                                <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Creator Name</label>
-                            <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea name="description" rows="3" placeholder="Tell us about your video, inspiration, or story..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
-                        <textarea name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+
+                    <!-- Creator Information - Backlink Benefits -->
+                    <div class="bg-green-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-lg font-semibold text-green-900 mb-3">🌟 Creator Information & Backlinks</h4>
+                        <p class="text-sm text-green-700 mb-4">Share your links to get valuable backlinks and drive traffic to your platforms!</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Website</label>
+                                <input type="url" name="creator_website" placeholder="https://yourwebsite.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <p class="text-xs text-green-600 mt-1">Get backlinks to boost your SEO!</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Linktree</label>
+                                <input type="url" name="creator_linktree" placeholder="https://linktr.ee/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <p class="text-xs text-green-600 mt-1">Share all your important links</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
+                                <input type="url" name="creator_instagram" placeholder="https://instagram.com/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Twitter/X</label>
+                                <input type="url" name="creator_twitter" placeholder="https://twitter.com/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">YouTube</label>
+                                <input type="url" name="creator_youtube" placeholder="https://youtube.com/@yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">TikTok</label>
+                                <input type="url" name="creator_tiktok" placeholder="https://tiktok.com/@yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
                     </div>
 
                     <!-- File Upload Option -->
@@ -257,20 +347,64 @@
                 <p class="text-gray-600 mb-6">Upload your images, artwork, or share links from image platforms</p>
                 
                 <form id="visuals-upload-form" class="space-y-6">
-                    <!-- Common Fields -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                            <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <!-- Content Information -->
+                    <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-lg font-semibold text-blue-900 mb-3">📝 Content Details</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                                <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Artist Name *</label>
+                                <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Artist Name</label>
-                            <input type="text" name="artist_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea name="description" rows="3" placeholder="Tell us about your artwork, inspiration, or story..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
-                        <textarea name="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+
+                    <!-- Creator Information - Backlink Benefits -->
+                    <div class="bg-green-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-lg font-semibold text-green-900 mb-3">🌟 Creator Information & Backlinks</h4>
+                        <p class="text-sm text-green-700 mb-4">Share your links to get valuable backlinks and drive traffic to your platforms!</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Website</label>
+                                <input type="url" name="creator_website" placeholder="https://yourwebsite.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <p class="text-xs text-green-600 mt-1">Get backlinks to boost your SEO!</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Linktree</label>
+                                <input type="url" name="creator_linktree" placeholder="https://linktr.ee/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <p class="text-xs text-green-600 mt-1">Share all your important links</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
+                                <input type="url" name="creator_instagram" placeholder="https://instagram.com/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Twitter/X</label>
+                                <input type="url" name="creator_twitter" placeholder="https://twitter.com/yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">YouTube</label>
+                                <input type="url" name="creator_youtube" placeholder="https://youtube.com/@yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">TikTok</label>
+                                <input type="url" name="creator_tiktok" placeholder="https://tiktok.com/@yourname" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
                     </div>
 
                     <!-- File Upload Option -->
@@ -508,6 +642,50 @@
                         <h3 class="text-xl font-bold mb-2">${item.title}</h3>
                         <p class="text-gray-600 mb-4">${item.artist_name}</p>
                         ${item.description ? `<p class="text-gray-500 mb-4">${item.description}</p>` : ''}
+                        
+                        <!-- Creator Information & Backlinks -->
+                        ${(item.creator_website || item.creator_linktree || item.creator_instagram || item.creator_twitter || item.creator_youtube || item.creator_tiktok) ? `
+                        <div class="bg-green-50 rounded-lg p-4 mb-4">
+                            <h4 class="text-sm font-semibold text-green-900 mb-3">🌟 Connect with Creator</h4>
+                            <div class="flex flex-wrap gap-2">
+                                ${item.creator_website ? `<a href="${item.creator_website}" target="_blank" class="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs hover:bg-green-200 transition-colors">
+                                    🌐 Website
+                                </a>` : ''}
+                                ${item.creator_linktree ? `<a href="${item.creator_linktree}" target="_blank" class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs hover:bg-blue-200 transition-colors">
+                                    🔗 Linktree
+                                </a>` : ''}
+                                ${item.creator_instagram ? `<a href="${item.creator_instagram}" target="_blank" class="inline-flex items-center px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-xs hover:bg-pink-200 transition-colors">
+                                    📱 Instagram
+                                </a>` : ''}
+                                ${item.creator_twitter ? `<a href="${item.creator_twitter}" target="_blank" class="inline-flex items-center px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs hover:bg-sky-200 transition-colors">
+                                    🐦 Twitter
+                                </a>` : ''}
+                                ${item.creator_youtube ? `<a href="${item.creator_youtube}" target="_blank" class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs hover:bg-red-200 transition-colors">
+                                    📺 YouTube
+                                </a>` : ''}
+                                ${item.creator_tiktok ? `<a href="${item.creator_tiktok}" target="_blank" class="inline-flex items-center px-3 py-1 bg-black bg-opacity-10 text-gray-700 rounded-full text-xs hover:bg-black hover:bg-opacity-20 transition-colors">
+                                    🎵 TikTok
+                                </a>` : ''}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- Smart Voting Link Section -->
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 mb-4">
+                            <h4 class="text-sm font-semibold text-green-900 mb-3">📤 Share This Content</h4>
+                            <p class="text-xs text-green-700 mb-3">Share this voting link to get more votes and climb the leaderboard!</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="copyVoteLink(${item.id}, '${item.content_type}', '{{ board.slug }}')" class="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs hover:bg-green-200 transition-colors">
+                                    🔗 Copy Vote Link
+                                </button>
+                                <button onclick="shareToFacebook(${item.id}, '${item.content_type}', '{{ board.slug }}', '${item.title}', '${item.artist_name}')" class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs hover:bg-blue-200 transition-colors">
+                                    📘 Facebook
+                                </button>
+                                <button onclick="shareToTwitter(${item.id}, '${item.content_type}', '{{ board.slug }}', '${item.title}', '${item.artist_name}')" class="inline-flex items-center px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs hover:bg-sky-200 transition-colors">
+                                    🐦 Twitter
+                                </button>
+                            </div>
+                        </div>
                         
                         <!-- Media Content -->
                         ${mediaContent}
@@ -803,6 +981,73 @@
                     submitBtn.disabled = false;
                 }
             }
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
+            
+            // Set colors based on type
+            if (type === 'success') {
+                toast.className += ' bg-green-600';
+            } else if (type === 'error') {
+                toast.className += ' bg-red-600';
+            } else {
+                toast.className += ' bg-blue-600';
+            }
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Smart Voting Link Functions
+        function copyVoteLink(contentId, contentType, boardSlug) {
+            const voteUrl = `https://urvote.rocks/vote/${contentId}/${boardSlug}`;
+            navigator.clipboard.writeText(voteUrl).then(() => {
+                showToast('🔗 Voting link copied to clipboard!', 'success');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = voteUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('🔗 Voting link copied to clipboard!', 'success');
+            });
+        }
+
+        function shareToFacebook(contentId, contentType, boardSlug, title, artistName) {
+            const voteUrl = `https://urvote.rocks/vote/${contentId}/${boardSlug}`;
+            const text = `Vote for ${title} by ${artistName} on UrVote.Rocks! 🎵`;
+            const encodedUrl = encodeURIComponent(voteUrl);
+            const encodedText = encodeURIComponent(text);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`, '_blank');
+        }
+
+        function shareToTwitter(contentId, contentType, boardSlug, title, artistName) {
+            const voteUrl = `https://urvote.rocks/vote/${contentId}/${boardSlug}`;
+            const text = `Vote for ${title} by ${artistName} on UrVote.Rocks! 🎵`;
+            const encodedUrl = encodeURIComponent(voteUrl);
+            const encodedText = encodeURIComponent(text);
+            window.open(`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`, '_blank');
         }
     </script>
 </body>

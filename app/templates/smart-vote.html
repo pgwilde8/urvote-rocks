@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote for {{ content.title }} - {{ board.title }} | UrVote.Rocks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Social Media Meta Tags for Viral Sharing -->
+    <meta property="og:title" content="Vote for {{ content.title }} by {{ content.artist_name }}">
+    <meta property="og:description" content="Check out this amazing {{ content_type }} on {{ board.title }}! Vote now and see the leaderboard.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="https://urvote.rocks/static/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .content-card { transition: all 0.3s ease; }
+        .content-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .theme-sunset { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
+        .theme-sunrise { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .theme-ocean { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .theme-mountain { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .theme-garden { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .theme-forest { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-purple-600">UrVote.Rocks</a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-purple-600 transition-colors">Home</a>
+                    <a href="/media-boards" class="text-gray-700 hover:text-purple-600 transition-colors">Media Boards</a>
+                    <a href="/board/{{ board.slug }}" class="text-gray-700 hover:text-purple-600 transition-colors">Back to Board</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Featured Content Section -->
+    <section class="py-12 bg-gradient-to-br from-purple-50 to-blue-50">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    🎯 Vote for This {{ content_type|title }}!
+                </h1>
+                <p class="text-xl text-gray-600">Support amazing content and see where it ranks on the leaderboard</p>
+            </div>
+            
+            <!-- Featured Content Card -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4">
+                        {% if content_type == 'music' %}🎵{% elif content_type == 'video' %}🎬{% else %}🖼️{% endif %}
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ content.title }}</h2>
+                    <p class="text-xl text-gray-600 mb-4">by {{ content.artist_name }}</p>
+                    {% if content.description %}
+                    <p class="text-gray-600 max-w-2xl mx-auto">{{ content.description }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Media Content Display -->
+                <div class="mb-6">
+                    {% if content_type == 'music' %}
+                        {% if content.file_path and content.file_path != '' %}
+                            <!-- Audio Player -->
+                            <div class="custom-audio-player bg-gray-100 rounded-lg p-6">
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <button onclick="togglePlayPause(this, '{{ content.file_path|replace('uploads/', '/uploads/') }}')" class="play-btn bg-purple-600 text-white rounded-full w-16 h-16 flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                        <span class="text-2xl">▶️</span>
+                                    </button>
+                                    <div class="flex-1">
+                                        <div class="text-lg font-medium text-gray-700">{{ content.title }}</div>
+                                        <div class="text-gray-500">{{ content.artist_name }}</div>
+                                    </div>
+                                </div>
+                                <audio id="featured-audio" preload="metadata" style="display: none;">
+                                    <source src="{{ content.file_path|replace('uploads/', '/uploads/') }}" type="audio/mpeg">
+                                </audio>
+                            </div>
+                        {% elif content.external_link %}
+                            <!-- External Music Link -->
+                            <div class="text-center p-6 bg-blue-100 rounded-lg">
+                                <p class="text-lg text-blue-800 mb-3">🎵 External Music Link</p>
+                                <a href="{{ content.external_link }}" target="_blank" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                                    🎧 Listen on Platform
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% elif content_type == 'video' %}
+                        {% if content.file_path and content.file_path != '' %}
+                            <!-- Video Player -->
+                            <video controls class="w-full rounded-lg">
+                                <source src="{{ content.file_path|replace('uploads/', '/uploads/') }}" type="video/mp4">
+                                Your browser does not support the video element.
+                            </video>
+                        {% elif content.external_link %}
+                            <!-- External Video Link -->
+                            <div class="text-center p-6 bg-red-100 rounded-lg">
+                                <p class="text-lg text-red-800 mb-3">🎬 External Video Link</p>
+                                <a href="{{ content.external_link }}" target="_blank" class="inline-block bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
+                                    🎬 Watch on Platform
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% elif content_type == 'visuals' %}
+                        {% if content.file_path and content.file_path != '' %}
+                            <!-- Image Display -->
+                            <img src="{{ content.file_path|replace('uploads/', '/uploads/') }}" alt="{{ content.title }}" class="w-full max-h-96 object-cover rounded-lg mx-auto">
+                        {% elif content.external_link %}
+                            <!-- External Image Link -->
+                            <div class="text-center p-6 bg-green-100 rounded-lg">
+                                <p class="text-lg text-green-800 mb-3">🖼️ External Image Link</p>
+                                <a href="{{ content.external_link }}" target="_blank" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                                    🖼️ View Full Image
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+                <!-- Voting Section -->
+                <div class="text-center">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Cast Your Vote!</h3>
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="voteContent({{ content.id }}, 'like', '{{ content_type }}')" class="vote-btn like-btn flex items-center space-x-2 px-6 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
+                            <span class="text-2xl">👍</span>
+                            <span>Like</span>
+                        </button>
+                        <button onclick="voteContent({{ content.id }}, 'dislike', '{{ content_type }}')" class="vote-btn dislike-btn flex items-center space-x-2 px-6 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                            <span class="text-2xl">👎</span>
+                            <span>Dislike</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media Board Owner Billboard -->
+    <section class="py-12 bg-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="theme-{{ board.theme }} rounded-2xl p-8 text-center text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                <div class="relative">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">{{ board.title }}</h2>
+                    {% if board.business_tagline %}
+                    <p class="text-xl mb-6">{{ board.business_tagline }}</p>
+                    {% endif %}
+                    {% if board.description %}
+                    <p class="text-lg opacity-90 mb-6">{{ board.description }}</p>
+                    {% endif %}
+                    
+                    <!-- Business Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+                        {% if board.website_url %}
+                        <div class="bg-white bg-opacity-15 backdrop-blur-sm rounded-lg p-3">
+                            <div class="text-lg mb-1">🌐</div>
+                            <a href="{{ board.website_url }}" target="_blank" class="text-sm hover:underline">Visit Website</a>
+                        </div>
+                        {% endif %}
+                        {% if board.contact_email %}
+                        <div class="bg-white bg-opacity-15 backdrop-blur-sm rounded-lg p-3">
+                            <div class="text-lg mb-1">📧</div>
+                            <a href="mailto:{{ board.contact_email }}" class="text-sm hover:underline">Contact</a>
+                        </div>
+                        {% endif %}
+                        {% if board.social_facebook or board.social_instagram or board.social_twitter %}
+                        <div class="bg-white bg-opacity-15 backdrop-blur-sm rounded-lg p-3">
+                            <div class="text-lg mb-1">📱</div>
+                            <span class="text-sm">Follow Us</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mt-6">
+                        <a href="/board/{{ board.slug }}" class="inline-block bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105">
+                            🚀 Visit Full Media Board
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaderboard Section -->
+    <section class="py-12 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">🏆 Top Voted Content</h2>
+                <p class="text-xl text-gray-600">See what's trending on this Media Board</p>
+            </div>
+            
+            <!-- Leaderboard -->
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                {% if leaderboard %}
+                <div class="space-y-4">
+                    {% for item in leaderboard %}
+                    <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <!-- Rank Badge -->
+                        <div class="flex-shrink-0">
+                            {% if item.rank == 1 %}
+                            <div class="w-12 h-12 bg-yellow-400 text-yellow-900 rounded-full flex items-center justify-center font-bold text-xl">🥇</div>
+                            {% elif item.rank == 2 %}
+                            <div class="w-12 h-12 bg-gray-300 text-gray-700 rounded-full flex items-center justify-center font-bold text-xl">🥈</div>
+                            {% elif item.rank == 3 %}
+                            <div class="w-12 h-12 bg-orange-400 text-orange-900 rounded-full flex items-center justify-center font-bold text-xl">🥉</div>
+                            {% else %}
+                            <div class="w-12 h-12 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center font-bold text-xl">#{{ item.rank }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Content Info -->
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ item.title }}</h3>
+                            <p class="text-gray-600">by {{ item.artist_name }}</p>
+                            <div class="flex items-center space-x-2 mt-1">
+                                <span class="text-sm text-gray-500">
+                                    {% if item.content_type == 'music' %}🎵 Music{% elif item.content_type == 'video' %}🎬 Video{% else %}🖼️ Visual{% endif %}
+                                </span>
+                                <span class="text-sm text-gray-400">•</span>
+                                <span class="text-sm text-green-600 font-medium">{{ item.vote_count }} votes</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Vote Button -->
+                        <div class="flex-shrink-0">
+                            <button onclick="voteContent({{ item.id }}, 'like', '{{ item.content_type }}')" class="bg-green-100 text-green-700 px-4 py-2 rounded-lg hover:bg-green-200 transition-colors">
+                                👍 Vote
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <div class="text-6xl mb-4">🏆</div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No Votes Yet</h3>
+                    <p class="text-gray-500">Be the first to vote and start the leaderboard!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Share Section -->
+    <section class="py-12 bg-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">📤 Share This Voting Link</h2>
+            <p class="text-xl text-gray-600 mb-6">Help this content climb the leaderboard by sharing with friends!</p>
+            
+            <!-- Share Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-6">
+                <button onclick="shareToFacebook()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    📘 Share on Facebook
+                </button>
+                <button onclick="shareToTwitter()" class="bg-sky-500 text-white px-6 py-3 rounded-lg hover:bg-sky-600 transition-colors">
+                    🐦 Share on Twitter
+                </button>
+                <button onclick="copyLink()" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                    🔗 Copy Link
+                </button>
+            </div>
+            
+            <!-- Current URL Display -->
+            <div class="bg-gray-100 rounded-lg p-4 max-w-2xl mx-auto">
+                <p class="text-sm text-gray-600 mb-2">Current Voting Link:</p>
+                <p class="text-sm font-mono text-gray-800 break-all">{{ request.url }}</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Voting functionality
+        async function voteContent(contentId, voteType, contentType) {
+            try {
+                const response = await fetch(`/api/boards/{{ board.id }}/content/${contentId}/vote`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        vote_type: voteType
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`Vote ${result.action}! ${result.message}`);
+                    // Refresh the page to show updated vote counts
+                    location.reload();
+                } else {
+                    const error = await response.json();
+                    alert('Vote failed: ' + error.detail);
+                }
+            } catch (error) {
+                console.error('Voting error:', error);
+                alert('Error casting vote. Please try again.');
+            }
+        }
+
+        // Audio player functionality
+        let currentAudio = null;
+        let currentPlayBtn = null;
+
+        function togglePlayPause(button, audioSrc) {
+            const audio = document.getElementById('featured-audio');
+            
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+                if (currentPlayBtn) {
+                    currentPlayBtn.innerHTML = '<span class="text-2xl">▶️</span>';
+                }
+            }
+            
+            if (audio.paused) {
+                audio.play();
+                button.innerHTML = '<span class="text-2xl">⏸️</span>';
+                currentAudio = audio;
+                currentPlayBtn = button;
+            } else {
+                audio.pause();
+                button.innerHTML = '<span class="text-2xl">▶️</span>';
+                currentAudio = null;
+                currentPlayBtn = null;
+            }
+        }
+
+        // Social sharing functions
+        function shareToFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(`Vote for {{ content.title }} by {{ content.artist_name }} on {{ board.title }}! 🎵`);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+        }
+
+        function shareToTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(`Vote for {{ content.title }} by {{ content.artist_name }} on {{ board.title }}! 🎵`);
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = window.location.href;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Link copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>
