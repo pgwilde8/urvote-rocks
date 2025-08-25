@@ -435,6 +435,55 @@ async def client_homepage(
 async def admin_page(request: Request):
     return templates.TemplateResponse("admin/dashboard.html", {"request": request})
 
+# Admin upload page (HTML)
+@app.get("/admin/upload", response_class=HTMLResponse)
+async def admin_upload_page(request: Request, db: AsyncSession = Depends(get_db)):
+    """Admin page for uploading new songs"""
+    # Get all boards for the dropdown
+    from .models import Board
+    boards_res = await db.execute(select(Board).order_by(Board.title))
+    boards = boards_res.scalars().all()
+    
+    return templates.TemplateResponse("admin/admin_upload.html", {
+        "request": request,
+        "boards": boards
+    })
+
+@app.post("/admin/upload", response_class=HTMLResponse)
+async def admin_upload_song(
+    request: Request,
+    title: str = Form(...),
+    artist_name: str = Form(...),
+    url: str = Form(...),
+    board_id: int = Form(...),
+    social_link: str = Form(None),
+    db: AsyncSession = Depends(get_db)
+):
+    """Handle admin song upload form submission"""
+    try:
+        from .models import Song
+        
+        # Create new song
+        new_song = Song(
+            title=title,
+            artist_name=artist_name,
+            external_link=url,
+            board_id=board_id,
+            creator_linktree=social_link,
+            is_approved=True,  # Admin uploads are auto-approved
+            content_source="admin_upload"
+        )
+        
+        db.add(new_song)
+        await db.commit()
+        
+        # Redirect back to upload page with success message
+        return RedirectResponse(url="/admin/upload?success=true", status_code=303)
+        
+    except Exception as e:
+        # Redirect back with error message
+        return RedirectResponse(url=f"/admin/upload?error={str(e)}", status_code=303)
+
 # Auth pages (if you use server-rendered forms)
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):

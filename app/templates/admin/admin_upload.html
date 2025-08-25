@@ -3,6 +3,24 @@
 
 {% block content %}
 <div class="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
+  <!-- Success/Error Messages -->
+  {% if request.query_params.get('success') %}
+    <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+      Song uploaded successfully!
+    </div>
+  {% endif %}
+  
+  {% if request.query_params.get('error') %}
+    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+      Error: {{ request.query_params.get('error') }}
+    </div>
+  {% endif %}
+  
+  <!-- Navigation -->
+  <div class="mb-4">
+    <a href="/admin" class="text-blue-600 hover:text-blue-800">← Back to Admin Dashboard</a>
+  </div>
+  
   <h1 class="text-2xl font-bold mb-4">Admin: Upload New Song</h1>
   <form method="post">
     <div class="mb-4">
