@@ -9,6 +9,11 @@ import uuid
 import hashlib
 import re
 
+# File size limits (in bytes)
+MAX_MUSIC_SIZE = 50 * 1024 * 1024      # 50MB
+MAX_VIDEO_SIZE = 100 * 1024 * 1024     # 100MB  
+MAX_VISUAL_SIZE = 25 * 1024 * 1024     # 25MB
+
 router = APIRouter(
     prefix="/api/boards",
     tags=["boards"]
@@ -195,16 +200,23 @@ async def get_board_content(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching content: {str(e)}")
 
+from pydantic import BaseModel
+
+class VoteRequest(BaseModel):
+    vote_type: str
+
 @router.post("/{board_id}/content/{content_id}/vote")
 async def vote_on_content(
     board_id: int,
     content_id: int,
-    vote_data: dict,
+    vote_data: VoteRequest,
     db: AsyncSession = Depends(get_db)
 ):
     """Vote on content (like/dislike)"""
     try:
-        vote_type = vote_data.get("vote_type")
+        print(f"DEBUG: Vote request received - board_id: {board_id}, content_id: {content_id}, vote_type: {vote_data.vote_type}")
+        
+        vote_type = vote_data.vote_type
         if vote_type not in ["like", "dislike"]:
             raise HTTPException(status_code=400, detail="Invalid vote type")
         
@@ -212,29 +224,61 @@ async def vote_on_content(
         voter_id = 1
         
         # Check if vote already exists
-        existing_vote = await db.execute(
-            select(Vote).where(
-                Vote.media_id == content_id,
-                Vote.voter_id == voter_id
-            )
+        existing_vote_query = select(Vote).where(
+            Vote.media_id == content_id,
+            Vote.voter_id == voter_id
         )
-        existing_vote = existing_vote.scalar_one_or_none()
+        print(f"DEBUG: Checking for existing vote with query: {existing_vote_query}")
+        
+        existing_vote_res = await db.execute(existing_vote_query)
+        existing_vote = existing_vote_res.scalar_one_or_none()
+        print(f"DEBUG: Existing vote found: {existing_vote is not None}")
         
         if existing_vote:
+            print(f"DEBUG: Found existing vote: ID={existing_vote.id}, type={existing_vote.vote_type}")
             if existing_vote.vote_type == vote_type:
                 # Remove vote if clicking same button
+                print(f"DEBUG: Removing existing vote")
                 await db.delete(existing_vote)
                 await db.commit()
                 return {"message": "Vote removed", "action": "removed"}
             else:
                 # Change vote type
+                print(f"DEBUG: Updating existing vote from {existing_vote.vote_type} to {vote_type}")
                 existing_vote.vote_type = vote_type
                 await db.commit()
                 return {"message": "Vote updated", "action": "updated"}
         else:
-            # Create new vote
-            # Determine media type from content_id (this is simplified - in production you'd query the content)
-            media_type = "music"  # Default, could be enhanced
+            # Create new vote - determine media type by checking which table has this content_id
+            media_type = None
+            
+            print(f"DEBUG: Determining media type for content_id: {content_id}")
+            
+            # Check if it's a song
+            song_res = await db.execute(select(Song).where(Song.id == content_id, Song.board_id == board_id))
+            song = song_res.scalar_one_or_none()
+            if song:
+                media_type = "music"
+                print(f"DEBUG: Found song with title: {song.title}")
+            else:
+                # Check if it's a video
+                video_res = await db.execute(select(Video).where(Video.id == content_id, Video.board_id == board_id))
+                video = video_res.scalar_one_or_none()
+                if video:
+                    media_type = "video"
+                    print(f"DEBUG: Found video with title: {video.title}")
+                else:
+                    # Check if it's a visual
+                    visual_res = await db.execute(select(Visual).where(Visual.id == content_id, Visual.board_id == board_id))
+                    visual = visual_res.scalar_one_or_none()
+                    if visual:
+                        media_type = "visuals"
+                        print(f"DEBUG: Found visual with title: {visual.title}")
+                    else:
+                        print(f"DEBUG: Content not found in any table")
+                        raise HTTPException(status_code=404, detail="Content not found")
+            
+            print(f"DEBUG: Determined media_type: {media_type}")
             
             new_vote = Vote(
                 media_type=media_type,
@@ -243,12 +287,114 @@ async def vote_on_content(
                 vote_type=vote_type,
                 ip_address="127.0.0.1"  # In production, get from request
             )
+            print(f"DEBUG: Creating new vote: media_type={media_type}, media_id={content_id}, voter_id={voter_id}, vote_type={vote_type}")
+            
             db.add(new_vote)
             await db.commit()
+            print(f"DEBUG: Vote saved successfully with ID: {new_vote.id}")
+            
             return {"message": "Vote added", "action": "added"}
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing vote: {str(e)}")
+
+@router.get("/{board_id}/test-vote")
+async def test_vote_endpoint(board_id: int, db: AsyncSession = Depends(get_db)):
+    """Test endpoint to verify voting system is working"""
+    try:
+        # Check if board exists
+        board_res = await db.execute(select(Board).where(Board.id == board_id))
+        board = board_res.scalar_one_or_none()
+        
+        if not board:
+            raise HTTPException(status_code=404, detail="Board not found")
+        
+        # Check if there's any content to vote on
+        music_count = await db.execute(select(func.count(Song.id)).where(Song.board_id == board_id))
+        video_count = await db.execute(select(func.count(Video.id)).where(Video.board_id == board_id))
+        visual_count = await db.execute(select(func.count(Visual.id)).where(Visual.board_id == board_id))
+        
+        return {
+            "board_id": board_id,
+            "board_title": board.title,
+            "content_counts": {
+                "music": music_count.scalar() or 0,
+                "video": video_count.scalar() or 0,
+                "visuals": visual_count.scalar() or 0
+            },
+            "total_content": (music_count.scalar() or 0) + (video_count.scalar() or 0) + (visual_count.scalar() or 0)
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error testing vote endpoint: {str(e)}")
+
+@router.get("/{board_id}/test-upload")
+async def test_upload_endpoint(board_id: int, db: AsyncSession = Depends(get_db)):
+    """Test endpoint to verify upload system is working"""
+    try:
+        # Check if board exists
+        board_res = await db.execute(select(Board).where(Board.id == board_id))
+        board = board_res.scalar_one_or_none()
+        
+        if not board:
+            raise HTTPException(status_code=404, detail="Board not found")
+        
+        # Check upload directories
+        import os
+        base_upload_dir = os.path.join(os.getcwd(), "uploads")
+        board_slug = board.slug
+        
+        upload_dirs = {
+            "music": os.path.join(base_upload_dir, "music", board_slug),
+            "video": os.path.join(base_upload_dir, "video", board_slug),
+            "visuals": os.path.join(base_upload_dir, "visuals", board_slug)
+        }
+        
+        dir_status = {}
+        for media_type, dir_path in upload_dirs.items():
+            exists = os.path.exists(dir_path)
+            writable = os.access(dir_path, os.W_OK) if exists else False
+            dir_status[media_type] = {
+                "exists": exists,
+                "writable": writable,
+                "path": dir_path,
+                "board_specific": True
+            }
+        
+        return {
+            "board_id": board_id,
+            "board_title": board.title,
+            "board_settings": {
+                "allow_music": board.allow_music,
+                "allow_video": board.allow_video,
+                "allow_visuals": board.allow_visuals
+            },
+            "upload_directories": dir_status
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error testing upload endpoint: {str(e)}")
+
+@router.get("/upload-limits")
+async def get_upload_limits():
+    """Get current file upload size limits"""
+    return {
+        "music": {
+            "max_size_mb": MAX_MUSIC_SIZE // (1024 * 1024),
+            "max_size_bytes": MAX_MUSIC_SIZE,
+            "formats": ["MP3", "WAV", "FLAC", "AAC"]
+        },
+        "video": {
+            "max_size_mb": MAX_VIDEO_SIZE // (1024 * 1024),
+            "max_size_bytes": MAX_VIDEO_SIZE,
+            "formats": ["MP4", "MOV", "AVI", "WebM"]
+        },
+        "visuals": {
+            "max_size_mb": MAX_VISUAL_SIZE // (1024 * 1024),
+            "max_size_bytes": MAX_VISUAL_SIZE,
+            "formats": ["JPG", "PNG", "GIF", "WebP"]
+        }
+    }
 
 @router.get("/{board_id}/stats")
 async def get_board_stats(
@@ -406,6 +552,8 @@ async def upload_music(
         if not board:
             raise HTTPException(status_code=404, detail="Board not found")
         
+        print(f"DEBUG: Board found - ID: {board.id}, Title: '{board.title}', Slug: '{board.slug}'")
+        
         if not board.allow_music:
             raise HTTPException(status_code=400, detail="This board does not allow music uploads")
         
@@ -428,30 +576,54 @@ async def upload_music(
             if not file.content_type.startswith('audio/'):
                 raise HTTPException(status_code=400, detail="File must be an audio file")
             
-            # Create uploads directory if it doesn't exist
-            upload_dir = os.path.join(os.getcwd(), "uploads", "music")
+            # Validate file size
+            if file.size and file.size > MAX_MUSIC_SIZE:
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"Music file too large. Maximum size is {MAX_MUSIC_SIZE // (1024*1024)}MB. Your file is {file.size / (1024*1024):.1f}MB"
+                )
+            
+            # Create uploads directory structure: uploads/music/{board_slug}/
+            board_slug = board.slug
+            base_uploads_dir = os.path.join(os.getcwd(), "uploads")
+            music_dir = os.path.join(base_uploads_dir, "music")
+            upload_dir = os.path.join(music_dir, board_slug)
+            
+            print(f"DEBUG: Base uploads dir: {base_uploads_dir}")
+            print(f"DEBUG: Music dir: {music_dir}")
+            print(f"DEBUG: Board-specific dir: {upload_dir}")
+            print(f"DEBUG: Base uploads exists: {os.path.exists(base_uploads_dir)}")
+            print(f"DEBUG: Music dir exists: {os.path.exists(music_dir)}")
+            
             os.makedirs(upload_dir, exist_ok=True)
+            print(f"DEBUG: Directory created/exists: {os.path.exists(upload_dir)}")
+            print(f"DEBUG: Directory writable: {os.access(upload_dir, os.W_OK)}")
             
             # Generate unique filename
             file_extension = os.path.splitext(file.filename)[1]
             unique_filename = f"{uuid.uuid4().hex}{file_extension}"
-            file_path = f"uploads/music/{unique_filename}"  # Store relative path for database
+            file_path = f"uploads/music/{board_slug}/{unique_filename}"  # Store relative path for database
+            print(f"DEBUG: File path: {file_path}")
             
             # Save the file
             try:
+                print(f"DEBUG: About to save file to: {file_path}")
                 with open(file_path, "wb") as buffer:
                     content = await file.read()
                     buffer.write(content)
+                print(f"DEBUG: File saved successfully")
                 
                 # Calculate file size and hash
                 file_size = len(content)
                 file_hash = hashlib.sha256(content).hexdigest()
+                print(f"DEBUG: File size: {file_size}, Hash: {file_hash[:8]}...")
                 
                 content_source = "upload"
                 
             except Exception as e:
+                print(f"DEBUG: Error saving file: {str(e)}")
                 raise HTTPException(status_code=500, detail=f"Error saving file: {str(e)}")
-            
+        
         else:
             # Handle external link
             file_path = None
@@ -464,6 +636,7 @@ async def upload_music(
                 raise HTTPException(status_code=400, detail="Invalid external link format")
         
         # Create the music entry
+        print(f"DEBUG: Creating Song with file_path: {file_path}")
         new_music = Song(
             title=title,
             artist_name=artist_name,
@@ -487,6 +660,7 @@ async def upload_music(
         db.add(new_music)
         await db.commit()
         await db.refresh(new_music)
+        print(f"DEBUG: Song saved to database with ID: {new_music.id}")
         
         return {
             "success": True,
@@ -503,6 +677,7 @@ async def upload_video(
     title: str = Form(...),
     artist_name: str = Form(...),
     description: str = Form(None),
+    video_type: str = Form("general"),  # Default to "general" if not provided
     file: UploadFile = File(None),
     external_link: str = Form(None),
     creator_website: str = Form(None),
@@ -544,14 +719,22 @@ async def upload_video(
             if not file.content_type.startswith('video/'):
                 raise HTTPException(status_code=400, detail="File must be a video file")
             
-            # Create uploads directory if it doesn't exist
-            upload_dir = os.path.join(os.getcwd(), "uploads", "video")
+            # Validate file size
+            if file.size and file.size > MAX_VIDEO_SIZE:
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"Video file too large. Maximum size is {MAX_VIDEO_SIZE // (1024*1024)}MB. Your file is {file.size / (1024*1024):.1f}MB"
+                )
+            
+            # Create uploads directory structure: uploads/video/{board_slug}/
+            board_slug = board.slug
+            upload_dir = os.path.join(os.getcwd(), "uploads", "video", board_slug)
             os.makedirs(upload_dir, exist_ok=True)
             
             # Generate unique filename
             file_extension = os.path.splitext(file.filename)[1]
             unique_filename = f"{uuid.uuid4().hex}{file_extension}"
-            file_path = f"uploads/video/{unique_filename}"  # Store relative path for database
+            file_path = f"uploads/video/{board_slug}/{unique_filename}"  # Store relative path for database
             
             # Save the file
             try:
@@ -567,7 +750,7 @@ async def upload_video(
                 
             except Exception as e:
                 raise HTTPException(status_code=500, detail=f"Error saving file: {str(e)}")
-            
+        
         else:
             # Handle external link
             file_path = None
@@ -584,10 +767,13 @@ async def upload_video(
             title=title,
             artist_name=artist_name,
             description=description,
+            video_type=video_type,  # Use video_type from form
             board_id=board_id,
             artist_id=user_id,
             file_path=file_path,
             external_link=external_link,
+            file_size=file_size,  # Add file size
+            file_hash=file_hash,  # Add file hash
             content_source=content_source,
             creator_website=creator_website,
             creator_linktree=creator_linktree,
@@ -617,6 +803,7 @@ async def upload_visuals(
     title: str = Form(...),
     artist_name: str = Form(...),
     description: str = Form(None),
+    visual_type: str = Form("general"),  # Default to "general" if not provided
     file: UploadFile = File(None),
     external_link: str = Form(None),
     creator_website: str = Form(None),
@@ -658,14 +845,22 @@ async def upload_visuals(
             if not file.content_type.startswith('image/'):
                 raise HTTPException(status_code=400, detail="File must be an image file")
             
-            # Create uploads directory if it doesn't exist
-            upload_dir = os.path.join(os.getcwd(), "uploads", "visuals")
+            # Validate file size
+            if file.size and file.size > MAX_VISUAL_SIZE:
+                raise HTTPException(
+                    status_code=400, 
+                    detail=f"Image file too large. Maximum size is {MAX_VISUAL_SIZE // (1024*1024)}MB. Your file is {file.size / (1024*1024):.1f}MB"
+                )
+            
+            # Create uploads directory structure: uploads/visuals/{board_slug}/
+            board_slug = board.slug
+            upload_dir = os.path.join(os.getcwd(), "uploads", "visuals", board_slug)
             os.makedirs(upload_dir, exist_ok=True)
             
             # Generate unique filename
             file_extension = os.path.splitext(file.filename)[1]
             unique_filename = f"{uuid.uuid4().hex}{file_extension}"
-            file_path = f"uploads/visuals/{unique_filename}"
+            file_path = f"uploads/visuals/{board_slug}/{unique_filename}"
             
             # Save the file
             try:
@@ -698,10 +893,13 @@ async def upload_visuals(
             title=title,
             artist_name=artist_name,
             description=description,
+            visual_type=visual_type,  # Use visual_type from form
             board_id=board_id,
             artist_id=user_id,
             file_path=file_path,
             external_link=external_link,
+            file_size=file_size,  # Add file size
+            file_hash=file_hash,  # Add file hash
             content_source=content_source,
             creator_website=creator_website,
             creator_linktree=creator_linktree,
@@ -870,3 +1068,112 @@ async def get_board_vote_stats(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error getting vote stats: {str(e)}")
+
+@router.get("/{board_id}/debug-votes")
+async def debug_votes(board_id: int, db: AsyncSession = Depends(get_db)):
+    """Debug endpoint to check all votes for a board"""
+    try:
+        # Get all votes for this board
+        votes_query = select(Vote).join(
+            Song, (Vote.media_type == "music") & (Vote.media_id == Song.id)
+        ).where(Song.board_id == board_id)
+        
+        votes_res = await db.execute(votes_query)
+        music_votes = votes_res.scalars().all()
+        
+        # Get video votes
+        video_votes_query = select(Vote).join(
+            Video, (Vote.media_type == "video") & (Vote.media_id == Video.id)
+        ).where(Video.board_id == board_id)
+        
+        video_votes_res = await db.execute(video_votes_query)
+        video_votes = video_votes_res.scalars().all()
+        
+        # Get visual votes
+        visual_votes_query = select(Vote).join(
+            Visual, (Vote.media_type == "visuals") & (Vote.media_id == Visual.id)
+        ).where(Visual.board_id == board_id)
+        
+        visual_votes_res = await db.execute(visual_votes_query)
+        visual_votes = visual_votes_res.scalars().all()
+        
+        return {
+            "board_id": board_id,
+            "music_votes": [{"id": v.id, "media_id": v.media_id, "vote_type": v.vote_type, "voter_id": v.voter_id} for v in music_votes],
+            "video_votes": [{"id": v.id, "media_id": v.media_id, "vote_type": v.vote_type, "voter_id": v.voter_id} for v in video_votes],
+            "visual_votes": [{"id": v.id, "media_id": v.media_id, "vote_type": v.vote_type, "voter_id": v.voter_id} for v in visual_votes],
+            "total_votes": len(music_votes) + len(video_votes) + len(visual_votes)
+        }
+        
+    except Exception as e:
+        return {"error": str(e)}
+
+@router.get("/{board_id}/upload-structure")
+async def get_upload_structure(board_id: int, db: AsyncSession = Depends(get_db)):
+    """Get the current upload directory structure for a board"""
+    try:
+        # Check if board exists
+        board_res = await db.execute(select(Board).where(Board.id == board_id))
+        board = board_res.scalar_one_or_none()
+        
+        if not board:
+            raise HTTPException(status_code=404, detail="Board not found")
+        
+        import os
+        base_upload_dir = os.path.join(os.getcwd(), "uploads")
+        board_slug = board.slug
+        
+        structure = {
+            "board_id": board_id,
+            "board_name": board.title,
+            "board_slug": board_slug,
+            "base_path": base_upload_dir,
+            "directories": {}
+        }
+        
+        # Check each media type directory
+        for media_type in ["music", "video", "visuals"]:
+            media_dir = os.path.join(base_upload_dir, media_type, board_slug)
+            exists = os.path.exists(media_dir)
+            
+            if exists:
+                # List files in the directory
+                try:
+                    files = os.listdir(media_dir)
+                    file_info = []
+                    total_size = 0
+                    
+                    for filename in files:
+                        file_path = os.path.join(media_dir, filename)
+                        if os.path.isfile(file_path):
+                            file_size = os.path.getsize(file_path)
+                            total_size += file_size
+                            file_info.append({
+                                "filename": filename,
+                                "size_bytes": file_size,
+                                "size_mb": round(file_size / (1024 * 1024), 2)
+                            })
+                    
+                    structure["directories"][media_type] = {
+                        "exists": True,
+                        "path": media_dir,
+                        "file_count": len(file_info),
+                        "total_size_mb": round(total_size / (1024 * 1024), 2),
+                        "files": file_info
+                    }
+                except Exception as e:
+                    structure["directories"][media_type] = {
+                        "exists": True,
+                        "path": media_dir,
+                        "error": str(e)
+                    }
+            else:
+                structure["directories"][media_type] = {
+                    "exists": False,
+                    "path": media_dir
+                }
+        
+        return structure
+        
+    except Exception as e:
+        return {"error": str(e)}
