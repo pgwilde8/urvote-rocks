@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - UrVote.Rocks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-primary to-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Simple, Transparent Pricing</h1>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed">
+                    Choose the perfect media board package for your brand, event, or creative contest. No hidden fees, no surprises.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Toggle -->
+    <div class="text-center py-8">
+        <div class="inline-flex items-center bg-white rounded-lg p-1 shadow-sm border border-gray-200">
+            <button id="monthly-toggle" class="px-6 py-2 rounded-md font-medium transition-colors duration-200 bg-primary text-white">
+                Monthly
+            </button>
+            <button id="annual-toggle" class="px-6 py-2 rounded-md font-medium text-gray-700 hover:text-primary transition-colors duration-200">
+                Annual
+                <span class="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Save 20%</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Starter Plan -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 relative">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Starter</h3>
+                    <p class="text-gray-600">Perfect for small businesses and events</p>
+                    <div class="mt-6">
+                        <span class="text-4xl font-bold text-gray-900" id="starter-price">$99</span>
+                        <span class="text-gray-600" id="starter-period">/month</span>
+                    </div>
+                </div>
+                
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">1 Media Board</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Up to 100 Content Submissions</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Basic Voting System</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Standard Analytics</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Email Support</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Custom Contest Duration</span>
+                    </li>
+                </ul>
+                
+                <a href="/contact?plan=starter" class="w-full bg-gray-900 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-200 text-center block">
+                    Get Started
+                </a>
+            </div>
+            
+            <!-- Professional Plan (Featured) -->
+            <div class="bg-white rounded-lg shadow-lg border-2 border-primary p-8 relative transform scale-105">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span class="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold">Most Popular</span>
+                </div>
+                
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Professional</h3>
+                    <p class="text-gray-600">Ideal for growing brands and major events</p>
+                    <div class="mt-6">
+                        <span class="text-4xl font-bold text-gray-900" id="pro-price">$199</span>
+                        <span class="text-gray-600" id="pro-period">/month</span>
+                    </div>
+                </div>
+                
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">3 Media Boards</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Up to 500 Content Submissions</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Advanced Voting System</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Detailed Analytics & Insights</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Priority Support</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Custom Branding</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">API Access</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">White-label Options</span>
+                    </li>
+                </ul>
+                
+                <a href="/contact?plan=professional" class="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200 text-center block">
+                    Get Started
+                </a>
+            </div>
+            
+            <!-- Enterprise Plan -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 relative">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Enterprise</h3>
+                    <p class="text-gray-600">For large organizations and agencies</p>
+                    <div class="mt-6">
+                        <span class="text-4xl font-bold text-gray-900" id="enterprise-price">$399</span>
+                        <span class="text-gray-600" id="enterprise-period">/month</span>
+                    </div>
+                </div>
+                
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Unlimited Media Boards</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Unlimited Content Submissions</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Premium Voting System</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Advanced Analytics & Reporting</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">24/7 Dedicated Support</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Full Customization</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Advanced API & Webhooks</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-primary mr-3">✓</span>
+                        <span class="text-gray-700">Custom Integrations</span>
+                    </li>
+                </ul>
+                
+                <a href="/contact?plan=enterprise" class="w-full bg-gray-900 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors duration-200 text-center block">
+                    Get Started
+                </a>
+            </div>
+        </div>
+        
+        <!-- Additional Services -->
+        <div class="mt-20">
+            <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Additional Services</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg p-8 shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Custom Development</h3>
+                    <p class="text-gray-600 mb-4">Need custom features or integrations? Our development team can build exactly what you need.</p>
+                    <p class="text-gray-900 font-semibold">Starting at $150/hour</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-8 shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Content Moderation</h3>
+                    <p class="text-gray-600 mb-4">Professional content moderation to ensure your contests maintain high quality standards.</p>
+                    <p class="text-gray-900 font-semibold">Starting at $50/hour</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-8 shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Contest Management</h3>
+                    <p class="text-gray-600 mb-4">Full-service contest management from setup to winner selection and prize distribution.</p>
+                    <p class="text-gray-900 font-semibold">Starting at $200/contest</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-8 shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Analytics & Reporting</h3>
+                    <p class="text-gray-600 mb-4">Custom analytics dashboards and detailed reports for your contest performance.</p>
+                    <p class="text-gray-900 font-semibold">Starting at $100/month</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FAQ Section -->
+        <div class="mt-20">
+            <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Frequently Asked Questions</h2>
+            
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Can I change my plan later?</h3>
+                    <p class="text-gray-600">Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Is there a setup fee?</h3>
+                    <p class="text-gray-600">No setup fees! Your first month starts immediately when you create your media board.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">What payment methods do you accept?</h3>
+                    <p class="text-gray-600">We accept all major credit cards, PayPal, and bank transfers for annual plans. All payments are processed securely.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Do you offer refunds?</h3>
+                    <p class="text-gray-600">We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your first month's payment.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CTA Section -->
+        <div class="text-center mt-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Ready to Launch Your Contest?</h2>
+            <p class="text-xl text-gray-600 mb-8">Get started today and discover amazing AI-generated content for your brand or event.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/contact" class="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-200">
+                    Contact Sales
+                </a>
+                <a href="/about" class="bg-white text-primary border-2 border-primary px-8 py-4 rounded-lg font-semibold hover:bg-primary hover:text-white transition-colors duration-200">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for pricing toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const monthlyToggle = document.getElementById('monthly-toggle');
+            const annualToggle = document.getElementById('annual-toggle');
+            
+            // Monthly prices
+            const monthlyPrices = {
+                starter: 99,
+                pro: 199,
+                enterprise: 399
+            };
+            
+            // Annual prices (20% discount)
+            const annualPrices = {
+                starter: 79,
+                pro: 159,
+                enterprise: 319
+            };
+            
+            function updatePricing(isAnnual) {
+                const prices = isAnnual ? annualPrices : monthlyPrices;
+                const period = isAnnual ? '/month' : '/month';
+                
+                document.getElementById('starter-price').textContent = `$${prices.starter}`;
+                document.getElementById('pro-price').textContent = `$${prices.pro}`;
+                document.getElementById('enterprise-price').textContent = `$${prices.enterprise}`;
+                
+                document.getElementById('starter-period').textContent = period;
+                document.getElementById('pro-period').textContent = period;
+                document.getElementById('enterprise-period').textContent = period;
+                
+                // Update toggle button styles
+                if (isAnnual) {
+                    monthlyToggle.className = 'px-6 py-2 rounded-md font-medium text-gray-700 hover:text-primary transition-colors duration-200';
+                    annualToggle.className = 'px-6 py-2 rounded-md font-medium transition-colors duration-200 bg-primary text-white';
+                } else {
+                    monthlyToggle.className = 'px-6 py-2 rounded-md font-medium transition-colors duration-200 bg-primary text-white';
+                    annualToggle.className = 'px-6 py-2 rounded-md font-medium text-gray-700 hover:text-primary transition-colors duration-200';
+                }
+            }
+            
+            monthlyToggle.addEventListener('click', () => updatePricing(false));
+            annualToggle.addEventListener('click', () => updatePricing(true));
+            
+            // Initialize with monthly pricing
+            updatePricing(false);
+        });
+    </script>
+</body>
+</html>

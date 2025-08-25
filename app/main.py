@@ -567,6 +567,26 @@ async def terms_of_service_short(request: Request):
 async def privacy_policy_short(request: Request):
     return templates.TemplateResponse("legal/privacy-policy.html", {"request": request})
 
+# About page
+@app.get("/about", response_class=HTMLResponse)
+async def about_page(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
+# Contact page
+@app.get("/contact", response_class=HTMLResponse)
+async def contact_page(request: Request):
+    return templates.TemplateResponse("contact.html", {"request": request})
+
+# Pricing page
+@app.get("/pricing", response_class=HTMLResponse)
+async def pricing_page(request: Request):
+    return templates.TemplateResponse("pricing.html", {"request": request})
+
+# FAQ page
+@app.get("/faq", response_class=HTMLResponse)
+async def faq_page(request: Request):
+    return templates.TemplateResponse("faq.html", {"request": request})
+
 # ------------------------------------------------------------------------------
 # Health & Error Handlers
 # ------------------------------------------------------------------------------
