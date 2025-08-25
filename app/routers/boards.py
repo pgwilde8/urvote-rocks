@@ -724,3 +724,149 @@ async def upload_visuals(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error uploading visual: {str(e)}")
+
+@router.get("/{board_id}/vote-stats")
+async def get_board_vote_stats(
+    board_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+    """Get voting statistics for a specific Media Board"""
+    try:
+        # First check if board exists
+        board_res = await db.execute(select(Board).where(Board.id == board_id))
+        board = board_res.scalar_one_or_none()
+        
+        if not board:
+            raise HTTPException(status_code=404, detail="Board not found")
+        
+        # Get total vote counts by joining through content tables
+        # Get upvotes for music
+        music_upvotes_res = await db.execute(
+            select(func.count(Vote.id)).join(Song, Vote.media_id == Song.id).where(
+                Vote.media_type == "music",
+                Vote.vote_type == "like",
+                Song.board_id == board_id
+            )
+        )
+        music_upvotes = music_upvotes_res.scalar() or 0
+        
+        # Get upvotes for videos
+        video_upvotes_res = await db.execute(
+            select(func.count(Vote.id)).join(Video, Vote.media_id == Video.id).where(
+                Vote.media_type == "video",
+                Vote.vote_type == "like",
+                Video.board_id == board_id
+            )
+        )
+        video_upvotes = video_upvotes_res.scalar() or 0
+        
+        # Get upvotes for visuals
+        visual_upvotes_res = await db.execute(
+            select(func.count(Vote.id)).join(Visual, Vote.media_id == Visual.id).where(
+                Vote.media_type == "visuals",
+                Vote.vote_type == "like",
+                Visual.board_id == board_id
+            )
+        )
+        visual_upvotes = visual_upvotes_res.scalar() or 0
+        
+        total_upvotes = music_upvotes + video_upvotes + visual_upvotes
+        
+        # Get downvotes for music
+        music_downvotes_res = await db.execute(
+            select(func.count(Vote.id)).join(Song, Vote.media_id == Song.id).where(
+                Vote.media_type == "music",
+                Vote.vote_type == "dislike",
+                Song.board_id == board_id
+            )
+        )
+        music_downvotes = music_downvotes_res.scalar() or 0
+        
+        # Get downvotes for videos
+        video_downvotes_res = await db.execute(
+            select(func.count(Vote.id)).join(Video, Vote.media_id == Video.id).where(
+                Vote.media_type == "video",
+                Vote.vote_type == "dislike",
+                Video.board_id == board_id
+            )
+        )
+        video_downvotes = video_downvotes_res.scalar() or 0
+        
+        # Get downvotes for visuals
+        visual_downvotes_res = await db.execute(
+            select(func.count(Vote.id)).join(Visual, Vote.media_id == Visual.id).where(
+                Vote.media_type == "visuals",
+                Vote.vote_type == "dislike",
+                Visual.board_id == board_id
+            )
+        )
+        visual_downvotes = visual_downvotes_res.scalar() or 0
+        
+        total_downvotes = music_downvotes + video_downvotes + visual_downvotes
+        
+        total_votes = total_upvotes + total_downvotes
+        
+        # Get top performing content (by upvotes)
+        top_content = []
+        
+        # Get top music
+        if board.allow_music:
+            music_query = select(Song, func.count(Vote.id).label('upvotes')).join(
+                Vote, (Vote.media_type == "music") & (Vote.media_id == Song.id) & (Vote.vote_type == "like")
+            ).where(Song.board_id == board_id).group_by(Song.id).order_by(func.count(Vote.id).desc()).limit(5)
+            music_res = await db.execute(music_query)
+            music_items = music_res.all()
+            for song, upvotes in music_items:
+                top_content.append({
+                    "id": song.id,
+                    "title": song.title,
+                    "artist_name": song.artist_name,
+                    "content_type": "music",
+                    "upvotes": upvotes
+                })
+        
+        # Get top videos
+        if board.allow_video:
+            video_query = select(Video, func.count(Vote.id).label('upvotes')).join(
+                Vote, (Vote.media_type == "video") & (Vote.media_id == Video.id) & (Vote.vote_type == "like")
+            ).where(Video.board_id == board_id).group_by(Video.id).order_by(func.count(Vote.id).desc()).limit(5)
+            video_res = await db.execute(video_query)
+            video_items = video_res.all()
+            for video, upvotes in video_items:
+                top_content.append({
+                    "id": video.id,
+                    "title": video.title,
+                    "artist_name": video.artist_name,
+                    "content_type": "video",
+                    "upvotes": upvotes
+                })
+        
+        # Get top visuals
+        if board.allow_visuals:
+            visual_query = select(Visual, func.count(Vote.id).label('upvotes')).join(
+                Vote, (Vote.media_type == "visuals") & (Vote.media_id == Visual.id) & (Vote.vote_type == "like")
+            ).where(Visual.board_id == board_id).group_by(Visual.id).order_by(func.count(Vote.id).desc()).limit(5)
+            visual_res = await db.execute(visual_query)
+            visual_items = visual_res.all()
+            for visual, upvotes in visual_items:
+                top_content.append({
+                    "id": visual.id,
+                    "title": visual.title,
+                    "artist_name": visual.artist_name,
+                    "content_type": "visuals",
+                    "upvotes": upvotes
+                })
+        
+        # Sort all content by upvotes and take top 5
+        top_content.sort(key=lambda x: x['upvotes'], reverse=True)
+        top_content = top_content[:5]
+        
+        return {
+            "total_upvotes": total_upvotes,
+            "total_downvotes": total_downvotes,
+            "total_votes": total_votes,
+            "top_content": top_content
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error getting vote stats: {str(e)}")
