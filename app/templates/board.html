@@ -290,6 +290,13 @@
                         <p>Allow Video: {{ board.allow_video }}</p>
                         <p>Allow Visuals: {{ board.allow_visuals }}</p>
                     </div>
+                    
+                    <!-- Test Lightbox Button -->
+                    <div class="mt-3 pt-3 border-t border-yellow-300">
+                        <button onclick="testLightbox()" class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700">
+                            🧪 Test Lightbox
+                        </button>
+                    </div>
                 </div>
             </div>
             
@@ -950,7 +957,7 @@
                             fileUrl = `/uploads/visuals/${item.file_path}`; // Old format: just filename
                         }
                         
-                        mediaContent = `<img src="${fileUrl}" alt="${item.title}" class="w-full h-48 object-cover rounded mb-4">`;
+                        mediaContent = `<img src="${fileUrl}" alt="${item.title}" class="w-full h-48 object-cover rounded mb-4 cursor-pointer hover:opacity-90 transition-opacity" onclick="console.log('Image clicked!'); openImageLightbox('${fileUrl}', '${item.title}', '${item.artist_name}')">`;
                     } else if (item.external_link) {
                         // External link - show image or link
                         if (item.external_link.includes('unsplash.com') || item.external_link.includes('pexels.com')) {
@@ -961,7 +968,7 @@
                                 </a>
                             </div>`;
                         } else {
-                            mediaContent = `<img src="${item.external_link}" alt="${item.title}" class="w-full h-48 object-cover rounded mb-4">`;
+                            mediaContent = `<img src="${item.external_link}" alt="${item.title}" class="w-full h-48 object-cover rounded mb-4 cursor-pointer hover:opacity-90 transition-opacity" onclick="console.log('External image clicked!'); openImageLightbox('${item.external_link}', '${item.title}', '${item.artist_name}')">`;
                         }
                     }
                 }
@@ -1473,6 +1480,126 @@
             const encodedUrl = encodeURIComponent(voteUrl);
             const encodedText = encodeURIComponent(text);
             window.open(`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`, '_blank');
+        }
+        
+        // Image Lightbox Functions
+        function openImageLightbox(imageUrl, title, artistName) {
+            console.log('Opening lightbox for:', title);
+            
+            // Remove any existing lightbox first
+            const existingLightbox = document.getElementById('image-lightbox');
+            if (existingLightbox) {
+                existingLightbox.remove();
+            }
+            
+            // Create lightbox overlay
+            const lightbox = document.createElement('div');
+            lightbox.id = 'image-lightbox';
+            lightbox.className = 'fixed inset-0 bg-black bg-opacity-90 z-[9999] flex items-center justify-center p-4';
+            
+            // Create lightbox content container
+            const contentContainer = document.createElement('div');
+            contentContainer.className = 'relative max-w-5xl max-h-full bg-transparent';
+            
+            // Create close button (larger and more visible)
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '✕';
+            closeBtn.className = 'absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white text-2xl font-bold w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 z-[10000] shadow-lg cursor-pointer';
+            closeBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Close button clicked');
+                closeImageLightbox();
+            };
+            closeBtn.title = 'Close (ESC)';
+            
+            // Create image
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = title;
+            img.className = 'w-full h-auto max-h-[80vh] object-contain rounded-lg shadow-2xl';
+            img.onclick = function(e) {
+                e.stopPropagation(); // Prevent closing when clicking on image
+            };
+            
+            // Create image info with close instructions
+            const info = document.createElement('div');
+            info.className = 'absolute bottom-4 left-4 right-4 bg-black bg-opacity-80 text-white p-4 rounded-lg';
+            info.innerHTML = `
+                <h3 class="text-xl font-bold mb-1">${title}</h3>
+                <p class="text-lg opacity-90 mb-2">by ${artistName}</p>
+                <p class="text-sm opacity-75">💡 Click outside image or press ESC to close</p>
+            `;
+            info.onclick = function(e) {
+                e.stopPropagation(); // Prevent closing when clicking on info
+            };
+            
+            // Assemble lightbox
+            contentContainer.appendChild(closeBtn);
+            contentContainer.appendChild(img);
+            contentContainer.appendChild(info);
+            lightbox.appendChild(contentContainer);
+            
+            // Add to page
+            document.body.appendChild(lightbox);
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+            
+            // Add escape key listener and store reference directly on lightbox
+            const escapeHandler = function(e) {
+                if (e.key === 'Escape') {
+                    console.log('Escape key pressed');
+                    closeImageLightbox();
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+            
+            // Store the actual function reference directly on the lightbox element
+            lightbox._escapeHandler = escapeHandler;
+            
+            // Add click handler to the main overlay (background)
+            lightbox.onclick = function(e) {
+                if (e.target === lightbox) {
+                    console.log('Background clicked, closing lightbox');
+                    closeImageLightbox();
+                }
+            };
+            
+            console.log('Lightbox opened successfully');
+        }
+        
+        function closeImageLightbox() {
+            console.log('closeImageLightbox called');
+            const lightbox = document.getElementById('image-lightbox');
+            if (lightbox) {
+                console.log('Found lightbox, removing...');
+                
+                // Remove escape key listener using the stored function reference
+                if (lightbox._escapeHandler) {
+                    document.removeEventListener('keydown', lightbox._escapeHandler);
+                }
+                
+                // Remove lightbox
+                lightbox.remove();
+                
+                // Restore body scroll
+                document.body.style.overflow = '';
+                
+                console.log('Image lightbox closed successfully');
+            } else {
+                console.log('No lightbox found to close');
+            }
+        }
+        
+        // Test function to verify lightbox works
+        function testLightbox() {
+            console.log('🧪 Test lightbox function called');
+            openImageLightbox(
+                'https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=Test+Image', 
+                'Test Image', 
+                'Test Artist'
+            );
         }
     </script>
 </body>
