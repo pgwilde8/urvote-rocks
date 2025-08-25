@@ -549,6 +549,24 @@ async def templates_page(request: Request):
 async def success_page(request: Request, session_id: str = None):
     return templates.TemplateResponse("success.html", {"request": request, "session_id": session_id})
 
+# Legal pages
+@app.get("/legal/terms-of-service", response_class=HTMLResponse)
+async def terms_of_service_page(request: Request):
+    return templates.TemplateResponse("legal/terms-of-service.html", {"request": request})
+
+@app.get("/legal/privacy-policy", response_class=HTMLResponse)
+async def privacy_policy_page(request: Request):
+    return templates.TemplateResponse("legal/privacy-policy.html", {"request": request})
+
+# Shorter legal routes for easier access
+@app.get("/terms-of-service", response_class=HTMLResponse)
+async def terms_of_service_short(request: Request):
+    return templates.TemplateResponse("legal/terms-of-service.html", {"request": request})
+
+@app.get("/privacy-policy", response_class=HTMLResponse)
+async def privacy_policy_short(request: Request):
+    return templates.TemplateResponse("legal/privacy-policy.html", {"request": request})
+
 # ------------------------------------------------------------------------------
 # Health & Error Handlers
 # ------------------------------------------------------------------------------

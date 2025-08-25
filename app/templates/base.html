@@ -30,12 +30,30 @@
                         <span class="text-2xl font-bold text-primary">UrVote.Rocks</span>
                     </a>
                 </div>
-                <div class="flex items-center space-x-4">
+                <!-- Desktop Navigation (hidden on mobile) -->
+                <div class="hidden md:flex items-center space-x-4">
                     <a href="/" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                    <a href="/campaigns" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">View Active Contests</a>
-                    <a href="/how-to-submit" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Submit Song</a>
+                    <a href="/media-boards" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Media Boards</a>
+                    <a href="/pricing" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Pricing</a>
+                    <a href="/about" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="/faq" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">FAQ</a>
+                    <a href="/contact" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Contact</a>
                     
+                    <!-- Legal Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                            Legal
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                            <a href="/terms-of-service" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Terms of Service</a>
+                            <a href="/privacy-policy" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Privacy Policy</a>
+                        </div>
+                    </div>
                     
+                    <!-- Auth Buttons -->
                     {% if current_user %}
                         <a href="/profile" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Profile</a>
                         <a href="/logout" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Logout</a>
@@ -43,10 +61,44 @@
                         <a href="/login" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Login</a>
                         <a href="/register" class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600">Register</a>
                     {% endif %}
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-primary p-2 rounded-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="hidden md:hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+                    <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Home</a>
+                    <a href="/media-boards" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Media Boards</a>
+                    <a href="/pricing" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Pricing</a>
+                    <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">About</a>
+                    <a href="/faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">FAQ</a>
+                    <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Contact</a>
                     
-                    <!-- Premium CTA Button -->
-                    <a href="/songboards" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg">Songboards</a>
-                    <a href="/songboard" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-green-600 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg">Songboard</a>
+                    <!-- Legal Links -->
+                    <div class="border-t border-gray-200 pt-2">
+                        <a href="/terms-of-service" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Terms of Service</a>
+                        <a href="/privacy-policy" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Privacy Policy</a>
+                    </div>
+                    
+                    <!-- Auth Links -->
+                    <div class="border-t border-gray-200 pt-2">
+                        {% if current_user %}
+                            <a href="/profile" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Profile</a>
+                            <a href="/logout" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Logout</a>
+                        {% else %}
+                            <a href="/login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Login</a>
+                            <a href="/register" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Register</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,9 +117,11 @@
           <h3 class="text-lg font-bold mb-4">Quick Links</h3>
           <ul class="space-y-2">
             <li><a href="/" class="hover:underline">Home</a></li>
-            <li><a href="/campaigns" class="hover:underline">Active Contests</a></li>
-            <li><a href="/how-to-submit" class="hover:underline">Submit Song</a></li>
-            <li><a href="/songboards" class="hover:underline">Songboards</a></li>
+            <li><a href="/media-boards" class="hover:underline">Media Boards</a></li>
+            <li><a href="/pricing" class="hover:underline">Pricing</a></li>
+            <li><a href="/about" class="hover:underline">About</a></li>
+            <li><a href="/faq" class="hover:underline">FAQ</a></li>
+            <li><a href="/contact" class="hover:underline">Contact</a></li>
             <li><a href="/login" class="hover:underline">Login</a></li>
             <li><a href="/register" class="hover:underline">Register</a></li>
           </ul>
@@ -97,7 +151,7 @@
           </ul>
           <div class="mt-6 text-gray-400 text-sm">
             Powered by <span class="text-primary font-semibold">UrVote.Rocks</span><br>
-            Contest Platform for Brands, Events, and Creators<br>
+            Media Board Contest Platform for AI Content & Creative Campaigns<br>
             &copy; {{ year }} UrVote.Rocks. All rights reserved.
           </div>
         </div>
@@ -105,5 +159,31 @@
     </footer>
 
     {% block extra_scripts %}{% endblock %}
+    
+    <!-- Mobile Menu JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+            
+            // Close menu when window is resized to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) { // md breakpoint
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
