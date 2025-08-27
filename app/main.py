@@ -18,9 +18,10 @@ from .database import get_db
 from .models import Contest, Client, Song, Vote
 
 # Routers (updated: campaigns -> songboards, add sales)
-from .routers import auth, songs, voting, songboards, signup, static_pages
+from .routers import auth, songs, voting, songboards, signup, static_pages, brevo_test
 from . import admin
 from app.routers import submitter, board_owner, boards
+# Routers (updated: campaigns -> songboards, add sales)
 
 # ------------------------------------------------------------------------------
 # FastAPI app
@@ -311,6 +312,7 @@ app.include_router(auth.router, prefix="/api", tags=["auth"])
 app.include_router(songs.router, prefix="/api", tags=["songs"])
 app.include_router(voting.router, prefix="/api", tags=["voting"])
 app.include_router(admin.router, prefix="/api", tags=["admin"])
+app.include_router(brevo_test.router, prefix="/api", tags=["brevo"])
 
 # Site features
 app.include_router(songboards.router, tags=["songboards"])   # replaces campaigns
@@ -363,10 +365,10 @@ async def handle_upload_form(
 async def legacy_leaderboard_redirect():
     return RedirectResponse(url="/songboards", status_code=307)
 
-# Public pricing: redirect to sales module
-@app.get("/pricing")
-async def redirect_to_sales_pricing():
-    return RedirectResponse(url="/sales/pricing", status_code=307)
+# Public pricing: redirect to sales module (commented out due to conflict)
+# @app.get("/pricing")
+# async def redirect_to_sales_pricing():
+#     return RedirectResponse(url="/sales/pricing", status_code=307)
 
 # Client contest page
 @app.get("/contest/{client_slug}/{contest_slug}", response_class=HTMLResponse)

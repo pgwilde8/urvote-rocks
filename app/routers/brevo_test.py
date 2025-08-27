@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from ..brevo_config import send_test_email, send_welcome_email
 
-router = APIRouter(tags=["brevo"])
+router = APIRouter(prefix="/brevo", tags=["brevo"])
 
 class TestEmailRequest(BaseModel):
     email: str

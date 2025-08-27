@@ -55,6 +55,10 @@ class Settings(BaseSettings):
     stripe_prod_id: str
     stripe_webhook_secret: str
     
+    # Brevo Email Configuration
+    brevo_api: Optional[str] = None
+    brevo_api_key: Optional[str] = None
+
     @property
     def allowed_extensions(self) -> set:
         """Get allowed file extensions"""
