@@ -12,6 +12,7 @@ from .schemas import SongApproval
 from .auth import get_current_admin_user
 from .config import settings
 
+
 router = APIRouter(prefix="/admin", tags=["admin"])
 templates = Jinja2Templates(directory="app/templates")
 

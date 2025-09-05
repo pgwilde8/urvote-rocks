@@ -19,7 +19,8 @@ from .models import Contest, Client, Song, Vote
 
 # Routers (updated: campaigns -> songboards, add sales)
 from .routers import auth, songs, voting, songboards, signup, static_pages, brevo_test
-from . import admin
+#from . import admin
+from .routers import admin
 from app.routers import submitter, board_owner, boards
 # Routers (updated: campaigns -> songboards, add sales)
 
@@ -313,7 +314,7 @@ app.include_router(songs.router, prefix="/api", tags=["songs"])
 app.include_router(voting.router, prefix="/api", tags=["voting"])
 app.include_router(admin.router, prefix="/api", tags=["admin"])
 app.include_router(brevo_test.router, prefix="/api", tags=["brevo"])
-
+app.include_router(admin.router, prefix="/api", tags=["admin"])
 # Site features
 app.include_router(songboards.router, tags=["songboards"])   # replaces campaigns
 app.include_router(signup.router, tags=["signup"])
@@ -321,6 +322,7 @@ app.include_router(submitter.router, tags=["submitter"])
 app.include_router(board_owner.router, tags=["board_owner"])
 app.include_router(boards.router, tags=["boards"])  # Media Board Content API
 app.include_router(static_pages.router, tags=["static_pages"])  # Sales, pricing, contact pages
+
 # app.include_router(sales.router, tags=["sales"])  # Removed because 'sales' is not defined
 
 # Handle form submission (UI -> calls upload logic, then redirects)
