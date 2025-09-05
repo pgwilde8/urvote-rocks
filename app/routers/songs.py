@@ -84,8 +84,8 @@ async def upload_song_logic(
                 aws_access_key_id=settings.spaces_access_key,
                 aws_secret_access_key=settings.spaces_secret_key)
             
-            # Upload to Spaces
-            spaces_key = f"payportpro/patriotic-2024/{safe_filename}"
+            # Upload to Spaces with organized structure
+            spaces_key = f"users/music/{safe_filename}"
             print(f"DEBUG: Uploading to key: {spaces_key}")
             
             spaces_client.upload_fileobj(
