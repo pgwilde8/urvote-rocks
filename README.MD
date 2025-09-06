@@ -163,6 +163,29 @@ By launch date, **the staging build must support**:
    * Brand marketers
 3. Offer **launch discount** to first 10 SaaS clients
 
----
-
-Do you want me to now **package this README into a PDF** so it looks like the formal “onboarding brief” for your team, similar to the dev onboarding doc I made earlier? That way they get it as a clean, branded document they can open on day one.
+1. Board Owners (Platform Clients)
+Who they are: Businesses/organizations that create and manage media boards
+Authentication needs:
+Account required: Yes, full account needed
+Registration flow: Email + password + business verification
+Access level: Full platform access, board management, analytics
+Session management: Long-lived sessions, "remember me" functionality
+Security: High - they control boards and have billing access
+Proposed flow:
+2. Content Creators/Uploaders (Contestants)
+Who they are: Artists, musicians, videographers who submit content to boards
+Authentication needs:
+Account required: Yes, but simplified
+Registration flow: Email + password + basic profile (optional social links)
+Access level: Upload content, manage their submissions, view their stats
+Session management: Standard sessions
+Security: Medium - they can upload content but limited scope
+Proposed flow:
+3. Voters (Public Participants)
+Who they are: General public who vote on content
+Authentication needs:
+Account required: No (as you mentioned for user acquisition)
+Identification: Email + name only (already implemented)
+Access level: Vote, view content, share
+Session management: None - stateless voting
+Security: Low - limited to voting with fraud prevention
