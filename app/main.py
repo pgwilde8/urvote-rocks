@@ -597,11 +597,11 @@ async def privacy_policy_page(request: Request):
 # Shorter legal routes for easier access
 @app.get("/terms-of-service", response_class=HTMLResponse)
 async def terms_of_service_short(request: Request):
-    return templates.TemplateResponse("legal/terms-of-service.html", {"request": request})
+    return templates.TemplateResponse("terms-of-service.html", {"request": request})
 
 @app.get("/privacy-policy", response_class=HTMLResponse)
 async def privacy_policy_short(request: Request):
-    return templates.TemplateResponse("legal/privacy-policy.html", {"request": request})
+    return templates.TemplateResponse("privacy-policy.html", {"request": request})
 
 # About page
 @app.get("/about", response_class=HTMLResponse)
