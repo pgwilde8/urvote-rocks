@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,7 +22,7 @@ from .models import Contest, Client, Song, Vote
 from .routers import auth, songs, voting, songboards, signup, static_pages, brevo_test
 #from . import admin
 from .routers import admin
-from app.routers import submitter, board_owner, boards
+from app.routers import submitter, board_owner, boards, auth_google
 # Routers (updated: campaigns -> songboards, add sales)
 
 # ------------------------------------------------------------------------------
@@ -54,6 +55,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Session middleware for OAuth state management
+app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
 
 # Add security headers middleware for uploads
 from fastapi.responses import Response
@@ -305,6 +309,11 @@ async def free_board_creation_alt(request: Request):
     """Alternative route for free board creation page"""
     return templates.TemplateResponse("get-media-board.html", {"request": request})
 
+@app.get("/mediaboard-login", response_class=HTMLResponse)
+async def mediaboard_login_page(request: Request):
+    """Media board owner login page"""
+    return templates.TemplateResponse("mediaboard-login.html", {"request": request})
+
 # Upload form (UI)
 @app.get("/upload", response_class=HTMLResponse)
 async def upload_page(request: Request):
@@ -343,6 +352,7 @@ app.include_router(signup.router, tags=["signup"])
 app.include_router(submitter.router, tags=["submitter"])
 app.include_router(board_owner.router, tags=["board_owner"])
 app.include_router(boards.router, tags=["boards"])  # Media Board Content API
+app.include_router(auth_google.router, tags=["google_auth"])  # Google OAuth authentication
 app.include_router(static_pages.router, tags=["static_pages"])  # Sales, pricing, contact pages
 
 # app.include_router(sales.router, tags=["sales"])  # Removed because 'sales' is not defined

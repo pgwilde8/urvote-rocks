@@ -26,6 +26,11 @@ class User(Base):
     profile_image = Column(String(500), nullable=True)  # Profile picture
     is_contestant = Column(Boolean, default=False)  # Can submit songs
     is_voter = Column(Boolean, default=True)  # Can vote (default for all)
+    
+    # Google OAuth fields
+    google_id = Column(String(255), nullable=True, unique=True, index=True)
+    name = Column(String(255), nullable=True)  # Full name from Google
+    user_type = Column(String(50), default="voter")  # voter, creator, board_owner
     membership_expires_at = Column(DateTime, nullable=True)
     
     # Additional fields for better artist profiles

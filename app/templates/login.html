@@ -16,6 +16,73 @@
                 </a>
             </p>
         </div>
+
+        <!-- Role Selection -->
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 text-center">I am a...</h3>
+            <div class="grid grid-cols-1 gap-3">
+                <button type="button" id="board-owner-btn" 
+                        class="role-btn p-4 border-2 border-gray-200 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-sm font-medium text-gray-900">Board Owner</h4>
+                            <p class="text-xs text-gray-500">Create and manage media boards for contests</p>
+                        </div>
+                    </div>
+                </button>
+                
+                <button type="button" id="creator-btn" 
+                        class="role-btn p-4 border-2 border-gray-200 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-sm font-medium text-gray-900">Content Creator</h4>
+                            <p class="text-xs text-gray-500">Upload and share your creative content</p>
+                        </div>
+                    </div>
+                </button>
+                
+                <button type="button" id="voter-btn" 
+                        class="role-btn p-4 border-2 border-gray-200 rounded-lg text-left hover:border-primary hover:bg-blue-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-sm font-medium text-gray-900">Voter</h4>
+                            <p class="text-xs text-gray-500">Vote on content and participate in contests</p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            
+            <!-- Selected Role Indicator -->
+            <div id="selected-role" class="mt-4 p-3 bg-primary/10 border border-primary/20 rounded-lg hidden">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-sm font-medium text-primary">Selected: <span id="selected-role-text"></span></span>
+                </div>
+            </div>
+        </div>
         <form class="mt-8 space-y-6" id="loginForm">
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
@@ -62,12 +129,67 @@
 </div>
 
 <script>
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
+let selectedRole = null;
+
+// Role selection handlers
+document.getElementById('board-owner-btn').addEventListener('click', function() {
+    selectRole('board-owner', 'Board Owner');
+});
+
+document.getElementById('creator-btn').addEventListener('click', function() {
+    selectRole('creator', 'Content Creator');
+});
+
+document.getElementById('voter-btn').addEventListener('click', function() {
+    selectRole('voter', 'Voter');
+});
+
+function selectRole(role, roleName) {
+    // Remove previous selection
+    document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.classList.remove('border-primary', 'bg-primary/5');
+        btn.classList.add('border-gray-200');
+    });
+    
+    // Add selection to clicked button
+    event.target.closest('.role-btn').classList.add('border-primary', 'bg-primary/5');
+    event.target.closest('.role-btn').classList.remove('border-gray-200');
+    
+    // Update selected role
+    selectedRole = role;
+    document.getElementById('selected-role-text').textContent = roleName;
+    document.getElementById('selected-role').classList.remove('hidden');
+}
+
+// Login form handler
+document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    
+    // Check if role is selected
+    if (!selectedRole) {
+        document.getElementById('error-message').textContent = 'Please select your role first';
+        document.getElementById('error-message').classList.remove('hidden');
+        document.getElementById('success-message').classList.add('hidden');
+        return;
+    }
     
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     
+    // For now, just redirect based on role (no actual auth yet)
+    if (selectedRole === 'board-owner') {
+        // Redirect board owners to templates page
+        window.location.href = '/templates';
+    } else if (selectedRole === 'creator') {
+        // Redirect creators to upload page or creator dashboard
+        window.location.href = '/upload';
+    } else if (selectedRole === 'voter') {
+        // Redirect voters to leaderboard or voting page
+        window.location.href = '/leaderboard';
+    }
+    
+    // TODO: When auth is implemented, replace with actual API call:
+    /*
     try {
         const response = await fetch('/api/auth/login', {
             method: 'POST',
@@ -76,25 +198,22 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             },
             body: JSON.stringify({
                 email: email,
-                password: password
+                password: password,
+                role: selectedRole
             })
         });
         
         if (response.ok) {
             const data = await response.json();
-            
-            // Store the token
             localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('user_role', selectedRole);
             
-            // Show success message
-            document.getElementById('success-message').textContent = 'Login successful! Redirecting...';
-            document.getElementById('success-message').classList.remove('hidden');
-            document.getElementById('error-message').classList.add('hidden');
-            
-            // Redirect to home page
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 1000);
+            // Redirect based on role
+            if (selectedRole === 'board-owner') {
+                window.location.href = '/templates';
+            } else if (selectedRole === 'creator') {
+                window.location.href = '/upload';
+            }
         } else {
             const errorData = await response.json();
             document.getElementById('error-message').textContent = errorData.detail || 'Login failed';
@@ -106,6 +225,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         document.getElementById('error-message').classList.remove('hidden');
         document.getElementById('success-message').classList.add('hidden');
     }
+    */
 });
 </script>
 {% endblock %}

@@ -280,13 +280,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
----
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 📞 Support
 
@@ -295,15 +289,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Email:** support@urvote.rocks
 - **Discord:** [Join our community](https://discord.gg/urvote)
 
----
 
-## 🙏 Acknowledgments
-
-- Built with [FastAPI](https://fastapi.tiangolo.com/) - the modern Python web framework
-- Styled with [TailwindCSS](https://tailwindcss.com/) - utility-first CSS framework
-- Powered by [PostgreSQL](https://www.postgresql.org/) - the world's most advanced open source database
-
----
 
 <div align="center">
 

@@ -210,18 +210,24 @@ async def vote_on_content(
     board_id: int,
     content_id: int,
     vote_data: VoteRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db)
 ):
-    """Vote on content (like/dislike)"""
+    """Vote on content (like/dislike) - requires authentication"""
     try:
         print(f"DEBUG: Vote request received - board_id: {board_id}, content_id: {content_id}, vote_type: {vote_data.vote_type}")
+        
+        # Check if user is authenticated
+        user_id = request.session.get("user_id")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Authentication required to vote")
         
         vote_type = vote_data.vote_type
         if vote_type not in ["like", "dislike"]:
             raise HTTPException(status_code=400, detail="Invalid vote type")
         
-        # For now, use a default voter_id (in production, this would be the authenticated user)
-        voter_id = 1
+        # Use authenticated user's ID
+        voter_id = user_id
         
         # Check if vote already exists
         existing_vote_query = select(Vote).where(

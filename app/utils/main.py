@@ -5,6 +5,8 @@ from pathlib import Path
 from typing import Optional, Tuple
 import aiofiles
 import httpx
+from datetime import datetime, timedelta
+from jose import JWTError, jwt
 from ..config import settings
 import time
 
@@ -158,3 +160,41 @@ def get_upload_file_path(content_type: str, board_slug: str, uploader_id: int, f
         Relative path to the file for database storage
     """
     return f"uploads/{content_type}/{board_slug}/{uploader_id}/{filename}"
+
+def generate_jwt_token(user_id: int, email: str, user_type: str) -> str:
+    """
+    Generate JWT token for user authentication
+    
+    Args:
+        user_id: User ID
+        email: User email
+        user_type: Type of user (voter, creator, board_owner)
+    
+    Returns:
+        JWT token string
+    """
+    expire = datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
+    to_encode = {
+        "sub": str(user_id),
+        "email": email,
+        "user_type": user_type,
+        "exp": expire
+    }
+    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
+    return encoded_jwt
+
+def verify_jwt_token(token: str) -> Optional[dict]:
+    """
+    Verify JWT token and return payload
+    
+    Args:
+        token: JWT token string
+    
+    Returns:
+        Token payload if valid, None if invalid
+    """
+    try:
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        return payload
+    except JWTError:
+        return None

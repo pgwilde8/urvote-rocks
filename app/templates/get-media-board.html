@@ -16,18 +16,73 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+    <nav class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-purple-600">UrVote.Rocks</a>
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <span class="text-2xl font-bold text-purple-600">UrVote.Rocks</span>
+                    </a>
                 </div>
-                <div class="flex items-center space-x-6">
-                    <a href="/" class="text-gray-700 hover:text-purple-600 transition-colors">Home</a>
-                    <a href="/media-boards" class="text-gray-700 hover:text-purple-600 transition-colors font-semibold text-purple-600">Media Boards</a>
-                    <a href="/dashboard" class="text-gray-700 hover:text-purple-600 transition-colors">Dashboard</a>
-                    <a href="/templates" class="text-gray-700 hover:text-purple-600 transition-colors">Themes</a>
-                    <a href="/leaderboard" class="text-gray-700 hover:text-purple-600 transition-colors">Leaderboard</a>
+                <!-- Desktop Navigation (hidden on mobile) -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="/" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="/media-boards" class="text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Media Boards</a>
+                    <a href="/pricing" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Pricing</a>
+                    <a href="/about" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="/faq" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">FAQ</a>
+                    <a href="/contact" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    
+                    <!-- Legal Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                            Legal
+                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                            <a href="/terms-of-service" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Terms of Service</a>
+                            <a href="/privacy-policy" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Privacy Policy</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Auth Buttons -->
+                    <a href="/login" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                    <a href="/register" class="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-700">Register</a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-purple-600 p-2 rounded-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="hidden md:hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+                    <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">Home</a>
+                    <a href="/media-boards" class="block px-3 py-2 rounded-md text-base font-medium text-purple-600 hover:bg-gray-50">Media Boards</a>
+                    <a href="/pricing" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">Pricing</a>
+                    <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">About</a>
+                    <a href="/faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">FAQ</a>
+                    <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">Contact</a>
+                    
+                    <!-- Legal Links -->
+                    <div class="border-t border-gray-200 pt-2">
+                        <a href="/terms-of-service" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">Terms of Service</a>
+                        <a href="/privacy-policy" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">Privacy Policy</a>
+                    </div>
+                    
+                    <!-- Auth Links -->
+                    <div class="border-t border-gray-200 pt-2">
+                        <a href="/login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">Login</a>
+                        <a href="/register" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-50">Register</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -45,7 +100,7 @@
                 Think Pinterest, but for AI-generated media with community voting across all formats.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/templates" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                <a href="/mediaboard-login" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
                     🚀 Get Started
                 </a>
             </div>
@@ -247,7 +302,7 @@
                 Join the AI creativity revolution and showcase your work to the world
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/templates" class="bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg">
+                <a href="/mediaboard-login" class="bg-white text-purple-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg">
                     🎨 Get Started & Choose Your Theme
                 </a>
             </div>
@@ -281,6 +336,32 @@
                     });
                 }
             });
+        });
+
+        // Mobile Menu JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+                
+                // Close menu when window is resized to desktop
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth >= 768) { // md breakpoint
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            }
         });
     </script>
 </body>

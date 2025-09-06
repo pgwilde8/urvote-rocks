@@ -61,6 +61,11 @@ class Settings(BaseSettings):
     # Brevo Email Configuration
     brevo_api: Optional[str] = None
     brevo_api_key: Optional[str] = None
+    
+    # Google OAuth Configuration
+    google_client_id: Optional[str] = None
+    google_client_secret: Optional[str] = None
+    google_redirect_uri: str = "http://localhost:8000/auth/google/callback"
 
     @property
     def allowed_extensions(self) -> set:
