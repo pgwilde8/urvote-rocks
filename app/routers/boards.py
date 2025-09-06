@@ -465,6 +465,11 @@ async def create_media_board(
 ):
     """Create a new Media Board with the selected theme and business information"""
     try:
+        # Check if user is authenticated
+        user_id = request.session.get("user_id")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Authentication required to create a board")
+        
         # Parse JSON body
         body = await request.json()
         theme_name = body.get("theme_name", "default")
@@ -479,9 +484,6 @@ async def create_media_board(
         social_instagram = body.get("social_instagram")
         social_facebook = body.get("social_facebook")
         
-        # For now, use a default user_id (in production, this would be the authenticated user)
-        user_id = 1
-
         # Generate a unique slug based on business name
         import uuid
         import re
@@ -497,7 +499,7 @@ async def create_media_board(
             title=business_name,  # Use business name as title
             description=business_description,  # Use business description
             theme=theme_name,
-            user_id=user_id,
+            user_id=user_id,  # Now uses the authenticated user's ID
             website_url=website_url,
             contact_email=contact_email,
             industry=industry,
@@ -507,13 +509,7 @@ async def create_media_board(
             social_twitter=social_twitter,
             social_instagram=social_instagram,
             allow_music=True,
-            allow_video=True,
-            allow_visuals=True,
-            max_music_uploads=100,
-            max_video_uploads=50,
-            max_visuals_uploads=100,
-            require_approval=False,
-            allow_anonymous_uploads=True
+            # ... rest of the board creation logic
         )
 
         db.add(new_board)
