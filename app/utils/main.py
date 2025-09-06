@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional, Tuple
 import aiofiles
 import httpx
-from .config import settings
+from ..config import settings
 import time
 
 def validate_file_type(filename: str) -> bool:
@@ -120,3 +120,41 @@ def format_file_size(size_bytes: int) -> str:
         i += 1
     
     return f"{size_bytes:.1f}{size_names[i]}"
+
+def create_upload_directory_structure(content_type: str, board_slug: str, uploader_id: int) -> str:
+    """
+    Create directory structure for uploads: uploads/{content_type}/{board_slug}/{uploader_id}/
+    
+    Args:
+        content_type: Type of content (music, video, visuals)
+        board_slug: Slug of the board (e.g., "businessorganization-nam-aee51a0f")
+        uploader_id: ID of the content uploader
+    
+    Returns:
+        Relative path to the upload directory
+    """
+    base_uploads_dir = os.path.join(os.getcwd(), "uploads")
+    content_dir = os.path.join(base_uploads_dir, content_type)
+    board_dir = os.path.join(content_dir, board_slug)
+    uploader_dir = os.path.join(board_dir, str(uploader_id))
+    
+    # Create the directory structure
+    os.makedirs(uploader_dir, exist_ok=True)
+    
+    # Return relative path for database storage
+    return f"uploads/{content_type}/{board_slug}/{uploader_id}"
+
+def get_upload_file_path(content_type: str, board_slug: str, uploader_id: int, filename: str) -> str:
+    """
+    Get the full file path for an upload using the new directory structure
+    
+    Args:
+        content_type: Type of content (music, video, visuals)
+        board_slug: Slug of the board (e.g., "businessorganization-nam-aee51a0f")
+        uploader_id: ID of the content uploader
+        filename: The filename to store
+    
+    Returns:
+        Relative path to the file for database storage
+    """
+    return f"uploads/{content_type}/{board_slug}/{uploader_id}/{filename}"

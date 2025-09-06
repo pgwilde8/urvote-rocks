@@ -6,11 +6,11 @@ from sqlalchemy import select, func, and_
 from typing import List, Optional
 from datetime import datetime, timedelta
 
-from .database import get_db
-from .models import User, Song, Vote, Contest
-from .schemas import SongApproval
-from .auth import get_current_admin_user
-from .config import settings
+from ..database import get_db
+from ..models import User, Song, Vote, Contest
+from ..schemas import SongApproval
+from ..auth import get_current_admin_user
+from ..config import settings
 
 
 router = APIRouter(prefix="/admin", tags=["admin"])

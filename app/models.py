@@ -34,8 +34,8 @@ class User(Base):
     years_active = Column(String(50), nullable=True)  # How long making music
     
     # Relationships
-    songs = relationship("Song", back_populates="artist")
     votes = relationship("Vote", back_populates="voter")
+    # Note: songs relationship removed to avoid SQLAlchemy conflicts
 
 class Client(Base):
     __tablename__ = "clients"
@@ -100,12 +100,17 @@ class Song(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     approved_at = Column(DateTime(timezone=True), nullable=True)
     
+    # New fields for directory structure
+    board_owner_id = Column(BigInteger, ForeignKey("users.id"), nullable=True)  # Who owns the board
+    uploader_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Who uploaded the content
+    
     # Relationships
-    artist = relationship("User", back_populates="songs")
     contest = relationship("Contest")
     votes = relationship("Vote", back_populates="song")
     board_id = Column(BigInteger, ForeignKey("boards.id", ondelete="CASCADE"), nullable=True, index=True)
     board = relationship("Board", back_populates="songs")
+    # Note: artist, board_owner and uploader relationships removed to avoid SQLAlchemy conflicts
+    # These can be accessed via direct queries if needed
     
 class Board(Base):
     __tablename__ = "boards"
@@ -178,8 +183,13 @@ class Video(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     approved_at = Column(DateTime(timezone=True), nullable=True)
     
+    # New fields for directory structure
+    board_owner_id = Column(BigInteger, ForeignKey("users.id"), nullable=True)  # Who owns the board
+    uploader_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Who uploaded the content
+    
     # Relationships
     board = relationship("Board", back_populates="videos")
+    # Note: board_owner and uploader relationships removed to avoid SQLAlchemy conflicts
 
 class Visual(Base):
     __tablename__ = "visuals"
@@ -214,8 +224,13 @@ class Visual(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     approved_at = Column(DateTime(timezone=True), nullable=True)
     
+    # New fields for directory structure
+    board_owner_id = Column(BigInteger, ForeignKey("users.id"), nullable=True)  # Who owns the board
+    uploader_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Who uploaded the content
+    
     # Relationships
     board = relationship("Board", back_populates="visuals")
+    # Note: board_owner and uploader relationships removed to avoid SQLAlchemy conflicts
 
 class Vote(Base):
     __tablename__ = "votes"
@@ -223,17 +238,25 @@ class Vote(Base):
     id = Column(Integer, primary_key=True, index=True)
     song_id = Column(Integer, ForeignKey("songs.id"), nullable=True)  # Made nullable for generic voting
     voter_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # Made optional for anonymous voting
-    voter_type = Column(String(20), default="authenticated")  # "authenticated" or "anonymous"
+    voter_type = Column(String(20), default="anonymous")  # "authenticated" or "anonymous"
+    
+    # Anonymous voting fields
+    voter_email = Column(String(255), nullable=True, index=True)  # For anonymous voters
+    voter_name = Column(String(255), nullable=True)  # Optional name for anonymous voters
     
     # Generic voting fields for all media types
     media_type = Column(String(20), nullable=True)  # "music", "video", "visuals"
     media_id = Column(BigInteger, nullable=True)  # ID of the content being voted on
     vote_type = Column(String(20), default="like")  # "like" or "dislike"
     
+    # Fraud prevention
     ip_address = Column(String(45), nullable=False)  # IPv6 compatible
     user_agent = Column(Text, nullable=True)
     device_fingerprint = Column(String(255), nullable=True)
     recaptcha_score = Column(String(10), nullable=True)
+    
+    # Rate limiting
+    votes_per_email_per_day = Column(Integer, default=1)  # Track daily votes per email
     
     # GeoIP data
     country_code = Column(String(2), nullable=True)

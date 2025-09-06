@@ -525,6 +525,10 @@ async def create_media_board(
         }
 
     except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"DEBUG: Board creation error: {str(e)}")
+        print(f"DEBUG: Full traceback: {error_details}")
         raise HTTPException(status_code=500, detail=f"Error creating board: {str(e)}")
 
 @router.post("/{board_id}/upload/music")
@@ -583,26 +587,21 @@ async def upload_music(
                     detail=f"Music file too large. Maximum size is {MAX_MUSIC_SIZE // (1024*1024)}MB. Your file is {file.size / (1024*1024):.1f}MB"
                 )
             
-            # Create uploads directory structure: uploads/music/{board_slug}/
-            board_slug = board.slug
-            base_uploads_dir = os.path.join(os.getcwd(), "uploads")
-            music_dir = os.path.join(base_uploads_dir, "music")
-            upload_dir = os.path.join(music_dir, board_slug)
+            # Get board slug and IDs for database and directory structure
+            board_slug = board.slug  # Use board slug for directory naming
+            board_owner_id = board.user_id if board.user_id else 1  # For database foreign key
+            uploader_id = user_id  # This will be the authenticated user in production
             
-            print(f"DEBUG: Base uploads dir: {base_uploads_dir}")
-            print(f"DEBUG: Music dir: {music_dir}")
-            print(f"DEBUG: Board-specific dir: {upload_dir}")
-            print(f"DEBUG: Base uploads exists: {os.path.exists(base_uploads_dir)}")
-            print(f"DEBUG: Music dir exists: {os.path.exists(music_dir)}")
+            # Create uploads directory structure: uploads/music/{board_slug}/{uploader_id}/
+            from ..utils import create_upload_directory_structure, get_upload_file_path
             
-            os.makedirs(upload_dir, exist_ok=True)
-            print(f"DEBUG: Directory created/exists: {os.path.exists(upload_dir)}")
-            print(f"DEBUG: Directory writable: {os.access(upload_dir, os.W_OK)}")
+            upload_dir = create_upload_directory_structure("music", board_slug, uploader_id)
+            print(f"DEBUG: Upload directory: {upload_dir}")
             
             # Generate unique filename
             file_extension = os.path.splitext(file.filename)[1]
             unique_filename = f"{uuid.uuid4().hex}{file_extension}"
-            file_path = f"uploads/music/{board_slug}/{unique_filename}"  # Store relative path for database
+            file_path = get_upload_file_path("music", board_slug, uploader_id, unique_filename)
             print(f"DEBUG: File path: {file_path}")
             
             # Save the file
@@ -654,6 +653,8 @@ async def upload_music(
             creator_twitter=creator_twitter,
             creator_youtube=creator_youtube,
             creator_tiktok=creator_tiktok,
+            board_owner_id=board_owner_id,
+            uploader_id=uploader_id,
             is_approved=True  # For now, auto-approve
         )
         
@@ -726,15 +727,20 @@ async def upload_video(
                     detail=f"Video file too large. Maximum size is {MAX_VIDEO_SIZE // (1024*1024)}MB. Your file is {file.size / (1024*1024):.1f}MB"
                 )
             
-            # Create uploads directory structure: uploads/video/{board_slug}/
-            board_slug = board.slug
-            upload_dir = os.path.join(os.getcwd(), "uploads", "video", board_slug)
-            os.makedirs(upload_dir, exist_ok=True)
+            # Get board slug and IDs for database and directory structure
+            board_slug = board.slug  # Use board slug for directory naming
+            board_owner_id = board.user_id if board.user_id else 1  # For database foreign key
+            uploader_id = user_id  # This will be the authenticated user in production
+            
+            # Create uploads directory structure: uploads/video/{board_slug}/{uploader_id}/
+            from ..utils import create_upload_directory_structure, get_upload_file_path
+            
+            upload_dir = create_upload_directory_structure("video", board_slug, uploader_id)
             
             # Generate unique filename
             file_extension = os.path.splitext(file.filename)[1]
             unique_filename = f"{uuid.uuid4().hex}{file_extension}"
-            file_path = f"uploads/video/{board_slug}/{unique_filename}"  # Store relative path for database
+            file_path = get_upload_file_path("video", board_slug, uploader_id, unique_filename)
             
             # Save the file
             try:
@@ -781,6 +787,8 @@ async def upload_video(
             creator_twitter=creator_twitter,
             creator_youtube=creator_youtube,
             creator_tiktok=creator_tiktok,
+            board_owner_id=board_owner_id,
+            uploader_id=uploader_id,
             is_approved=True  # For now, auto-approve
         )
         
@@ -852,15 +860,20 @@ async def upload_visuals(
                     detail=f"Image file too large. Maximum size is {MAX_VISUAL_SIZE // (1024*1024)}MB. Your file is {file.size / (1024*1024):.1f}MB"
                 )
             
-            # Create uploads directory structure: uploads/visuals/{board_slug}/
-            board_slug = board.slug
-            upload_dir = os.path.join(os.getcwd(), "uploads", "visuals", board_slug)
-            os.makedirs(upload_dir, exist_ok=True)
+            # Get board slug and IDs for database and directory structure
+            board_slug = board.slug  # Use board slug for directory naming
+            board_owner_id = board.user_id if board.user_id else 1  # For database foreign key
+            uploader_id = user_id  # This will be the authenticated user in production
+            
+            # Create uploads directory structure: uploads/visuals/{board_slug}/{uploader_id}/
+            from ..utils import create_upload_directory_structure, get_upload_file_path
+            
+            upload_dir = create_upload_directory_structure("visuals", board_slug, uploader_id)
             
             # Generate unique filename
             file_extension = os.path.splitext(file.filename)[1]
             unique_filename = f"{uuid.uuid4().hex}{file_extension}"
-            file_path = f"uploads/visuals/{board_slug}/{unique_filename}"
+            file_path = get_upload_file_path("visuals", board_slug, uploader_id, unique_filename)
             
             # Save the file
             try:
@@ -907,6 +920,8 @@ async def upload_visuals(
             creator_twitter=creator_twitter,
             creator_youtube=creator_youtube,
             creator_tiktok=creator_tiktok,
+            board_owner_id=board_owner_id,
+            uploader_id=uploader_id,
             is_approved=True  # For now, auto-approve
         )
         

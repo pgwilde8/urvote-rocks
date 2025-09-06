@@ -252,11 +252,21 @@ async def create_checkout_session(
     request: Request,
     theme: str = Query("default", description="Selected theme name")
 ):
-    """Create Stripe checkout session for Media Board subscription"""
+    """Create Stripe checkout session for Media Board subscription or redirect to free creation"""
+    from app.config import settings
+    
+    # Check if free boards are enabled
+    if settings.free_boards_enabled:
+        # Redirect to free board creation page
+        return RedirectResponse(url=f"/media-boards/create?theme={theme}&free=true", status_code=303)
+    
+    # If Stripe is not configured, redirect to free creation
+    if not settings.stripe_secret_key:
+        return RedirectResponse(url=f"/media-boards/create?theme={theme}&free=true", status_code=303)
+    
     try:
         # Import stripe here to avoid circular imports
         import stripe
-        from app.config import settings
         
         stripe.api_key = settings.stripe_secret_key
         
@@ -280,8 +290,20 @@ async def create_checkout_session(
         return RedirectResponse(url=session.url, status_code=303)
         
     except Exception as e:
-        # If Stripe fails, redirect back to media-boards with error
-        return RedirectResponse(url="/media-boards?error=checkout_failed", status_code=303)
+        # If Stripe fails, redirect to free creation
+        return RedirectResponse(url=f"/media-boards/create?theme={theme}&free=true", status_code=303)
+
+# Free Board Creation Page
+@app.get("/media-boards/create", response_class=HTMLResponse)
+async def free_board_creation_page(request: Request):
+    """Show free board creation page"""
+    return templates.TemplateResponse("get-media-board.html", {"request": request})
+
+# Alternative route for easier access
+@app.get("/get-media-board", response_class=HTMLResponse)
+async def free_board_creation_alt(request: Request):
+    """Alternative route for free board creation page"""
+    return templates.TemplateResponse("get-media-board.html", {"request": request})
 
 # Upload form (UI)
 @app.get("/upload", response_class=HTMLResponse)

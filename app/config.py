@@ -48,12 +48,15 @@ class Settings(BaseSettings):
     spaces_secret_key: str = "KTWro6oES5YqxAvI2Oq52MlqxkuVjz8NJlL9WdEncT0"
     spaces_region: str = "sfo3"
     
-    # Stripe Configuration
-    stripe_secret_key: str
-    stripe_publishable_key: str
-    stripe_price_id: str
-    stripe_prod_id: str
-    stripe_webhook_secret: str
+    # Stripe Configuration (Optional - can be disabled for free launch)
+    stripe_secret_key: Optional[str] = None
+    stripe_publishable_key: Optional[str] = None
+    stripe_price_id: Optional[str] = None
+    stripe_prod_id: Optional[str] = None
+    stripe_webhook_secret: Optional[str] = None
+    
+    # Free Launch Mode
+    free_boards_enabled: bool = True  # Set to False when ready to charge
     
     # Brevo Email Configuration
     brevo_api: Optional[str] = None
@@ -66,5 +69,6 @@ class Settings(BaseSettings):
     
     class Config:
         env_file = ".env"
+        extra = "ignore"  # Ignore extra fields in .env file
 
 settings = Settings()
