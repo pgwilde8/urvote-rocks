@@ -464,11 +464,32 @@ async def create_media_board(
     db: AsyncSession = Depends(get_db)
 ):
     """Create a new Media Board with the selected theme and business information"""
+    # Check if user is authenticated
+    user_id = request.session.get("user_id")
+    print(f"DEBUG: user_id from session: {user_id}")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Authentication required to create a board")
+    
+    # Check if user already has a board (one board per email limit)
+    from ..models import User
+    user_result = await db.execute(select(User).where(User.id == user_id))
+    user = user_result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Check if user already has a board
+    print(f"DEBUG: Checking for existing board for user_id: {user_id}")
+    existing_board = await db.execute(select(Board).where(Board.user_id == user_id))
+    existing_board_result = existing_board.scalar_one_or_none()
+    print(f"DEBUG: Existing board found: {existing_board_result}")
+    if existing_board_result:
+        print(f"DEBUG: User {user_id} already has board: {existing_board_result.id} - {existing_board_result.title}")
+        raise HTTPException(
+            status_code=400, 
+            detail="You already have a Media Board! During our early launch, each user can only create one board. Contact support if you need to modify your existing board."
+        )
+    
     try:
-        # Check if user is authenticated
-        user_id = request.session.get("user_id")
-        if not user_id:
-            raise HTTPException(status_code=401, detail="Authentication required to create a board")
         
         # Parse JSON body
         body = await request.json()
@@ -494,6 +515,7 @@ async def create_media_board(
         base_slug = f"{clean_name}-{uuid.uuid4().hex[:8]}"
 
         # Create the board with business information
+        print(f"DEBUG: Creating board with user_id: {user_id}, title: {business_name}")
         new_board = Board(
             slug=base_slug,
             title=business_name,  # Use business name as title
@@ -509,7 +531,8 @@ async def create_media_board(
             social_twitter=social_twitter,
             social_instagram=social_instagram,
             allow_music=True,
-            # ... rest of the board creation logic
+            allow_video=True,
+            allow_visuals=True
         )
 
         db.add(new_board)
@@ -531,6 +554,7 @@ async def create_media_board(
         error_details = traceback.format_exc()
         print(f"DEBUG: Board creation error: {str(e)}")
         print(f"DEBUG: Full traceback: {error_details}")
+        print(f"DEBUG: Session data: {dict(request.session)}")
         raise HTTPException(status_code=500, detail=f"Error creating board: {str(e)}")
 
 @router.post("/{board_id}/upload/music")

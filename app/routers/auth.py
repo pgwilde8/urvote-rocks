@@ -139,9 +139,19 @@ async def register_form(
         await db.commit()
         await db.refresh(new_user)
         
+        # Automatically log in the user after registration
+        from .auth import create_access_token
+        access_token = create_access_token(data={"sub": str(new_user.id)})
+        
+        # Store user info in session
+        request.session["user_id"] = new_user.id
+        request.session["user_email"] = new_user.email
+        request.session["user_type"] = new_user.user_type
+        request.session["access_token"] = access_token
+        
         # Redirect based on user type
         if user_type == "board_owner":
-            return RedirectResponse(url="/make-media-board", status_code=302)
+            return RedirectResponse(url="/templates", status_code=302)
         elif user_type == "creator":
             return RedirectResponse(url="/contests", status_code=302)
         else:
@@ -179,6 +189,40 @@ async def login(user_data: UserLogin, db: AsyncSession = Depends(get_db)):
         "access_token": access_token,
         "token_type": "bearer",
         "user": UserResponse.from_orm(user)
+    }
+
+@router.post("/session")
+async def set_session(
+    request: Request,
+    user_id: int,
+    email: str,
+    user_type: str
+):
+    """Set user session data"""
+    request.session["user_id"] = user_id
+    request.session["user_email"] = email
+    request.session["user_type"] = user_type
+    return {"status": "success"}
+
+@router.get("/me")
+async def get_current_user(request: Request, db: AsyncSession = Depends(get_db)):
+    """Get current user information from session"""
+    user_id = request.session.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return {
+        "id": user.id,
+        "email": user.email,
+        "name": user.name,
+        "user_type": user.user_type,
+        "is_active": user.is_active
     }
 
 @router.post("/verify-email/{token}")
