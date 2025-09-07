@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - UrVote.Rocks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="/" class="flex items-center">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-lg">U</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">UrVote.Rocks</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="/" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="/get-media-board" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Media Boards</a>
+                        <a href="/pricing" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Pricing</a>
+                        <a href="/about" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="/faq" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">FAQ</a>
+                        <a href="/contact" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                        <a href="/blog" class="text-primary font-semibold px-3 py-2 rounded-md text-sm font-medium">Blog</a>
+                    </div>
+                </div>
+                
+                <!-- Auth Buttons -->
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <a href="/login" class="text-gray-700 hover:text-primary px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                        <a href="/login" class="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600">Register</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-primary p-2 rounded-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+                    <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Home</a>
+                    <a href="/get-media-board" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Media Boards</a>
+                    <a href="/pricing" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Pricing</a>
+                    <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">About</a>
+                    <a href="/faq" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">FAQ</a>
+                    <a href="/contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Contact</a>
+                    <a href="/blog" class="block px-3 py-2 rounded-md text-base font-medium text-primary bg-blue-50">Blog</a>
+                    
+                    <!-- Auth Links -->
+                    <div class="border-t border-gray-200 pt-2">
+                        <a href="/login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Login</a>
+                        <a href="/login" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-primary to-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">UrVote.Rocks Blog</h1>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed">
+                    Insights, tips, and stories from the world of AI-generated content contests
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                <!-- Featured Post -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+                    <div class="aspect-w-16 aspect-h-9 bg-gradient-to-r from-purple-500 to-pink-500">
+                        <div class="flex items-center justify-center text-white text-6xl font-bold">
+                            🎵
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <span class="bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">Featured</span>
+                            <span class="text-gray-500 text-sm">December 15, 2024</span>
+                            <span class="text-gray-500 text-sm">•</span>
+                            <span class="text-gray-500 text-sm">5 min read</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                            The Future of AI Music Contests: How UrVote.Rocks is Revolutionizing Creative Competitions
+                        </h2>
+                        <p class="text-gray-600 mb-6">
+                            Discover how AI-generated music contests are changing the creative landscape, and why UrVote.Rocks is leading the charge in democratizing music creation and discovery.
+                        </p>
+                        <a href="#" class="text-primary hover:text-blue-600 font-semibold">Read More →</a>
+                    </div>
+                </div>
+
+                <!-- Blog Posts Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Post 1 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="aspect-w-16 aspect-h-9 bg-gradient-to-r from-green-500 to-blue-500">
+                            <div class="flex items-center justify-center text-white text-4xl font-bold">
+                                🎬
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-semibold">AI Video</span>
+                                <span class="text-gray-500 text-sm">Dec 12, 2024</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-3">
+                                Top 10 AI Video Generation Tools for Contest Creators
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                A comprehensive guide to the best AI video tools that are helping creators win contests and build their portfolios.
+                            </p>
+                            <a href="#" class="text-primary hover:text-blue-600 text-sm font-semibold">Read More →</a>
+                        </div>
+                    </div>
+
+                    <!-- Post 2 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="aspect-w-16 aspect-h-9 bg-gradient-to-r from-orange-500 to-red-500">
+                            <div class="flex items-center justify-center text-white text-4xl font-bold">
+                                🖼️
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-semibold">AI Visuals</span>
+                                <span class="text-gray-500 text-sm">Dec 10, 2024</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-3">
+                                How to Create Winning Visual Content for AI Art Contests
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Expert tips and strategies for creating compelling visual content that stands out in AI art competitions.
+                            </p>
+                            <a href="#" class="text-primary hover:text-blue-600 text-sm font-semibold">Read More →</a>
+                        </div>
+                    </div>
+
+                    <!-- Post 3 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="aspect-w-16 aspect-h-9 bg-gradient-to-r from-purple-500 to-indigo-500">
+                            <div class="flex items-center justify-center text-white text-4xl font-bold">
+                                🏆
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-semibold">Success Stories</span>
+                                <span class="text-gray-500 text-sm">Dec 8, 2024</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-3">
+                                From Contest Winner to Professional Creator: Sarah's Journey
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                How winning an UrVote.Rocks contest launched Sarah's career as a professional AI content creator.
+                            </p>
+                            <a href="#" class="text-primary hover:text-blue-600 text-sm font-semibold">Read More →</a>
+                        </div>
+                    </div>
+
+                    <!-- Post 4 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="aspect-w-16 aspect-h-9 bg-gradient-to-r from-teal-500 to-cyan-500">
+                            <div class="flex items-center justify-center text-white text-4xl font-bold">
+                                💡
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="bg-teal-100 text-teal-800 px-2 py-1 rounded-full text-xs font-semibold">Tips & Tricks</span>
+                                <span class="text-gray-500 text-sm">Dec 5, 2024</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-3">
+                                5 Essential Tips for Running Successful Media Board Contests
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Learn the secrets to creating engaging contests that attract top talent and generate buzz.
+                            </p>
+                            <a href="#" class="text-primary hover:text-blue-600 text-sm font-semibold">Read More →</a>
+                        </div>
+                    </div>
+
+                    <!-- Post 5 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="aspect-w-16 aspect-h-9 bg-gradient-to-r from-pink-500 to-rose-500">
+                            <div class="flex items-center justify-center text-white text-4xl font-bold">
+                                🚀
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="bg-pink-100 text-pink-800 px-2 py-1 rounded-full text-xs font-semibold">Platform Updates</span>
+                                <span class="text-gray-500 text-sm">Dec 3, 2024</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-3">
+                                New Features Coming to UrVote.Rocks in 2025
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Get a sneak peek at the exciting new features and improvements coming to the platform.
+                            </p>
+                            <a href="#" class="text-primary hover:text-blue-600 text-sm font-semibold">Read More →</a>
+                        </div>
+                    </div>
+
+                    <!-- Post 6 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="aspect-w-16 aspect-h-9 bg-gradient-to-r from-yellow-500 to-orange-500">
+                            <div class="flex items-center justify-center text-white text-4xl font-bold">
+                                📊
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-semibold">Analytics</span>
+                                <span class="text-gray-500 text-sm">Dec 1, 2024</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-3">
+                                The Psychology of Voting: What Makes Content Go Viral
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Understanding the psychological factors that influence voting behavior in content contests.
+                            </p>
+                            <a href="#" class="text-primary hover:text-blue-600 text-sm font-semibold">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-8">
+                    <button class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                        Load More Posts
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <!-- Search -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Search Blog</h3>
+                    <div class="relative">
+                        <input type="text" placeholder="Search posts..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Categories</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition-colors">AI Music (12)</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition-colors">AI Video (8)</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition-colors">AI Visuals (15)</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition-colors">Success Stories (6)</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition-colors">Tips & Tricks (9)</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition-colors">Platform Updates (4)</a></li>
+                    </ul>
+                </div>
+
+                <!-- Recent Posts -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Recent Posts</h3>
+                    <div class="space-y-4">
+                        <div class="flex space-x-3">
+                            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+                                🎵
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-900 text-sm">The Future of AI Music Contests</h4>
+                                <p class="text-gray-500 text-xs">Dec 15, 2024</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-3">
+                            <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+                                🎬
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-900 text-sm">Top 10 AI Video Tools</h4>
+                                <p class="text-gray-500 text-xs">Dec 12, 2024</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-3">
+                            <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+                                🖼️
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-900 text-sm">Winning Visual Content</h4>
+                                <p class="text-gray-500 text-xs">Dec 10, 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Newsletter Signup -->
+                <div class="bg-gradient-to-r from-primary to-blue-600 rounded-lg p-6 text-white">
+                    <h3 class="text-lg font-bold mb-2">Stay Updated</h3>
+                    <p class="text-blue-100 text-sm mb-4">Get the latest blog posts and platform updates delivered to your inbox.</p>
+                    <div class="space-y-3">
+                        <input type="email" placeholder="Enter your email" 
+                               class="w-full px-3 py-2 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600">
+                        <button class="w-full bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white mt-20">
+      <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Brand & Description -->
+          <div class="lg:col-span-1">
+            <div class="flex items-center mb-6">
+              <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mr-3">
+                <span class="text-white font-bold text-xl">U</span>
+              </div>
+              <span class="text-2xl font-bold">UrVote.Rocks</span>
+            </div>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+              The future of content contests. Discover, vote, and promote the best AI-generated music, videos, and visuals through community-driven contests.
+            </p>
+          </div>
+
+          <!-- Platform -->
+          <div>
+            <h3 class="text-lg font-bold mb-6 text-primary">Platform</h3>
+            <ul class="space-y-3">
+              <li><a href="/get-media-board" class="text-gray-300 hover:text-white transition-colors">Create Media Board</a></li>
+              <li><a href="/about" class="text-gray-300 hover:text-white transition-colors">How It Works</a></li>
+              <li><a href="/terms-of-service" class="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
+              <li><a href="/privacy-policy" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="/contact" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+            </ul>
+          </div>
+
+          <!-- Content Types -->
+          <div>
+            <h3 class="text-lg font-bold mb-6 text-primary">Content Types</h3>
+            <ul class="space-y-3">
+              <li class="text-gray-300 hover:text-white transition-colors cursor-pointer">🎵 AI Music</li>
+              <li class="text-gray-300 hover:text-white transition-colors cursor-pointer">🎬 AI Videos</li>
+              <li class="text-gray-300 hover:text-white transition-colors cursor-pointer">🖼️ AI Visuals</li>
+              <li class="text-gray-300 hover:text-white transition-colors cursor-pointer">🎭 Creative Campaigns</li>
+              <li class="text-gray-300 hover:text-white transition-colors cursor-pointer">🏆 Contest Winners</li>
+            </ul>
+          </div>
+
+          <!-- Resources -->
+          <div>
+            <h3 class="text-lg font-bold mb-6 text-primary">Resources</h3>
+            <ul class="space-y-3">
+              <li><a href="/login" class="text-gray-300 hover:text-white transition-colors">Login / Register</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">API Documentation</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Developer Guide</a></li>
+              <li><a href="/blog" class="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+              <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Status Page</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="bg-black py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="text-gray-400 text-sm">
+              © 2024 UrVote.Rocks. All rights reserved. | 
+              <a href="/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a> | 
+              <a href="/terms-of-service" class="hover:text-white transition-colors">Terms of Service</a>
+            </div>
+            <div class="flex items-center space-x-6 text-sm text-gray-400">
+              <span>🚀 Pre-Launch Phase</span>
+              <span>🌍 Global Platform</span>
+              <span>🤖 AI-Powered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript for mobile menu -->
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

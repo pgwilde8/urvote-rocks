@@ -623,6 +623,16 @@ async def pricing_page(request: Request):
 async def faq_page(request: Request):
     return templates.TemplateResponse("faq.html", {"request": request})
 
+# Blog page
+@app.get("/blog", response_class=HTMLResponse)
+async def blog_page(request: Request):
+    return templates.TemplateResponse("blog.html", {"request": request})
+
+# Contests page
+@app.get("/contests", response_class=HTMLResponse)
+async def contests_page(request: Request):
+    return templates.TemplateResponse("contests.html", {"request": request})
+
 # ------------------------------------------------------------------------------
 # Health & Error Handlers
 # ------------------------------------------------------------------------------
