@@ -130,7 +130,7 @@
                 
                 <!-- Authentication Section -->
                 <div id="auth-section" class="text-center mb-6">
-                    <div id="login-prompt" class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                    <div id="login-prompt" class="bg-blue-50 border border-blue-200 rounded-lg p-6" style="display: block;">
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">Sign in to Vote</h3>
                         <p class="text-sm text-gray-600 mb-4">Sign in with Google to cast your vote and see the leaderboard</p>
                         <button onclick="signInWithGoogle()" class="google-signin-btn flex items-center justify-center space-x-3 px-6 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors mx-auto">
@@ -145,16 +145,21 @@
                     </div>
                     
                     <div id="user-info" class="hidden bg-green-50 border border-green-200 rounded-lg p-4">
-                        <div class="flex items-center justify-center space-x-3">
-                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-sm font-medium text-gray-900" id="user-name">Welcome back!</p>
+                                    <p class="text-xs text-gray-600" id="user-email">Ready to vote</p>
+                                </div>
                             </div>
-                            <div class="text-left">
-                                <p class="text-sm font-medium text-gray-900" id="user-name">Welcome back!</p>
-                                <p class="text-xs text-gray-600" id="user-email">Ready to vote</p>
-                            </div>
+                            <button onclick="logout()" class="text-xs text-gray-500 hover:text-gray-700 underline">
+                                Logout
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -316,30 +321,55 @@
 
         // Check authentication status on page load
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Smart vote page loaded, starting auth check...');
+            
+            // Test if elements exist
+            const loginPrompt = document.getElementById('login-prompt');
+            const userInfo = document.getElementById('user-info');
+            console.log('🔍 Login prompt element:', loginPrompt);
+            console.log('🔍 User info element:', userInfo);
+            
             checkAuthStatus();
         });
 
         // Check if user is authenticated
         async function checkAuthStatus() {
+            console.log('🔍 Checking authentication status...');
             try {
-                const response = await fetch('/auth/me');
+                const response = await fetch('/api/auth/me');
+                console.log('📡 Auth response status:', response.status);
                 if (response.ok) {
                     currentUser = await response.json();
+                    console.log('✅ User authenticated:', currentUser);
                     isAuthenticated = true;
                     showAuthenticatedState();
                 } else {
+                    console.log('❌ User not authenticated, showing login prompt');
                     showLoginPrompt();
                 }
             } catch (error) {
-                console.log('Not authenticated');
+                console.log('❌ Auth check error:', error);
                 showLoginPrompt();
             }
         }
 
         // Show login prompt
         function showLoginPrompt() {
-            document.getElementById('login-prompt').classList.remove('hidden');
-            document.getElementById('user-info').classList.add('hidden');
+            console.log('🔓 Showing login prompt...');
+            const loginPrompt = document.getElementById('login-prompt');
+            const userInfo = document.getElementById('user-info');
+            
+            if (loginPrompt) {
+                loginPrompt.classList.remove('hidden');
+                console.log('✅ Login prompt element found and shown');
+            } else {
+                console.log('❌ Login prompt element not found!');
+            }
+            
+            if (userInfo) {
+                userInfo.classList.add('hidden');
+            }
+            
             // Disable voting buttons
             document.querySelectorAll('.vote-btn').forEach(btn => {
                 btn.disabled = true;
@@ -363,6 +393,24 @@
             // Pass current URL as parameter to Google OAuth
             const currentUrl = encodeURIComponent(window.location.href);
             window.location.href = `/auth/google?redirect_url=${currentUrl}`;
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                const response = await fetch('/auth/logout', { method: 'GET' });
+                if (response.ok) {
+                    console.log('✅ Logged out successfully');
+                    // Reset authentication state
+                    isAuthenticated = false;
+                    currentUser = null;
+                    showLoginPrompt();
+                } else {
+                    console.log('❌ Logout failed');
+                }
+            } catch (error) {
+                console.log('❌ Logout error:', error);
+            }
         }
 
         // Voting functionality
