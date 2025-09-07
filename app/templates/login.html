@@ -129,6 +129,10 @@
 </div>
 
 <script>
+// Get redirect URL from query parameters
+const urlParams = new URLSearchParams(window.location.search);
+const redirectUrl = urlParams.get('redirect_url') || '/templates';
+
 let selectedRole = null;
 
 // Role selection handlers
@@ -176,20 +180,14 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     
-    // For now, just redirect based on role (no actual auth yet)
-    if (selectedRole === 'board-owner') {
-        // Redirect board owners to templates page
-        window.location.href = '/templates';
-    } else if (selectedRole === 'creator') {
-        // Redirect creators to upload page or creator dashboard
-        window.location.href = '/upload';
-    } else if (selectedRole === 'voter') {
-        // Redirect voters to leaderboard or voting page
-        window.location.href = '/leaderboard';
+    // Handle different user types
+    if (selectedRole === 'voter') {
+        // Voters use Google OAuth - redirect to Google login
+        window.location.href = '/auth/google?redirect_url=' + encodeURIComponent(redirectUrl);
+        return;
     }
     
-    // TODO: When auth is implemented, replace with actual API call:
-    /*
+    // Board Owners and Content Creators use traditional login
     try {
         const response = await fetch('/api/auth/login', {
             method: 'POST',
@@ -198,8 +196,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
             },
             body: JSON.stringify({
                 email: email,
-                password: password,
-                role: selectedRole
+                password: password
             })
         });
         
@@ -208,11 +205,29 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
             localStorage.setItem('access_token', data.access_token);
             localStorage.setItem('user_role', selectedRole);
             
-            // Redirect based on role
-            if (selectedRole === 'board-owner') {
+            // Store user info in session (for server-side access)
+            await fetch('/api/auth/session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${data.access_token}`
+                },
+                body: JSON.stringify({
+                    user_id: data.user.id,
+                    email: data.user.email,
+                    user_type: selectedRole
+                })
+            });
+            
+            // Redirect based on role or redirect URL
+            if (redirectUrl && redirectUrl !== '/templates') {
+                window.location.href = redirectUrl;
+            } else if (selectedRole === 'board-owner') {
                 window.location.href = '/templates';
             } else if (selectedRole === 'creator') {
                 window.location.href = '/upload';
+            } else {
+                window.location.href = '/templates';
             }
         } else {
             const errorData = await response.json();
@@ -225,7 +240,6 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         document.getElementById('error-message').classList.remove('hidden');
         document.getElementById('success-message').classList.add('hidden');
     }
-    */
 });
 </script>
 {% endblock %}

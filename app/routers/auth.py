@@ -86,6 +86,14 @@ async def verify_email(token: str, db: AsyncSession = Depends(get_db)):
     await db.commit()
     return {"message": "Email verified successfully"}
 
+@router.post("/session")
+async def set_session(request: Request, user_data: dict):
+    """Store user info in session for server-side access"""
+    request.session["user_id"] = user_data.get("user_id")
+    request.session["user_email"] = user_data.get("email")
+    request.session["user_type"] = user_data.get("user_type")
+    return {"message": "Session set successfully"}
+
 @router.post("/resend-verification")
 async def resend_verification(email: str, db: AsyncSession = Depends(get_db)):
     """Resend verification email"""

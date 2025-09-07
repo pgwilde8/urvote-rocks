@@ -210,6 +210,10 @@
                     } else {
                         throw new Error(data.message || 'Failed to create board');
                     }
+                } else if (response.status === 401) {
+                    // User needs to authenticate
+                    alert('🔐 Please log in to create your Media Board. Redirecting to login...');
+                    window.location.href = '/login';
                 } else {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
