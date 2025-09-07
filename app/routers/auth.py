@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Form
+from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.templating import Jinja2Templates
 from fastapi.security import HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -28,14 +30,29 @@ async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already taken"
         )
-    # Create new user
+    # Create new user with appropriate permissions based on user_type
     verification_token = secrets.token_urlsafe(32)
     hashed_password = get_password_hash(user_data.password)
+    
+    # Set permissions based on user type
+    if user_data.user_type == "board_owner":
+        is_contestant = False
+        is_voter = True
+    elif user_data.user_type == "creator":
+        is_contestant = True
+        is_voter = True
+    else:  # voter or default
+        is_contestant = False
+        is_voter = True
+    
     new_user = User(
         email=user_data.email,
         username=user_data.username,
         hashed_password=hashed_password,
-        verification_token=verification_token
+        verification_token=verification_token,
+        user_type=user_data.user_type,
+        is_contestant=is_contestant,
+        is_voter=is_voter
     )
     db.add(new_user)
     await db.commit()
@@ -46,6 +63,99 @@ async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
         "message": "User registered successfully. Please check your email for verification.",
         "user_id": new_user.id
     }
+
+@router.post("/register-form", response_class=HTMLResponse)
+async def register_form(
+    request: Request,
+    email: str = Form(...),
+    username: str = Form(...),
+    password: str = Form(...),
+    user_type: str = Form(...),
+    db: AsyncSession = Depends(get_db)
+):
+    """Handle form-based registration for board_owners and creators"""
+    try:
+        # Check if user already exists
+        result = await db.execute(select(User).where(User.email == email))
+        if result.scalar_one_or_none():
+            return HTMLResponse(
+                content=f"""
+                <div class="text-red-600 text-center text-sm">
+                    Email already registered. 
+                    <a href="/login" class="text-blue-600 hover:underline">Login here</a>
+                </div>
+                """,
+                status_code=400
+            )
+        
+        result = await db.execute(select(User).where(User.username == username))
+        if result.scalar_one_or_none():
+            return HTMLResponse(
+                content="""
+                <div class="text-red-600 text-center text-sm">
+                    Username already taken. Please choose a different username.
+                </div>
+                """,
+                status_code=400
+            )
+        
+        # Validate user_type
+        if user_type not in ["board_owner", "creator"]:
+            return HTMLResponse(
+                content="""
+                <div class="text-red-600 text-center text-sm">
+                    Invalid user type. Please select Board Owner or Content Creator.
+                </div>
+                """,
+                status_code=400
+            )
+        
+        # Create new user with appropriate permissions
+        verification_token = secrets.token_urlsafe(32)
+        hashed_password = get_password_hash(password)
+        
+        # Set permissions based on user type
+        if user_type == "board_owner":
+            is_contestant = False
+            is_voter = True
+        elif user_type == "creator":
+            is_contestant = True
+            is_voter = True
+        else:  # This shouldn't happen due to validation above
+            is_contestant = False
+            is_voter = True
+        
+        new_user = User(
+            email=email,
+            username=username,
+            hashed_password=hashed_password,
+            verification_token=verification_token,
+            user_type=user_type,
+            is_contestant=is_contestant,
+            is_voter=is_voter
+        )
+        
+        db.add(new_user)
+        await db.commit()
+        await db.refresh(new_user)
+        
+        # Redirect based on user type
+        if user_type == "board_owner":
+            return RedirectResponse(url="/make-media-board", status_code=302)
+        elif user_type == "creator":
+            return RedirectResponse(url="/contests", status_code=302)
+        else:
+            return RedirectResponse(url="/login?message=Registration successful! Please login.", status_code=302)
+        
+    except Exception as e:
+        return HTMLResponse(
+            content=f"""
+            <div class="text-red-600 text-center text-sm">
+                Registration failed: {str(e)}
+            </div>
+            """,
+            status_code=500
+        )
 
 @router.post("/login", response_model=dict)
 async def login(user_data: UserLogin, db: AsyncSession = Depends(get_db)):

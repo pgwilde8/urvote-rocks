@@ -45,6 +45,14 @@
                     <span>Selected Theme: <strong id="selected-theme">Loading...</strong></span>
                 </div>
             </div>
+            
+            <!-- Authentication Status -->
+            <div id="auth-status" class="mt-4 text-center">
+                <div class="inline-flex items-center space-x-2 text-sm opacity-75">
+                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>Checking authentication...</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -156,8 +164,34 @@
     </div>
 
     <script>
-        // Get theme from URL parameters and localStorage
-        document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication status
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check if user is authenticated
+            try {
+                const response = await fetch('/auth/me');
+                if (!response.ok) {
+                    // User not authenticated, redirect to login with return URL
+                    const currentUrl = encodeURIComponent(window.location.href);
+                    window.location.href = `/login?redirect_url=${currentUrl}`;
+                    return;
+                }
+                
+                // User is authenticated, continue with page setup
+                const userData = await response.json();
+                console.log('Authenticated user:', userData);
+                
+                // Hide auth status indicator
+                document.getElementById('auth-status').style.display = 'none';
+                
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                // If auth check fails, redirect to login
+                const currentUrl = encodeURIComponent(window.location.href);
+                window.location.href = `/login?redirect_url=${currentUrl}`;
+                return;
+            }
+            
+            // Get theme from URL parameters and localStorage
             const urlParams = new URLSearchParams(window.location.search);
             const theme = urlParams.get('theme') || localStorage.getItem('selectedTheme') || 'default';
             

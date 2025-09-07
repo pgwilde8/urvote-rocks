@@ -9,11 +9,18 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    user_type: str = "voter"  # Default to voter
     
     @validator('password')
     def password_strength(cls, v):
         if len(v) < 8:
             raise ValueError('Password must be at least 8 characters')
+        return v
+    
+    @validator('user_type')
+    def validate_user_type(cls, v):
+        if v not in ["voter", "creator", "board_owner"]:
+            raise ValueError('User type must be voter, creator, or board_owner')
         return v
 
 class UserLogin(BaseModel):

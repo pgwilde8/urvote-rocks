@@ -68,7 +68,7 @@
         </div>
 
         <!-- Registration Form -->
-        <form id="register-form" class="mt-8 space-y-6">
+        <form id="register-form" class="mt-8 space-y-6" method="POST" action="/api/auth/register-form">
             <div class="space-y-4">
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
@@ -97,6 +97,9 @@
                            class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm" 
                            placeholder="Confirm your password">
                 </div>
+                
+                <!-- Hidden field for user type -->
+                <input type="hidden" id="user-type" name="user_type" value="">
             </div>
 
             <div>
@@ -130,7 +133,7 @@ let selectedRole = null;
 
 // Role selection handlers
 document.getElementById('board-owner-btn').addEventListener('click', function() {
-    selectRole('board-owner', 'Board Owner');
+    selectRole('board_owner', 'Board Owner');
 });
 
 document.getElementById('creator-btn').addEventListener('click', function() {
@@ -153,17 +156,23 @@ function selectRole(role, roleName) {
     document.getElementById('selected-role').classList.remove('hidden');
     document.getElementById('selected-role-text').textContent = roleName;
     
+    // Set the hidden user_type field
+    document.getElementById('user-type').value = role;
+    
     // Enable register button
     document.getElementById('register-btn').disabled = false;
     document.getElementById('register-btn').classList.remove('bg-gray-400');
     document.getElementById('register-btn').classList.add('bg-primary', 'hover:bg-blue-600');
 }
 
-// Form submission
-document.getElementById('register-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+// Form validation and submission
+document.getElementById('register-form').addEventListener('submit', function(e) {
+    // Clear previous error messages
+    document.getElementById('error-message').classList.add('hidden');
+    document.getElementById('success-message').classList.add('hidden');
     
     if (!selectedRole) {
+        e.preventDefault();
         document.getElementById('error-message').textContent = 'Please select your role';
         document.getElementById('error-message').classList.remove('hidden');
         return;
@@ -176,6 +185,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
     
     // Validate passwords match
     if (password !== confirmPassword) {
+        e.preventDefault();
         document.getElementById('error-message').textContent = 'Passwords do not match';
         document.getElementById('error-message').classList.remove('hidden');
         return;
@@ -183,45 +193,14 @@ document.getElementById('register-form').addEventListener('submit', async functi
     
     // Validate password length
     if (password.length < 8) {
+        e.preventDefault();
         document.getElementById('error-message').textContent = 'Password must be at least 8 characters';
         document.getElementById('error-message').classList.remove('hidden');
         return;
     }
     
-    try {
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                username: username,
-                password: password
-            })
-        });
-        
-        if (response.ok) {
-            const data = await response.json();
-            document.getElementById('success-message').textContent = 'Account created successfully! Redirecting to login...';
-            document.getElementById('success-message').classList.remove('hidden');
-            document.getElementById('error-message').classList.add('hidden');
-            
-            // Redirect to login page after successful registration
-            setTimeout(() => {
-                window.location.href = '/login?redirect_url=' + encodeURIComponent(redirectUrl);
-            }, 2000);
-        } else {
-            const errorData = await response.json();
-            document.getElementById('error-message').textContent = errorData.detail || 'Registration failed';
-            document.getElementById('error-message').classList.remove('hidden');
-            document.getElementById('success-message').classList.add('hidden');
-        }
-    } catch (error) {
-        document.getElementById('error-message').textContent = 'Network error. Please try again.';
-        document.getElementById('error-message').classList.remove('hidden');
-        document.getElementById('success-message').classList.add('hidden');
-    }
+    // If validation passes, let the form submit naturally
+    // The server will handle the registration and redirect
 });
 </script>
 {% endblock %}

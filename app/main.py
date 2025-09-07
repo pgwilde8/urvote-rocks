@@ -16,7 +16,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 # ---------------- App / Config ----------------
 from .config import settings
 from .database import get_db
-from .models import Contest, Client, Song, Vote
+from .models import Contest, Client, Song, Vote, User
+from .auth import verify_password
 
 # Routers (updated: campaigns -> songboards, add sales)
 from .routers import auth, songs, voting, songboards, signup, static_pages, brevo_test
@@ -114,8 +115,8 @@ async def board_page(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ):
-    # Import Board model here to avoid circular imports
-    from .models import Board
+    # Import models here to avoid circular imports
+    from .models import Board, Song, Video, Visual
     
     # Find board by slug
     board_res = await db.execute(select(Board).where(Board.slug == slug))
@@ -124,9 +125,22 @@ async def board_page(
     if not board:
         raise HTTPException(status_code=404, detail="Board not found")
     
+    # Load content for this board
+    songs_res = await db.execute(select(Song).where(Song.board_id == board.id).order_by(Song.created_at.desc()))
+    songs = songs_res.scalars().all()
+    
+    videos_res = await db.execute(select(Video).where(Video.board_id == board.id).order_by(Video.created_at.desc()))
+    videos = videos_res.scalars().all()
+    
+    visuals_res = await db.execute(select(Visual).where(Visual.board_id == board.id).order_by(Visual.created_at.desc()))
+    visuals = visuals_res.scalars().all()
+    
     return templates.TemplateResponse("board.html", {
         "request": request,
-        "board": board
+        "board": board,
+        "songs": songs,
+        "videos": videos,
+        "visuals": visuals
     })
 
 # Smart Voting Link Page - Dynamic for each piece of content
@@ -309,10 +323,47 @@ async def free_board_creation_alt(request: Request):
     """Alternative route for free board creation page"""
     return templates.TemplateResponse("get-media-board.html", {"request": request})
 
+# Board creation page for logged-in board owners
+@app.get("/make-media-board", response_class=HTMLResponse)
+async def make_media_board_page(request: Request):
+    """Board creation page for authenticated board owners"""
+    return templates.TemplateResponse("make-media-board.html", {"request": request})
+
 @app.get("/mediaboard-login", response_class=HTMLResponse)
 async def mediaboard_login_page(request: Request):
     """Media board owner login page"""
     return templates.TemplateResponse("mediaboard-login.html", {"request": request})
+
+@app.post("/mediaboard-login", response_class=HTMLResponse)
+async def mediaboard_login_form(
+    request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
+    db: AsyncSession = Depends(get_db)
+):
+    """Handle mediaboard login form submission"""
+    # Find user by email
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+    
+    if not user or not verify_password(password, user.hashed_password):
+        # Redirect back to login with error message
+        return RedirectResponse(url="/mediaboard-login?error=Invalid credentials", status_code=302)
+    
+    if not user.is_active:
+        return RedirectResponse(url="/mediaboard-login?error=Account is deactivated", status_code=302)
+    
+    # Create access token and store in session
+    from .auth import create_access_token
+    access_token = create_access_token(data={"sub": str(user.id)})
+    
+    # Store user info in session
+    request.session["user_id"] = user.id
+    request.session["user_email"] = user.email
+    request.session["access_token"] = access_token
+    
+    # Redirect to templates page after successful login
+    return RedirectResponse(url="/templates", status_code=302)
 
 # Upload form (UI)
 @app.get("/upload", response_class=HTMLResponse)
