@@ -685,6 +685,52 @@ async def contests_page(request: Request):
     return templates.TemplateResponse("contests.html", {"request": request})
 
 # ------------------------------------------------------------------------------
+# Newsletter Subscription
+# ------------------------------------------------------------------------------
+@app.post("/api/newsletter/subscribe")
+async def subscribe_newsletter(
+    email: str = Form(...),
+    request: Request = None
+):
+    """Subscribe email to Brevo newsletter list"""
+    try:
+        import requests
+        from app.config import settings
+        
+        if not settings.brevo_api_key:
+            raise HTTPException(status_code=500, detail="Email service not configured")
+        
+        # Brevo API endpoint for adding contacts
+        brevo_url = "https://api.brevo.com/v3/contacts"
+        
+        headers = {
+            "accept": "application/json",
+            "api-key": settings.brevo_api_key,
+            "content-type": "application/json"
+        }
+        
+        data = {
+            "email": email,
+            "listIds": [9],  # Your Brevo list ID
+            "updateEnabled": True  # Update if contact already exists
+        }
+        
+        response = requests.post(brevo_url, headers=headers, json=data)
+        
+        if response.status_code in [200, 201]:
+            return {"message": "Successfully subscribed to newsletter!"}
+        elif response.status_code == 400:
+            # Contact already exists or invalid email
+            return {"message": "Already subscribed or invalid email"}
+        else:
+            print(f"Brevo API error: {response.status_code} - {response.text}")
+            raise HTTPException(status_code=500, detail="Subscription failed")
+            
+    except Exception as e:
+        print(f"Newsletter subscription error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Subscription failed")
+
+# ------------------------------------------------------------------------------
 # Health & Error Handlers
 # ------------------------------------------------------------------------------
 @app.get("/health")
