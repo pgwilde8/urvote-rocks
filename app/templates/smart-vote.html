@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vote for {{ content.title }} - {{ board.title }} | UrVote.Rocks</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+{% extends "base.html" %}
+
+{% block title %}Vote for {{ content.title }} - {{ board.title }} | UrVote.Rocks{% endblock %}
+
+{% block extra_head %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Social Media Meta Tags for Viral Sharing -->
@@ -27,28 +25,21 @@
         .theme-garden { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
         .theme-forest { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
     </style>
-</head>
-<body class="bg-gray-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold text-purple-600">UrVote.Rocks</a>
-                </div>
-                <div class="flex items-center space-x-6">
-                    <a href="/" class="text-gray-700 hover:text-purple-600 transition-colors">Home</a>
-                    <a href="/media-boards" class="text-gray-700 hover:text-purple-600 transition-colors">Media Boards</a>
-                    <a href="/board/{{ board.slug }}" class="text-gray-700 hover:text-purple-600 transition-colors">Back to Board</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+{% endblock %}
 
+{% block content %}
     <!-- Featured Content Section -->
     <section class="py-12 bg-gradient-to-br from-purple-50 to-blue-50">
         <div class="max-w-4xl mx-auto px-4">
             <div class="text-center mb-8">
+                <div class="mb-4">
+                    <a href="/board/{{ board.slug }}" class="inline-flex items-center text-purple-600 hover:text-purple-700 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Back to {{ board.title }}
+                    </a>
+                </div>
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                     🎯 Vote for This {{ content_type|title }}!
                 </h1>
@@ -501,5 +492,4 @@
             });
         }
     </script>
-</body>
-</html>
+{% endblock %}
