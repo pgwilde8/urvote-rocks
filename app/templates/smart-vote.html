@@ -3,7 +3,7 @@
 {% block title %}Vote for {{ content.title }} - {{ board.title }} | UrVote.Rocks{% endblock %}
 
 {% block extra_head %}
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="sudo systemctl restart urvotehttps://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Social Media Meta Tags for Viral Sharing -->
     <meta property="og:title" content="Vote for {{ content.title }} by {{ content.artist_name }}">
@@ -15,7 +15,7 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .content-card { transition: all 0.3s ease; }
         .content-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
         .theme-sunset { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%); }
@@ -66,7 +66,7 @@
                             <!-- Audio Player -->
                             <div class="custom-audio-player bg-gray-100 rounded-lg p-6">
                                 <div class="flex items-center space-x-4 mb-4">
-                                    <button onclick="togglePlayPause(this, '{{ content.file_path|replace('uploads/', '/uploads/') }}')" class="play-btn bg-purple-600 text-white rounded-full w-16 h-16 flex items-center justify-center hover:bg-purple-700 transition-colors">
+                                    <button data-file-path="{{ content.file_path|replace('uploads/', '/uploads/') }}" class="play-btn bg-purple-600 text-white rounded-full w-16 h-16 flex items-center justify-center hover:bg-purple-700 transition-colors">
                                         <span class="text-2xl">▶️</span>
                                     </button>
                                     <div class="flex-1">
@@ -159,11 +159,11 @@
                 <div class="text-center">
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Cast Your Vote!</h3>
                     <div class="flex justify-center space-x-4">
-                        <button onclick="voteContent({{ content.id }}, 'like', '{{ content_type }}')" class="vote-btn like-btn flex items-center space-x-2 px-6 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <button data-content-id="{{ content.id }}" data-vote-type="like" data-content-type="{{ content_type }}" class="vote-btn like-btn flex items-center space-x-2 px-6 py-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                             <span class="text-2xl">👍</span>
                             <span>Like</span>
                         </button>
-                        <button onclick="voteContent({{ content.id }}, 'dislike', '{{ content_type }}')" class="vote-btn dislike-btn flex items-center space-x-2 px-6 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <button data-content-id="{{ content.id }}" data-vote-type="dislike" data-content-type="{{ content_type }}" class="vote-btn dislike-btn flex items-center space-x-2 px-6 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                             <span class="text-2xl">👎</span>
                             <span>Dislike</span>
                         </button>
@@ -261,7 +261,7 @@
                         
                         <!-- Vote Button -->
                         <div class="flex-shrink-0">
-                            <button onclick="voteContent({{ item.id }}, 'like', '{{ item.content_type }}')" class="bg-green-100 text-green-700 px-4 py-2 rounded-lg hover:bg-green-200 transition-colors">
+                            <button data-content-id="{{ item.id }}" data-vote-type="like" data-content-type="{{ item.content_type }}" class="bg-green-100 text-green-700 px-4 py-2 rounded-lg hover:bg-green-200 transition-colors">
                                 👍 Vote
                             </button>
                         </div>
@@ -321,6 +321,24 @@
             console.log('🔍 User info element:', userInfo);
             
             checkAuthStatus();
+            
+            // Add event listeners for vote buttons
+            document.querySelectorAll('.vote-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const contentId = this.getAttribute('data-content-id');
+                    const voteType = this.getAttribute('data-vote-type');
+                    const contentType = this.getAttribute('data-content-type');
+                    voteContent(contentId, voteType, contentType);
+                });
+            });
+            
+            // Add event listener for play button
+            document.querySelectorAll('.play-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const filePath = this.getAttribute('data-file-path');
+                    togglePlayPause(this, filePath);
+                });
+            });
         });
 
         // Check if user is authenticated
