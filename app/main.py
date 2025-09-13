@@ -674,6 +674,11 @@ async def pricing_page(request: Request):
 async def faq_page(request: Request):
     return templates.TemplateResponse("faq.html", {"request": request})
 
+# Contest Platform page
+@app.get("/contest-platform", response_class=HTMLResponse)
+async def contest_platform_page(request: Request):
+    return templates.TemplateResponse("contest-platform.html", {"request": request})
+
 # Blog page
 @app.get("/blog", response_class=HTMLResponse)
 async def blog_page(request: Request):
@@ -681,8 +686,65 @@ async def blog_page(request: Request):
 
 # Contests page
 @app.get("/contests", response_class=HTMLResponse)
-async def contests_page(request: Request):
-    return templates.TemplateResponse("contests.html", {"request": request})
+async def contests_page(request: Request, db: AsyncSession = Depends(get_db)):
+    """Display active contests from the database"""
+    try:
+        # Import models here to avoid circular imports
+        from .models import Contest, Client, Board
+        from sqlalchemy import select, func, and_
+        from datetime import datetime
+        
+        # Get active contests
+        contests_res = await db.execute(
+            select(Contest)
+            .where(Contest.is_active == True)
+            .where(Contest.end_date > datetime.now())
+            .order_by(Contest.created_at.desc())
+        )
+        contests = contests_res.scalars().all()
+        
+        # Get contest statistics
+        total_contests_res = await db.execute(select(func.count(Contest.id)))
+        total_contests = total_contests_res.scalar()
+        
+        active_contests_res = await db.execute(
+            select(func.count(Contest.id))
+            .where(Contest.is_active == True)
+            .where(Contest.end_date > datetime.now())
+        )
+        active_contests = active_contests_res.scalar()
+        
+        # Get all boards (since contests are now boards)
+        boards_res = await db.execute(
+            select(Board)
+            .where(Board.user_id.isnot(None))
+            .order_by(Board.created_at.desc())
+            .limit(10)
+        )
+        boards = boards_res.scalars().all()
+        
+        return templates.TemplateResponse("contests.html", {
+            "request": request,
+            "contests": contests,
+            "boards": boards,
+            "total_contests": total_contests or 0,
+            "active_contests": active_contests or 0,
+            "total_participants": 0,  # TODO: Calculate from votes
+            "total_submissions": 0,   # TODO: Calculate from content
+        })
+        
+    except Exception as e:
+        print(f"Error loading contests: {str(e)}")
+        # Fallback to empty data
+        return templates.TemplateResponse("contests.html", {
+            "request": request,
+            "contests": [],
+            "boards": [],
+            "total_contests": 0,
+            "active_contests": 0,
+            "total_participants": 0,
+            "total_submissions": 0,
+        })
 
 # ------------------------------------------------------------------------------
 # Newsletter Subscription

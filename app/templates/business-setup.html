@@ -107,6 +107,49 @@
                         <p class="text-sm text-gray-500 mt-2">This description will appear on your Media Board</p>
                     </div>
 
+                    <!-- Content Types -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">What type of content will this board accept? *</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Music Option -->
+                            <div class="relative">
+                                <input type="checkbox" id="allow_music" name="allow_music" value="true" checked 
+                                       class="sr-only peer">
+                                <label for="allow_music" 
+                                       class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl cursor-pointer peer-checked:border-purple-500 peer-checked:bg-purple-50 hover:border-purple-300 transition-all">
+                                    <div class="text-4xl mb-2">🎵</div>
+                                    <div class="font-semibold text-gray-900">Music</div>
+                                    <div class="text-sm text-gray-600 text-center">Audio files, songs, podcasts</div>
+                                </label>
+                            </div>
+
+                            <!-- Video Option -->
+                            <div class="relative">
+                                <input type="checkbox" id="allow_video" name="allow_video" value="true" checked 
+                                       class="sr-only peer">
+                                <label for="allow_video" 
+                                       class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl cursor-pointer peer-checked:border-purple-500 peer-checked:bg-purple-50 hover:border-purple-300 transition-all">
+                                    <div class="text-4xl mb-2">🎬</div>
+                                    <div class="font-semibold text-gray-900">Video</div>
+                                    <div class="text-sm text-gray-600 text-center">Video files, clips, presentations</div>
+                                </label>
+                            </div>
+
+                            <!-- Visuals Option -->
+                            <div class="relative">
+                                <input type="checkbox" id="allow_visuals" name="allow_visuals" value="true" checked 
+                                       class="sr-only peer">
+                                <label for="allow_visuals" 
+                                       class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl cursor-pointer peer-checked:border-purple-500 peer-checked:bg-purple-50 hover:border-purple-300 transition-all">
+                                    <div class="text-4xl mb-2">🖼️</div>
+                                    <div class="font-semibold text-gray-900">Images</div>
+                                    <div class="text-sm text-gray-600 text-center">Photos, graphics, artwork</div>
+                                </label>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-3">Select the types of content you want to allow on your board. You can change this later.</p>
+                    </div>
+
                     <!-- Website -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-3">Website URL</label>
@@ -249,7 +292,10 @@
                         social_linkedin: formData.get('social_linkedin'),
                         social_twitter: formData.get('social_twitter'),
                         social_instagram: formData.get('social_instagram'),
-                        social_facebook: formData.get('social_facebook')
+                        social_facebook: formData.get('social_facebook'),
+                        allow_music: formData.get('allow_music') === 'true',
+                        allow_video: formData.get('allow_video') === 'true',
+                        allow_visuals: formData.get('allow_visuals') === 'true'
                     })
                 });
                 

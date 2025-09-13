@@ -104,39 +104,50 @@
             <!-- Main Content -->
             <div class="lg:col-span-3">
                 <!-- Featured Contest -->
+                {% if boards %}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
                     <div class="aspect-w-16 aspect-h-9 bg-gradient-to-r from-red-500 to-blue-500">
                         <div class="flex items-center justify-center text-white text-6xl font-bold">
-                            🇺🇸
+                            {% if boards[0].allow_music %}🎵{% elif boards[0].allow_video %}🎬{% elif boards[0].allow_visuals %}🖼️{% else %}🎭{% endif %}
                         </div>
                     </div>
                     <div class="p-8">
                         <div class="flex items-center space-x-4 mb-4">
                             <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">Featured</span>
                             <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">Active</span>
-                            <span class="text-gray-500 text-sm">Ends: January 31, 2025</span>
+                            <span class="text-gray-500 text-sm">Created: {{ boards[0].created_at.strftime('%B %d, %Y') }}</span>
                         </div>
                         <h2 class="text-2xl font-bold text-gray-900 mb-4">
-                            PayPortPro AI Patriotic Content Challenge
+                            {{ boards[0].title }}
                         </h2>
                         <p class="text-gray-600 mb-6">
-                            Celebrate American innovation and creativity with AI-generated patriotic content. Submit your best pro-American themed music, videos, and visuals for a chance to win amazing prizes and recognition.
+                            {{ boards[0].description or "Join this exciting contest and showcase your AI-generated content!" }}
                         </p>
                         <div class="flex items-center space-x-6 mb-6">
                             <div class="flex items-center space-x-2">
-                                <span class="text-sm text-gray-500">🎵 Music</span>
-                                <span class="text-sm text-gray-500">🎬 Video</span>
-                                <span class="text-sm text-gray-500">🖼️ Visuals</span>
+                                {% if boards[0].allow_music %}<span class="text-sm text-gray-500">🎵 Music</span>{% endif %}
+                                {% if boards[0].allow_video %}<span class="text-sm text-gray-500">🎬 Video</span>{% endif %}
+                                {% if boards[0].allow_visuals %}<span class="text-sm text-gray-500">🖼️ Visuals</span>{% endif %}
                             </div>
                             <div class="flex items-center space-x-2">
-                                <span class="text-sm text-gray-500">👥 1,247 participants</span>
+                                <span class="text-sm text-gray-500">👥 Active Board</span>
                             </div>
                         </div>
-                        <a href="/board/payportpro-ai-patriotic-content-challenge" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                        <a href="/board/{{ boards[0].slug }}" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
                             View Contest →
                         </a>
                     </div>
                 </div>
+                {% else %}
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden text-center p-8">
+                    <div class="text-6xl mb-4">🏆</div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">No Active Contests</h2>
+                    <p class="text-gray-600 mb-6">Be the first to create a contest and start engaging with creators!</p>
+                    <a href="/get-media-board" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                        Create Contest →
+                    </a>
+                </div>
+                {% endif %}
 
                 <!-- Contests Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -161,7 +172,7 @@
                             </p>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">👥 342 participants</span>
-                                <a href="/board/sunset-music-contest" class="text-primary hover:text-blue-600 text-sm font-semibold">View Contest →</a>
+                                <a href="/get-media-board" class="text-primary hover:text-blue-600 text-sm font-semibold">Create Contest →</a>
                             </div>
                         </div>
                     </div>
@@ -187,7 +198,7 @@
                             </p>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">👥 189 participants</span>
-                                <a href="/board/ai-video-innovation-challenge" class="text-primary hover:text-blue-600 text-sm font-semibold">View Contest →</a>
+                                <a href="/get-media-board" class="text-primary hover:text-blue-600 text-sm font-semibold">Create Contest →</a>
                             </div>
                         </div>
                     </div>
@@ -213,7 +224,7 @@
                             </p>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">👥 567 participants</span>
-                                <a href="/board/digital-art-revolution" class="text-primary hover:text-blue-600 text-sm font-semibold">View Contest →</a>
+                                <a href="/get-media-board" class="text-primary hover:text-blue-600 text-sm font-semibold">Create Contest →</a>
                             </div>
                         </div>
                     </div>
@@ -239,7 +250,7 @@
                             </p>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">👥 234 participants</span>
-                                <a href="/board/creative-campaign-showcase" class="text-primary hover:text-blue-600 text-sm font-semibold">View Contest →</a>
+                                <a href="/get-media-board" class="text-primary hover:text-blue-600 text-sm font-semibold">Create Contest →</a>
                             </div>
                         </div>
                     </div>
@@ -265,7 +276,7 @@
                             </p>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">👥 891 participants</span>
-                                <a href="/board/holiday-music-festival" class="text-primary hover:text-blue-600 text-sm font-semibold">View Contest →</a>
+                                <a href="/get-media-board" class="text-primary hover:text-blue-600 text-sm font-semibold">Create Contest →</a>
                             </div>
                         </div>
                     </div>
@@ -291,7 +302,7 @@
                             </p>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">👥 156 participants</span>
-                                <a href="/board/tech-innovation-showcase" class="text-primary hover:text-blue-600 text-sm font-semibold">View Contest →</a>
+                                <a href="/get-media-board" class="text-primary hover:text-blue-600 text-sm font-semibold">Create Contest →</a>
                             </div>
                         </div>
                     </div>

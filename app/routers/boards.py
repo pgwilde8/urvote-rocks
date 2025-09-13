@@ -11,8 +11,8 @@ import re
 
 # File size limits (in bytes)
 MAX_MUSIC_SIZE = 50 * 1024 * 1024      # 50MB
-MAX_VIDEO_SIZE = 100 * 1024 * 1024     # 100MB  
-MAX_VISUAL_SIZE = 25 * 1024 * 1024     # 25MB
+MAX_VIDEO_SIZE = 25 * 1024 * 1024      # 25MB  
+MAX_VISUAL_SIZE = 10 * 1024 * 1024     # 10MB
 
 router = APIRouter(
     prefix="/api/boards",
@@ -505,6 +505,11 @@ async def create_media_board(
         social_instagram = body.get("social_instagram")
         social_facebook = body.get("social_facebook")
         
+        # Content type preferences
+        allow_music = body.get("allow_music", True)
+        allow_video = body.get("allow_video", True)
+        allow_visuals = body.get("allow_visuals", True)
+        
         # Generate a unique slug based on business name
         import uuid
         import re
@@ -530,9 +535,9 @@ async def create_media_board(
             social_linkedin=social_linkedin,
             social_twitter=social_twitter,
             social_instagram=social_instagram,
-            allow_music=True,
-            allow_video=True,
-            allow_visuals=True
+            allow_music=allow_music,
+            allow_video=allow_video,
+            allow_visuals=allow_visuals
         )
 
         db.add(new_board)
@@ -651,9 +656,9 @@ async def upload_music(
         
         else:
             # Handle external link
-            file_path = None
+            file_path = external_link  # Store the external link as file_path
             file_size = 0
-            file_hash = ""
+            file_hash = ""  # Empty hash for external links
             content_source = "external"
             
             # Validate external link (basic validation)
@@ -696,6 +701,10 @@ async def upload_music(
         }
         
     except Exception as e:
+        print(f"DEBUG: Music upload error: {str(e)}")
+        print(f"DEBUG: Error type: {type(e)}")
+        import traceback
+        print(f"DEBUG: Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=f"Error uploading music: {str(e)}")
 
 @router.post("/{board_id}/upload/video")
