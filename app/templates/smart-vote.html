@@ -1,9 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}Vote for {{ content.title }} - {{ board.title }} | UrVote.Rocks{% endblock %}
+{% block title %}Vote for {{ content.title }} by {{ content.artist_name }} - {{ board.title }} Contest | UrVote.Rocks{% endblock %}
 
 {% block extra_head %}
-    <link href="<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">" rel="stylesheet">
+<!-- Primary Meta Tags -->
+<meta name="title" content="Vote for {{ content.title }} by {{ content.artist_name }} - {{ board.title }} Contest">
+<meta name="description" content="Vote for {{ content.title }} by {{ content.artist_name }} in {{ board.title }} contest. Listen, watch, and vote on AI-generated content! Community voting on UrVote.Rocks.">
+<meta name="keywords" content="vote, {{ content.title }}, {{ content.artist_name }}, {{ board.title }}, AI content contest, community voting, AI-generated content">
+<meta name="author" content="UrVote.Rocks">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://urvote.rocks/vote/{{ content.id }}/{{ board.slug }}">
+<meta property="og:title" content="Vote: {{ content.title }} - {{ board.title }}">
+<meta property="og:description" content="Vote for {{ content.title }} by {{ content.artist_name }}. AI-generated content contest on UrVote.Rocks">
+<meta property="og:image" content="https://urvote.rocks/static/images/vote-og-{{ content.id }}.jpg">
+<meta property="og:site_name" content="UrVote.Rocks">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://urvote.rocks/vote/{{ content.id }}/{{ board.slug }}">
+<meta property="twitter:title" content="Vote: {{ content.title }} - {{ board.title }}">
+<meta property="twitter:description" content="Vote for {{ content.title }} by {{ content.artist_name }}. AI-generated content contest.">
+<meta property="twitter:image" content="https://urvote.rocks/static/images/vote-twitter-{{ content.id }}.jpg">
+
+<!-- Additional SEO -->
+<link rel="canonical" href="https://urvote.rocks/vote/{{ content.id }}/{{ board.slug }}">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "{{ content.title }}",
+  "description": "{{ content.description if content.description else 'AI-generated content entry in ' + board.title + ' contest' }}",
+  "creator": {
+    "@type": "Person",
+    "name": "{{ content.artist_name }}"
+  },
+  "url": "https://urvote.rocks/vote/{{ content.id }}/{{ board.slug }}",
+  "isPartOf": {
+    "@type": "Event",
+    "name": "{{ board.title }}",
+    "url": "https://urvote.rocks/board/{{ board.slug }}"
+  },
+  "genre": "{{ content.content_type }}",
+  "dateCreated": "{{ content.created_at.strftime('%Y-%m-%d') if content.created_at else '2024-01-01' }}"
+}
+</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Social Media Meta Tags for Viral Sharing -->
     <meta property="og:title" content="Vote for {{ content.title }} by {{ content.artist_name }}">

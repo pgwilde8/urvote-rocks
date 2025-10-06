@@ -1,8 +1,61 @@
 {% extends "base.html" %}
 
-{% block title %}Media Board - {{ board.title }}{% endblock %}
+{% block title %}{{ board.title }} - AI Content Contest | UrVote.Rocks{% endblock %}
 
 {% block extra_head %}
+<!-- Primary Meta Tags -->
+<meta name="title" content="{{ board.title }} - AI Content Contest | UrVote.Rocks">
+<meta name="description" content="Join {{ board.title }} contest on UrVote.Rocks. {{ board.description[:150] if board.description else 'Submit your AI-generated content and vote on the best entries!' }} Free contest with community voting.">
+<meta name="keywords" content="AI content contest, {{ board.title }}, community voting, AI-generated content, music contest, video contest, visual contest">
+<meta name="author" content="UrVote.Rocks">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://urvote.rocks/board/{{ board.slug }}">
+<meta property="og:title" content="{{ board.title }} - AI Content Contest">
+<meta property="og:description" content="{{ board.description[:150] if board.description else 'Join this AI content contest and vote on the best entries!' }}">
+<meta property="og:image" content="https://urvote.rocks/static/images/board-og-{{ board.slug }}.jpg">
+<meta property="og:site_name" content="UrVote.Rocks">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://urvote.rocks/board/{{ board.slug }}">
+<meta property="twitter:title" content="{{ board.title }} - AI Content Contest">
+<meta property="twitter:description" content="{{ board.description[:150] if board.description else 'Join this AI content contest and vote!' }}">
+<meta property="twitter:image" content="https://urvote.rocks/static/images/board-twitter-{{ board.slug }}.jpg">
+
+<!-- Additional SEO -->
+<link rel="canonical" href="https://urvote.rocks/board/{{ board.slug }}">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "{{ board.title }}",
+  "description": "{{ board.description if board.description else 'AI content contest with community voting' }}",
+  "url": "https://urvote.rocks/board/{{ board.slug }}",
+  "startDate": "{{ board.created_at.strftime('%Y-%m-%d') if board.created_at else '2024-01-01' }}",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+  "location": {
+    "@type": "VirtualLocation",
+    "url": "https://urvote.rocks/board/{{ board.slug }}"
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "UrVote.Rocks",
+    "url": "https://urvote.rocks"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }

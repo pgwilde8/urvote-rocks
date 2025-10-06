@@ -5,7 +5,7 @@ from typing import Optional
 
 from fastapi import FastAPI, Request, Depends, HTTPException, Form, File, UploadFile, APIRouter, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
@@ -80,6 +80,11 @@ async def add_security_headers(request: Request, call_next):
 # ------------------------------------------------------------------------------
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")  # Re-enable static mount
+
+# SEO files
+@app.get("/robots.txt")
+async def robots_txt():
+    return FileResponse("app/static/robots.txt", media_type="text/plain")
 templates = Jinja2Templates(directory="app/templates")
 
 # Remove the custom file serving route since it conflicts with board routes
@@ -791,6 +796,98 @@ async def subscribe_newsletter(
     except Exception as e:
         print(f"Newsletter subscription error: {str(e)}")
         raise HTTPException(status_code=500, detail="Subscription failed")
+
+# ------------------------------------------------------------------------------
+# Contact Form Processing
+# ------------------------------------------------------------------------------
+@app.post("/api/contact/submit")
+async def submit_contact_form(
+    first_name: str = Form(...),
+    last_name: str = Form(...),
+    email: str = Form(...),
+    subject: str = Form(...),
+    message: str = Form(...),
+    request: Request = None
+):
+    """Process contact form submission and send email via Brevo"""
+    try:
+        import requests
+        from app.config import settings
+        
+        if not settings.brevo_api_key:
+            raise HTTPException(status_code=500, detail="Email service not configured")
+        
+        # Brevo API endpoint for sending transactional emails
+        brevo_url = "https://api.brevo.com/v3/smtp/email"
+        
+        headers = {
+            "accept": "application/json",
+            "api-key": settings.brevo_api_key,
+            "content-type": "application/json"
+        }
+        
+        # Map subject codes to readable subjects
+        subject_map = {
+            "media-board-inquiry": "Media Board Creation Inquiry",
+            "pricing-information": "Pricing Information",
+            "technical-support": "Technical Support",
+            "partnership": "Partnership Opportunities",
+            "general-question": "General Question",
+            "bug-report": "Bug Report",
+            "feature-request": "Feature Request"
+        }
+        
+        readable_subject = subject_map.get(subject, subject)
+        
+        # Email content
+        email_data = {
+            "sender": {
+                "name": "UrVote.Rocks Contact Form",
+                "email": "noreply@urvote.rocks"
+            },
+            "to": [
+                {
+                    "email": "support@urvote.rocks",
+                    "name": "UrVote.Rocks Support"
+                }
+            ],
+            "subject": f"Contact Form: {readable_subject}",
+            "htmlContent": f"""
+            <h2>New Contact Form Submission</h2>
+            <p><strong>Name:</strong> {first_name} {last_name}</p>
+            <p><strong>Email:</strong> {email}</p>
+            <p><strong>Subject:</strong> {readable_subject}</p>
+            <p><strong>Message:</strong></p>
+            <p>{message.replace(chr(10), '<br>')}</p>
+            <hr>
+            <p><em>This message was sent from the UrVote.Rocks contact form.</em></p>
+            """,
+            "textContent": f"""
+            New Contact Form Submission
+            
+            Name: {first_name} {last_name}
+            Email: {email}
+            Subject: {readable_subject}
+            
+            Message:
+            {message}
+            
+            ---
+            This message was sent from the UrVote.Rocks contact form.
+            """
+        }
+        
+        response = requests.post(brevo_url, headers=headers, json=email_data)
+        
+        if response.status_code in [200, 201]:
+            return {"message": "Thank you for your message! We'll get back to you within 24 hours."}
+        else:
+            print(f"Brevo email error: {response.status_code} - {response.text}")
+            raise HTTPException(status_code=500, detail="Failed to send message")
+            
+    except Exception as e:
+        print(f"Contact form error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to send message")
 
 # ------------------------------------------------------------------------------
 # Health & Error Handlers

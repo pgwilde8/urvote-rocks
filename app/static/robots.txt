@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://urvote.rocks/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /auth/
+Disallow: /upload/
+Disallow: /static/uploads/
+
+# Allow important pages
+Allow: /
+Allow: /contest-platform
+Allow: /contests
+Allow: /board/
+Allow: /vote/
+Allow: /about
+Allow: /templates

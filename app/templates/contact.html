@@ -383,25 +383,64 @@
             const contactForm = document.getElementById('contact-form');
             const formMessage = document.getElementById('form-message');
             
-            contactForm.addEventListener('submit', function(e) {
+            contactForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
+                console.log('📧 Contact form submitted');
                 
-                // Get form data
-                const formData = new FormData(contactForm);
-                const data = Object.fromEntries(formData);
+                // Show loading state
+                const submitButton = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitButton.textContent;
+                submitButton.textContent = 'Sending...';
+                submitButton.disabled = true;
                 
-                // Show success message (in real implementation, this would send to backend)
-                formMessage.className = 'mt-4 p-4 rounded-lg bg-green-100 text-green-800 border border-green-200';
-                formMessage.textContent = 'Thank you for your message! We\'ll get back to you within 24 hours.';
-                formMessage.classList.remove('hidden');
-                
-                // Reset form
-                contactForm.reset();
-                
-                // Hide message after 5 seconds
-                setTimeout(() => {
-                    formMessage.classList.add('hidden');
-                }, 5000);
+                try {
+                    // Get form data
+                    const formData = new FormData(contactForm);
+                    console.log('📋 Form data:', Object.fromEntries(formData));
+                    
+                    // Send to backend
+                    console.log('🚀 Sending request to /api/contact/submit');
+                    const response = await fetch('/api/contact/submit', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    console.log('📊 Response status:', response.status);
+                    const result = await response.json();
+                    console.log('📊 Response data:', result);
+                    
+                    if (response.ok) {
+                        // Show success message
+                        formMessage.className = 'mt-4 p-4 rounded-lg bg-green-100 text-green-800 border border-green-200';
+                        formMessage.textContent = result.message;
+                        formMessage.classList.remove('hidden');
+                        console.log('✅ Success message shown');
+                        
+                        // Reset form
+                        contactForm.reset();
+                    } else {
+                        // Show error message
+                        formMessage.className = 'mt-4 p-4 rounded-lg bg-red-100 text-red-800 border border-red-200';
+                        formMessage.textContent = result.detail || 'Failed to send message. Please try again.';
+                        formMessage.classList.remove('hidden');
+                        console.log('❌ Error message shown:', result.detail);
+                    }
+                } catch (error) {
+                    // Show error message
+                    formMessage.className = 'mt-4 p-4 rounded-lg bg-red-100 text-red-800 border border-red-200';
+                    formMessage.textContent = 'Failed to send message. Please try again.';
+                    formMessage.classList.remove('hidden');
+                    console.log('❌ Catch error:', error);
+                } finally {
+                    // Reset button state
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                    
+                    // Hide message after 5 seconds
+                    setTimeout(() => {
+                        formMessage.classList.add('hidden');
+                    }, 5000);
+                }
             });
         });
     </script>

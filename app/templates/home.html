@@ -1,22 +1,147 @@
 {% extends "base.html" %}
 
-{% block title %}UrVote.Rocks - AI Content Contest Platform{% endblock %}
+{% block title %}UrVote.Rocks - AI Content Contest Platform | Submit & Vote on AI-Generated Content{% endblock %}
+
+{% block extra_head %}
+<!-- Primary Meta Tags -->
+<meta name="title" content="UrVote.Rocks - AI Content Contest Platform | Submit & Vote on AI-Generated Content">
+<meta name="description" content="Join UrVote.Rocks - the world's first AI content contest platform. Submit AI-generated music, videos & visuals. Vote on the best content. Free contests with cash prizes!">
+<meta name="keywords" content="AI content contests, AI music contests, AI video contests, community voting, AI-generated content, content platform, free contests, AI art contests, music voting platform">
+<meta name="author" content="UrVote.Rocks">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://urvote.rocks/">
+<meta property="og:title" content="UrVote.Rocks - AI Content Contest Platform">
+<meta property="og:description" content="Join the ultimate AI content contest platform. Submit, vote, and win prizes! Free contests for AI-generated music, videos & visuals.">
+<meta property="og:image" content="https://urvote.rocks/static/images/og-image.jpg">
+<meta property="og:site_name" content="UrVote.Rocks">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://urvote.rocks/">
+<meta property="twitter:title" content="UrVote.Rocks - AI Content Contest Platform">
+<meta property="twitter:description" content="Join the ultimate AI content contest platform. Submit, vote, and win prizes!">
+<meta property="twitter:image" content="https://urvote.rocks/static/images/twitter-image.jpg">
+
+<!-- Additional SEO -->
+<link rel="canonical" href="https://urvote.rocks/">
+<meta name="theme-color" content="#3B82F6">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "UrVote.Rocks",
+  "url": "https://urvote.rocks",
+  "description": "AI content contest platform for music, videos, and visuals with community voting",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://urvote.rocks/contests?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "UrVote.Rocks",
+    "url": "https://urvote.rocks"
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="text-center">
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-12 sm:py-20 rounded-lg mb-12">
+    <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white py-12 sm:py-20 rounded-lg mb-12">
         <div class="max-w-4xl mx-auto px-4 sm:px-6">
             <h1 class="text-4xl sm:text-5xl font-bold mb-6">UrVote.Rocks</h1>
             <p class="text-xl sm:text-2xl mb-4">The Future of Content Contests</p>
             <p class="text-lg sm:text-xl mb-8">Join the pre-launch and help shape the ultimate AI-generated content voting platform</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a href="/upload" class="bg-white text-gray-900 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full sm:w-auto text-center">
-                    Submit Your Content FREE
+                <a href="/get-media-board" class="bg-white text-gray-900 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full sm:w-auto text-center">
+                    Create Media Board
                 </a>
                 <a href="/contests" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg hover:bg-white hover:text-gray-900 transition-colors w-full sm:w-auto text-center">
                     View Active Contests
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three Ways to Participate -->
+    <div class="max-w-6xl mx-auto mb-12 px-4 sm:px-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8 text-center">🎯 Three Ways to Participate</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Media Board Owners -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                <div class="text-center mb-4">
+                    <div class="text-4xl mb-2">🏢</div>
+                    <h3 class="text-xl font-bold text-gray-800">Media Board Owners</h3>
+                    <span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-2">
+                        FREE during launch
+                    </span>
+                </div>
+                <ul class="text-sm text-gray-700 space-y-2">
+                    <li>• Create themed contest boards</li>
+                    <li>• Host AI content competitions</li>
+                    <li>• Curate and promote content</li>
+                    <li>• Add business branding and backlinks</li>
+                    <li>• Drive traffic to your business</li>
+                </ul>
+                <div class="mt-4 text-center">
+                    <a href="/get-media-board" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">
+                        Create Board FREE
+                    </a>
+                </div>
+            </div>
+
+            <!-- Content Creators -->
+            <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg shadow-md border-l-4 border-purple-500">
+                <div class="text-center mb-4">
+                    <div class="text-4xl mb-2">🎨</div>
+                    <h3 class="text-xl font-bold text-gray-800">Content Creators</h3>
+                    <span class="inline-block bg-purple-100 text-purple-800 text-sm font-semibold px-3 py-1 rounded-full mt-2">
+                        Always FREE
+                    </span>
+                </div>
+                <ul class="text-sm text-gray-700 space-y-2">
+                    <li>• Upload AI-generated music, videos, and visuals</li>
+                    <li>• Submit to themed contest boards</li>
+                    <li>• Get smart voting links for social sharing</li>
+                    <li>• Build portfolio and gain exposure</li>
+                    <li>• Earn backlinks to your platforms</li>
+                </ul>
+                <div class="mt-4 text-center">
+                    <a href="/contests" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-700 transition-colors">
+                        View Contests
+                    </a>
+                </div>
+            </div>
+
+            <!-- Voters -->
+            <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                <div class="text-center mb-4">
+                    <div class="text-4xl mb-2">🗳️</div>
+                    <h3 class="text-xl font-bold text-gray-800">Voters</h3>
+                    <span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-2">
+                        Always FREE
+                    </span>
+                </div>
+                <ul class="text-sm text-gray-700 space-y-2">
+                    <li>• Vote on your favorite AI content</li>
+                    <li>• Discover new creators and trends</li>
+                    <li>• Support the community</li>
+                    <li>• Help determine contest winners</li>
+                    <li>• Join the creative conversation</li>
+                </ul>
+                <div class="mt-4 text-center">
+                    <a href="/contests" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition-colors">
+                        Start Voting
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -385,12 +510,9 @@
                 We're not done building yet, but you can be part of the journey from the beginning. 
                 Sign up for FREE and get early access to everything we're creating.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div class="flex justify-center items-center">
                 <a href="/register" class="bg-white text-green-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors w-full sm:w-auto text-center">
                     Sign Up FREE
-                </a>
-                <a href="/upload" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors w-full sm:w-auto text-center">
-                    Submit Content Now
                 </a>
             </div>
         </div>
@@ -410,7 +532,7 @@
                 </a>
                 <a href="#" class="bg-blue-400 text-white p-4 rounded-lg hover:bg-blue-500 transition-colors text-center">
                     <div class="text-2xl mb-2">🐦</div>
-                    <div class="font-semibold">Twitter</div>
+                    <div class="font-semibold">X</div>
                 </a>
                 <a href="#" class="bg-pink-600 text-white p-4 rounded-lg hover:bg-pink-700 transition-colors text-center">
                     <div class="text-2xl mb-2">📷</div>
